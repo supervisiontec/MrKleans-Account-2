@@ -1,0 +1,236 @@
+<div class="index-content-header">
+</div>
+
+<div class="index-content-body">
+    <div class="col-xs-3 background-dark">
+        <div style="display: flex; flex-flow: column; height: calc(100vh - 52px);">
+
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 100%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label class="control-label">Account Main Category </label>
+                            <input type="text" id="categoryMain" class="form-control" ng-model="model.data.accMain" 
+                                   uib-typeahead="accMain as (accMain.indexNo + ' - ' + accMain.name) for accMain in model.accCategoryMainList |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accMainLable(model.data.accMain.indexNo)" 
+                                   typeahead-on-select="ui.loadAccMain(model.data.accMain.indexNo)"
+                                   typeahead-editable="false"
+                                   ng-disabled="ui.mode !== 'NEW'" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 70%">
+                    <col style="width: 30%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label class="control-label">Account Category 1</label>
+                            <input type="text" class="form-control" ng-model="model.data.accCategory1" 
+                                   uib-typeahead="accCategory1 as (accCategory1.indexNo + ' - ' + accCategory1.name) for accCategory1 in model.accCategory1List |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accCategory1Lable(model.data.accCategory1.indexNo)" 
+                                   typeahead-on-select="ui.loadAccCategory1(model.data.accCategory1.indexNo)"
+                                   typeahead-editable="true"
+                                   ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />
+                        </td>
+                        <td>
+                            <label class="control-label">Order No</label>
+                            <input class="form-control" type="text" ng-model="model.data.accCategory1.orderNo"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 70%">
+                    <col style="width: 30%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label class="control-label">Account Category 2</label>
+                            <input type="text" class="form-control" ng-model="model.data.accCategory2" 
+                                   uib-typeahead="accCategory2 as (accCategory2.indexNo + ' - ' + accCategory2.name) for accCategory2 in model.accCategory2List |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accCategory2Lable(model.data.accCategory2.indexNo)" 
+                                   typeahead-on-select="ui.loadAccCategory2(model.data.accCategory2.indexNo)"
+                                   typeahead-editable="true"
+                                   ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />
+                        </td>
+                        <td>
+                            <label class="control-label">Order No</label>
+                            <input class="form-control" type="text" ng-model="model.data.accCategory2.orderNo"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 70%">
+                    <col style="width: 30%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label class="control-label">Account Category 3</label>
+                            <input type="text" class="form-control" ng-model="model.data.accCategory3" 
+                                   uib-typeahead="accCategory3 as (accCategory3.indexNo + ' - ' + accCategory3.name) for accCategory3 in model.accCategory3List |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accCategory3Lable(model.data.accCategory3.indexNo)" 
+                                   typeahead-on-select="ui.loadAccCategory3(model.data.accCategory3.indexNo)"
+                                   typeahead-editable="true"
+                                   ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />
+                        </td>
+                        <td>
+                            <label class="control-label">Order No</label>
+                            <input class="form-control" type="text" ng-model="model.data.accCategory3.orderNo"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 100%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label class="control-label">Account Name</label>
+                            <input type="text" class="form-control" ng-model="model.data.name" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 50%">
+                    <col style="width: 50%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label class="control-label">COP</label>&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" ng-model="model.data.cop" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />
+                        </td>
+                        <td>
+                            <label class="control-label">Clear All</label>&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" ng-model="model.data.clearAll" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-xs-9 background-light">
+        <table>
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 5%">
+            <col style="width: 10%">
+            <thead class="background-dark"> 
+                <tr>
+                    <th>
+                        <input type="text" class="search-input" ng-model="model.search.main" placeholder="Search.. "
+                                uib-typeahead="accMain as (accMain.indexNo + ' - ' + accMain.name) for accMain in model.accCategoryMainList |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accMainLable(model.search.main.indexNo)" 
+                                   typeahead-on-select="ui.loadAccMain(model.data.accMain.indexNo)"
+                                   typeahead-editable="false" >
+                    </th>
+                    <th>
+                        <input type="text" class="search-input" ng-model="model.search.category1" placeholder="Search.."
+                                uib-typeahead="accCategory1 as (accCategory1.indexNo + ' - ' + accCategory1.name) for accCategory1 in model.accCategory1List |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accCategory1Lable(model.search.category1.indexNo)" 
+                                   typeahead-on-select="ui.loadAccCategory1(model.data.accCategory1.indexNo)"
+                                   typeahead-editable="false">
+                    </th>
+                    <th>
+                        <input type="text" class="search-input" ng-model="model.search.category2" placeholder="Search.."
+                               uib-typeahead="accCategory2 as (accCategory2.indexNo + ' - ' + accCategory2.name) for accCategory2 in model.accCategory2List |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accCategory2Lable(model.search.category2.indexNo)" 
+                                   typeahead-on-select="ui.loadAccCategory2(model.data.accCategory2.indexNo)"
+                                   typeahead-editable="false">
+                    </th>
+                    <th>
+                        <input type="text" class="search-input" ng-model="model.search.category3" placeholder="Search.."
+                               uib-typeahead="accCategory3 as (accCategory3.indexNo + ' - ' + accCategory3.name) for accCategory3 in model.accCategory3List |filter:$viewValue|limitTo:10" 
+                                   typeahead-input-formatter="model.accCategory3Lable(model.search.category3.indexNo)" 
+                                   typeahead-on-select="ui.loadAccCategory3(model.data.accCategory3.indexNo)"
+                                   typeahead-editable="false" >
+                    </th>
+                    <th>
+                        <input type="text" class="search-input" ng-model="model.search.accountName" placeholder="Search..">
+                    </th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <table class="table-rounded">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 5%">
+            <col style="width: 10%">
+            <thead class="background-dark"> 
+                <tr>
+                    <th>Main Category</th>
+                    <th>Sub Category 1</th>
+                    <th>Sub Category 2</th>
+                    <th>Sub Category 3</th>
+                    <th>Account Name</th>
+                    <th>COP</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="smart-scroll-y" style="height: calc(100vh - 220px);">
+            <table class="table-rounded table-hover">
+                <col style="width: 20%">
+                <col style="width: 20%">
+                <col style="width: 20%">
+                <col style="width: 20%">
+                <col style="width: 20%">
+                <col style="width: 5%">
+                <col style="width: 10%">
+                <tbody>
+                    <tr ng-repeat="account in model.accAccountList| filter:{name:model.search.accountName==null?'':model.search.accountName}"
+                        ng-if="(model.data.accMain.indexNo==null?true:account.accMain.indexNo == model.data.accMain.indexNo)
+                        && (model.data.accCategory1.indexNo==null?true:account.accCategory1.indexNo == model.data.accCategory1.indexNo)
+                        && (model.data.accCategory2.indexNo==null?true:account.accCategory2.indexNo == model.data.accCategory2.indexNo)
+                        && (model.data.accCategory3.indexNo==null?true:account.accCategory3.indexNo == model.data.accCategory3.indexNo)
+                        && (model.search.main.indexNo==null?true:account.accMain.indexNo == model.search.main.indexNo)
+                        && (model.search.category1.indexNo==null?true:account.accCategory1.indexNo == model.search.category1.indexNo)
+                        && (model.search.category2.indexNo==null?true:account.accCategory2.indexNo == model.search.category2.indexNo)
+                        && (model.search.category3.indexNo==null?true:account.accCategory3.indexNo == model.search.category3.indexNo)"
+
+                        >
+                        <td>{{account.accMain.name}}</td>
+                        <td>{{account.accCategory1.name}}</td>
+                        <td>{{account.accCategory2.name}}</td>
+                        <td>{{account.accCategory3.name}}</td>
+                        <td>{{account.name}} </td>
+                        <td ng-show="account.cop === true" class="label label-default">YES</td>
+                        <td ng-show="account.cop === false" class="label label-primary">NO</td>
+                        <td class="text-right" style="padding-left: 5px;">
+                            <a class="btn btn-primary" ng-click="ui.edit(account, $index)"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a class="btn btn-danger" ng-click="ui.delete(account.indexNo, $index)"><span class="glyphicon glyphicon-trash"></span></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="fab-container">
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+</div>
