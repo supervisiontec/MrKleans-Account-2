@@ -45,3 +45,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/care-point-account/CarePointAccount/target/
+/care-point-account/CarePointAccount/bower_components/
+/care-point-account/CarePointAccount/node_modules/
