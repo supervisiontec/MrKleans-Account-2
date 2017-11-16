@@ -28,7 +28,11 @@ public class JournalService {
 
     public Integer saveJournal(List<TAccLedger> list) {
         int count = 0;
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), "JOURNAL");
+        int deleteNumber = journalRepository.getDeleteNumber();
         for (TAccLedger tAccLedger : list) {
+            tAccLedger.setNumber(number);
+            tAccLedger.setDeleteRefNo(deleteNumber);
             tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
             tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

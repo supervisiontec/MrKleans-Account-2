@@ -9,7 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,6 +35,14 @@ public class MAccAccount implements Serializable {
     private String name;
 
     @Basic(optional = false)
+    @Column(name = "level")
+    private String level;
+
+    @Basic(optional = false)
+    @Column(name = "acc_code")
+    private String accCode;
+
+    @Basic(optional = false)
     @Column(name = "cop")
     private boolean cop;
 
@@ -43,48 +50,46 @@ public class MAccAccount implements Serializable {
     @Column(name = "user")
     private int user;
 
-    @JoinColumn(name = "acc_category1", referencedColumnName = "index_no")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private MAccCategory1 accCategory1;
+    @Basic(optional = false)
+    @Column(name = "acc_type")
+    private String accType;
 
-    @JoinColumn(name = "acc_category2", referencedColumnName = "index_no")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private MAccCategory2 accCategory2;
+    @Basic(optional = false)
+    @Column(name = "is_acc_account")
+    private boolean isAccAccount;
 
-    @JoinColumn(name = "acc_category3", referencedColumnName = "index_no")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private MAccCategory3 accCategory3;
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "sub_account_of")
+    private Integer subAccountOf;
 
     @JoinColumn(name = "acc_main", referencedColumnName = "index_no")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private MAccMain accMain;
-    
-    @Column(name = "is_bank_account")
-    private boolean isBankAccount;
-    
-    @Column(name = "cheque_no_view")
-    private boolean chequeNoView;
-    
-    @Column(name = "ref_no_view")
-    private boolean refNoView;
+
+    @Column(name = "sub_account_count")
+    private Integer subAccountCount;
 
     public MAccAccount() {
     }
 
-    public MAccAccount(Integer indexNo, String name, boolean cop, int user, MAccCategory1 accCategory1, MAccCategory2 accCategory2, MAccCategory3 accCategory3, MAccMain accMain, boolean isBankAccount, boolean chequeNoView, boolean refNoView) {
+    public MAccAccount(Integer indexNo, String name, String level, String accCode, boolean cop, int user, String accType, boolean isAccAccount, String description, Integer subAccountOf, MAccMain accMain, Integer subAccountCount) {
         this.indexNo = indexNo;
         this.name = name;
+        this.level = level;
+        this.accCode = accCode;
         this.cop = cop;
         this.user = user;
-        this.accCategory1 = accCategory1;
-        this.accCategory2 = accCategory2;
-        this.accCategory3 = accCategory3;
+        this.accType = accType;
+        this.isAccAccount = isAccAccount;
+        this.description = description;
+        this.subAccountOf = subAccountOf;
         this.accMain = accMain;
-        this.isBankAccount = isBankAccount;
-        this.chequeNoView = chequeNoView;
-        this.refNoView = refNoView;
+        this.subAccountCount = subAccountCount;
     }
 
+   
     public Integer getIndexNo() {
         return indexNo;
     }
@@ -101,7 +106,23 @@ public class MAccAccount implements Serializable {
         this.name = name;
     }
 
-    public boolean isCop() {
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getAccCode() {
+        return accCode;
+    }
+
+    public void setAccCode(String accCode) {
+        this.accCode = accCode;
+    }
+
+    public boolean getCop() {
         return cop;
     }
 
@@ -117,28 +138,44 @@ public class MAccAccount implements Serializable {
         this.user = user;
     }
 
-    public MAccCategory1 getAccCategory1() {
-        return accCategory1;
+    public String getAccType() {
+        return accType;
     }
 
-    public void setAccCategory1(MAccCategory1 accCategory1) {
-        this.accCategory1 = accCategory1;
+    public void setAccType(String accType) {
+        this.accType = accType;
     }
 
-    public MAccCategory2 getAccCategory2() {
-        return accCategory2;
+    public boolean getIsAccAccount() {
+        return isAccAccount;
     }
 
-    public void setAccCategory2(MAccCategory2 accCategory2) {
-        this.accCategory2 = accCategory2;
+    public void setIsAccAccount(boolean isAccAccount) {
+        this.isAccAccount = isAccAccount;
     }
 
-    public MAccCategory3 getAccCategory3() {
-        return accCategory3;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAccCategory3(MAccCategory3 accCategory3) {
-        this.accCategory3 = accCategory3;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getSubAccountOf() {
+        return subAccountOf;
+    }
+
+    public void setSubAccountOf(Integer subAccountOf) {
+        this.subAccountOf = subAccountOf;
+    }
+
+    public Integer getSubAccountCount() {
+        return subAccountCount;
+    }
+
+    public void setSubAccountCount(Integer subAccountCount) {
+        this.subAccountCount = subAccountCount;
     }
 
     public MAccMain getAccMain() {
@@ -149,30 +186,4 @@ public class MAccAccount implements Serializable {
         this.accMain = accMain;
     }
 
-    public boolean isIsBankAccount() {
-        return isBankAccount;
-    }
-
-    public void setIsBankAccount(boolean isBankAccount) {
-        this.isBankAccount = isBankAccount;
-    }
-
-    public boolean isChequeNoView() {
-        return chequeNoView;
-    }
-
-    public void setChequeNoView(boolean chequeNoView) {
-        this.chequeNoView = chequeNoView;
-    }
-
-    public boolean isRefNoView() {
-        return refNoView;
-    }
-
-    public void setRefNoView(boolean refNoView) {
-        this.refNoView = refNoView;
-    }
-
-    
-    
 }

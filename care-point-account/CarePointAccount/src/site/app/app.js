@@ -16,7 +16,7 @@
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? "http://localhost:8090"
+                        ? "http://localhost:8080"
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 
@@ -55,6 +55,10 @@
 //                            controller: "reOrderLevelController"
                         })
                         //transaction
+                        .when("/transaction/bank-reconciliation", {
+                            templateUrl: "app/accounts/bank-reconciliation/bank-reconciliation.html",
+                            controller: "bankReconciliationController"
+                        })
                         .when("/transaction/write-cheque", {
                             templateUrl: "app/accounts/cheque/write-cheque.html"
 //                            controller: "chequeController"

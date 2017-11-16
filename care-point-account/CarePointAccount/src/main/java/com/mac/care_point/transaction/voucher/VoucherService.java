@@ -29,19 +29,25 @@ public class VoucherService {
     private JournalRepository journalRepository;
 
     public Integer saveVoucher(VoucherMix voucherMix) {
-        
-        int number=journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(),"VOUCHER");
-        
+
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), "VOUCHER");
+        int deleteNumber = journalRepository.getDeleteNumber();
+
         voucherMix.getVoucher().setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
         voucherMix.getVoucher().setNumber(number);
+        voucherMix.getVoucher().setDeleteRefNo(deleteNumber);
         voucherMix.getVoucher().setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         voucherMix.getVoucher().setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
-        voucherMix.getVoucher().setTransactionDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         voucherMix.getVoucher().setUser(SecurityUtil.getCurrentUser().getBranch());
-        journalRepository.save(voucherMix.getVoucher());
+        TAccLedger save = journalRepository.save(voucherMix.getVoucher());
+        if (voucherMix.getVoucher().getBankReconciliation()) {
+            save.setReconciliationGroup(save.getIndexNo());
+            journalRepository.save(save);
 
+        }
         for (TAccLedger tAccLedger : voucherMix.getVoucherList()) {
             tAccLedger.setNumber(number);
+            tAccLedger.setDeleteRefNo(deleteNumber);
             tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
             tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));

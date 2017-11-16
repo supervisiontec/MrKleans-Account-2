@@ -47,21 +47,8 @@ public class MAccMain implements Serializable {
     @Basic(optional = false)
     @Column(name = "is_balance_sheet")
     private boolean isBalanceSheet;
-
+    
     public MAccMain() {
-    }
-
-    public MAccMain(Integer indexNo) {
-        this.indexNo = indexNo;
-    }
-
-    public MAccMain(Integer indexNo, String name, String increment, boolean isExpence, boolean isIncome, boolean isBalanceSheet) {
-        this.indexNo = indexNo;
-        this.name = name;
-        this.increment = increment;
-        this.isExpence = isExpence;
-        this.isIncome = isIncome;
-        this.isBalanceSheet = isBalanceSheet;
     }
 
     public Integer getIndexNo() {
@@ -88,7 +75,7 @@ public class MAccMain implements Serializable {
         this.increment = increment;
     }
 
-    public boolean getIsExpence() {
+    public boolean isIsExpence() {
         return isExpence;
     }
 
@@ -96,7 +83,7 @@ public class MAccMain implements Serializable {
         this.isExpence = isExpence;
     }
 
-    public boolean getIsIncome() {
+    public boolean isIsIncome() {
         return isIncome;
     }
 
@@ -104,7 +91,7 @@ public class MAccMain implements Serializable {
         this.isIncome = isIncome;
     }
 
-    public boolean getIsBalanceSheet() {
+    public boolean isIsBalanceSheet() {
         return isBalanceSheet;
     }
 
@@ -112,4 +99,5 @@ public class MAccMain implements Serializable {
         this.isBalanceSheet = isBalanceSheet;
     }
 
+   
 }

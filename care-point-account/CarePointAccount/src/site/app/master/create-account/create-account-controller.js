@@ -20,53 +20,38 @@
                     $scope.model.edit(account);
                     $scope.model.accAccountList.splice(index, 1);
                     $scope.model.data.clearAll = true;
-                    $scope.ui.mode = "NEW";
+                    $scope.ui.mode = "EDIT";
 
                 };
-                $scope.ui.delete = function (accIndex, index) {
-                    ConfirmPane.warningConfirm("DO YOU WANT TO DELECT !")
-                            .confirm(function () {
-                                $scope.model.delete(accIndex, index)
-                                        .then(function (data) {
-                                            Notification.success('Delete success !');
-                                        });
-                            });
+                $scope.ui.delete = function (acc) {
+                    if (!acc.isAccAccount) {
+                        Notification.error("Can't delete because there are another transaction with relation  !");
+                    } else {
+                        ConfirmPane.warningConfirm("DO YOU WANT TO DELECT !")
+                                .confirm(function () {
+                                    $scope.model.delete(acc.indexNo)
+                                            .then(function (data) {
+                                                Notification.success('Delete success !');
+                                            });
+                                });
+                    }
                 };
 
                 $scope.ui.save = function () {
-                    console.log($scope.model.data.accCategory1);
-                    console.log($scope.model.data.accCategory1);
-                    console.log($scope.model.data.accCategory1.indexNo);
                     var checkSave = true;
-                    if (!$scope.model.data.accMain.indexNo) {
-                        checkSave = false;
-                        Notification.error('Select a main category to save !');
-                    }
-
-                    if (angular.isUndefined($scope.model.data.accCategory1.indexNo)) {
-                        if (!$scope.model.data.accCategory1) {
-                            checkSave = false;
-                            Notification.error('Select a category1 to save !');
-                        }
-                    } else if (!$scope.model.data.accCategory1.indexNo) {
-                        checkSave = false;
-                        Notification.error('Select a category1 to save !');
-
-                    }
-                    if (angular.isUndefined($scope.model.data.accCategory2.indexNo)) {
-                        if (!$scope.model.data.accCategory2) {
-                            checkSave = false;
-                            Notification.error('Select a category2 to save !');
-                        }
-                    } else if (!$scope.model.data.accCategory2.indexNo) {
-                        checkSave = false;
-                        Notification.error('Select a category2 to save !');
-
-                    }
-
                     if (!$scope.model.data.name) {
                         checkSave = false;
-                        Notification.error('Type account name to save !');
+                        Notification.error('Insert a name to save !');
+                    }
+
+                    if (!$scope.model.data.accType) {
+                        checkSave = false;
+                        Notification.error('Select Account Type to save !');
+                    }
+
+                    if (!$scope.model.data.subAccountOf) {
+                        checkSave = false;
+                        Notification.error('Select subAccountOf to save !');
                     }
                     if (checkSave) {
                         $scope.ui.mode = "IDEAL";
@@ -75,8 +60,6 @@
                                     Notification.success('New Account save Sucess');
                                     if ($scope.model.data.clearAll) {
                                         $scope.model.clearData();
-                                    } else {
-                                        $scope.model.data = data;
                                     }
                                 });
                     }

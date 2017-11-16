@@ -21,4 +21,8 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
             + "where t_acc_ledger.current_branch=:branch and t_acc_ledger.`type` =:type", nativeQuery = true)
     public int getNumber(@Param("branch") Integer branch, @Param("type") String voucher);
 
+    @Query(value = "select ifnull( max(t_acc_ledger.delete_ref_no)+1,1) as number\n"
+            + "from t_acc_ledger", nativeQuery = true)
+    public int getDeleteNumber();
+
 }

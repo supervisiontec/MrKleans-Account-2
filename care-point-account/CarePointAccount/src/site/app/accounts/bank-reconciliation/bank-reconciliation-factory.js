@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .factory("voucherFactory", function () {
+            .factory("bankReconciliationFactory", function () {
                 var factory = {};
                 factory.Data = function () {
                     var data = {
@@ -14,20 +14,22 @@
                         "debit": 0.00,
                         "credit": 0.00,
                         "accAccount": null,
-                        "formName": 'PAYMENT VOUCHER',
+                        "formName":'PAYMENT VOUCHER',
                         "refNumber": null,
                         "type": 'VOUCHER',
                         "typeIndexNo": null,
                         "description": '',
                         "chequeDate": null,
-                        "bankReconciliation": false,
+                        "monthStart": null,
+                        "balance":0.00,
+                        "deleteRefNo":0,
                         "reconciliationGroup":0
 
                     };
                     return data;
                 };
-                factory.tempData = function () {
-                    var data = {
+                factory.tempDate = function () {
+                    var tempDate = {
                         "indexNo": null,
                         "transactionDate": null,
                         "currentDate": null,
@@ -38,17 +40,20 @@
                         "debit": 0.00,
                         "credit": 0.00,
                         "accAccount": null,
-                        "formName": 'PAYMENT VOUCHER',
+                        "formName":'PAYMENT VOUCHER',
                         "refNumber": null,
                         "type": 'VOUCHER',
                         "typeIndexNo": null,
                         "description": '',
                         "chequeDate": null,
-                        "bankReconciliation": false,
+                        "deleteRefNo":0,
                         "reconciliationGroup":0
+                        
+
                     };
-                    return data;
+                    return tempDate;
                 };
+                
                 return factory;
             });
 }());

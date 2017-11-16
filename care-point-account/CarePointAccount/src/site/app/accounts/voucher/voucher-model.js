@@ -1,6 +1,6 @@
 
 (function () {
-    var factory = function (voucherFactory, voucherService, $q,$timeout, $filter, Notification) {
+    var factory = function (voucherFactory, voucherService, $q, $timeout, $filter, Notification) {
         function employeeModel() {
             this.constructor();
         }
@@ -9,42 +9,30 @@
             data: {},
             tempData: {},
             currentBranch: {},
-            accCategory1List: [],
-            accCategory2List: [],
-            AccCategory3List: [],
-            accCategoryMainList: [],
+            selectAccType: {},
             accAccountList: [],
             branchList: [],
             saveDataList: [],
+            accTypeList: [],
             //constructor
             constructor: function () {
                 var that = this;
                 that.data = voucherFactory.Data();
                 that.tempData = voucherFactory.tempData();
 
-                voucherService.loadAccCategory1()
-                        .success(function (data) {
-                            that.accCategory1List = data;
-                        });
-                voucherService.loadAccCategory2()
-                        .success(function (data) {
-                            that.accCategory2List = data;
-                        });
-                voucherService.loadAccCategory3()
-                        .success(function (data) {
-                            that.accCategory3List = data;
-                        });
-                voucherService.loadAccCategoryMain()
-                        .success(function (data) {
-                            that.accCategoryMainList = data;
-                        });
+
                 voucherService.loadBranch()
                         .success(function (data) {
                             that.branchList = data;
                         });
                 voucherService.currentBranch()
                         .success(function (data) {
+                            that.currentBranch = data;
                             that.data.branch = data.indexNo;
+                        });
+                voucherService.loadAccTypes()
+                        .success(function (data) {
+                            that.accTypeList = data;
                         });
 
                 this.loadAccAccount();
@@ -64,62 +52,6 @@
                         });
             },
 
-//            delete: function (accIndex, index) {
-//                var that = this;
-//                var defer = $q.defer();
-//                createAccountService.delete(accIndex)
-//                        .success(function (data) {
-//                            that.clearData();
-//                            that.loadAccAccount();
-//                            defer.resolve(data);
-//                        })
-//                        .error(function (data) {
-//                            Notification.error(data.massage);
-//                            defer.reject(data);
-//                        });
-//                return defer.promise;
-//
-//            },
-            accMainLable: function (model) {
-                var label;
-                angular.forEach(this.accCategoryMainList, function (value) {
-                    if (value.indexNo === model) {
-                        label = value.indexNo + ' - ' + value.name;
-                        return;
-                    }
-                });
-                return label;
-            }
-            , accCategory1Lable: function (model) {
-                var label;
-                angular.forEach(this.accCategory1List, function (value) {
-                    if (value.indexNo === model) {
-                        label = value.indexNo + ' - ' + value.name;
-                        return;
-                    }
-                });
-                return label;
-            }
-            , accCategory2Lable: function (model) {
-                var label;
-                angular.forEach(this.accCategory2List, function (value) {
-                    if (value.indexNo === model) {
-                        label = value.indexNo + ' - ' + value.name;
-                        return;
-                    }
-                });
-                return label;
-            }
-            , accCategory3Lable: function (model) {
-                var label;
-                angular.forEach(this.accCategory3List, function (value) {
-                    if (value.indexNo === model) {
-                        label = value.indexNo + ' - ' + value.name;
-                        return;
-                    }
-                });
-                return label;
-            },
             branchLable: function (model) {
                 var label;
                 angular.forEach(this.branchList, function (value) {
@@ -134,17 +66,17 @@
                 var label;
                 angular.forEach(this.accAccountList, function (value) {
                     if (value.indexNo === model) {
-                        label = value.indexNo + ' - ' + value.name;
+                        label = value.accCode + ' - ' + value.name;
                         return;
                     }
                 });
                 return label;
             },
             addData: function () {
-                var that=this;
-                this.tempData.transactionDate=$filter('date')(this.tempData.transactionDate, 'yyyy-MM-dd');
+                var that = this;
+                this.tempData.transactionDate = $filter('date')(this.data.transactionDate, 'yyyy-MM-dd');
                 this.saveDataList.push(this.tempData);
-                this.tempData = voucherFactory.tempData();;
+                this.tempData = voucherFactory.tempData();
                 $timeout(function () {
                     that.totalCalculation();
                 }, 30);
@@ -162,7 +94,13 @@
                 var that = this;
                 var data = {};
                 data.voucherList = this.saveDataList;
+                this.data.transactionDate = $filter('date')(this.data.transactionDate, 'yyyy-MM-dd');
+                this.data.chequeDate = $filter('date')(this.data.chequeDate, 'yyyy-MM-dd');
                 data.voucher = this.data;
+                if (this.selectAccType.name === 'BANK') {
+                    data.voucher.bankReconciliation = true;
+                }
+
                 console.log(data);
 
                 var defer = $q.defer();
@@ -174,6 +112,16 @@
                             defer.reject(data);
                         });
                 return defer.promise;
+            },
+            setClear: function () {
+
+                this.tempData = voucherFactory.tempData();
+                this.data = voucherFactory.Data();
+                this.tempData.transactionDate = new Date();
+                this.data.transactionDate = new Date();
+                this.tempData.branch = this.currentBranch.indexNo;
+                this.data.branch = this.currentBranch.indexNo;
+                this.saveDataList = [];
             }
         };
         return employeeModel;

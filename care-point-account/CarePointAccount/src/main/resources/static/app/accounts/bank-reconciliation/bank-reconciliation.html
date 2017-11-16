@@ -1,0 +1,114 @@
+<div class="index-content-header"></div><div class="index-content-body"><div class="col-xs-3 background-dark"><div class="row" style="display: flex; flex-flow: column; height: calc(100vh - 53px);padding: 5px"><div class="row col-xs-12 nopadding" style="flex: 0 0 auto"><table class="table-rounded control-table"><col style="width: 35%"><col style="width: 65%"><tbody><tr><td>Bank Account :</td><td><input type="text" class="form-control" ng-model="model.data.accAccount" uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.accAccountList | filter:$viewValue | orderBy:'accCode'| filter:{accType:'BANK'} |limitTo:10" typeahead-input-formatter="model.accountLable(model.data.accAccount)" typeahead-editable="false" ng-disabled="ui.mode !== 'NEW'" id="bankAccount"></td></tr></tbody></table></div><div class="row col-xs-12 nopadding" style="flex: 0 0 auto"><table class="table-rounded control-table"><col style="width: 35%"><col style="width: 65%"><tbody><tr><td>Date :</td><td><input type="date" class="form-control" ng-model="model.data.transactionDate" ng-disabled="ui.mode !== 'NEW'" ng-change="model.selectDate()"></td></tr></tbody></table></div><div class="row col-xs-12 nopadding" style="flex: 0 0 auto"><table class="table-rounded control-table"><col style="width: 100%"><tbody><tr><td><input type="text" class="search-input" ng-model="model.data.searchText" placeholder="search by cheque no" ng-disabled="ui.mode !== 'NEW'"></td></tr></tbody></table></div><div class="row col-xs-12 nopadding" style="flex: 0 0 auto"><div class="smart-scroll-y" style="height: calc(100vh - 293px)" ng-show="model.reconciliationList.length"><table class="table-rounded control-table table-hover"><col style="width: 33.3%"><col style="width: 33.3%"><col style="width: 33.3%"><tbody><tr ng-repeat="data in model.reconciliationList | orderBy:'chequeDate' |
+                                filter:{'refNumber':model.data.searchText}" ng-click="ui.selectReconciliationCheque(data);"><td>{{data.refNumber}}</td><td>{{data.chequeDate}}</td><td ng-show="data.debit" class="text-right"><label class="label label-default">{{data.debit|number:2}}</label></td><td ng-show="data.credit" class="text-right"><label class="label label-primary">{{data.credit|number:2}}</label></td></tr></tbody></table></div></div><!--            <div class="placeholder" style="flex: 0 0 auto;"ng-hide="model.reconciliationList.length" style="height: calc(100vh - 293px); padding: 0px 10px 10px 10px;">
+                            <h1>RECONCILIATION CHEQUE EMPTY OR SELECT BANK ACCOUNT TO VIEW RECONCILIATION CHEQUE :(</h1>
+                        </div>--></div></div><div class="col-xs-9 background-light"><div class="row col-xs-12 nopadding"><table class="table-rounded control-table square-table"><col style="width: 25%"><col style="width: 25%"><col style="width: 25%"><col style="width: 25%"><tbody><tr><td>Month start : <input class="form-control" ng-model="model.data.monthStart" ng-disabled="true"></td><td>Reconcile Cheque : <input class="form-control" ng-model="model.data.reconcileValue" ng-disabled="true"></td><td>Other Reconcile: <input class="form-control" ng-model="model.data.otherReconcileValue" ng-disabled="true"></td><td>Balance : <input class="form-control" ng-model="model.data.value" ng-disabled="true"></td></tr></tbody></table></div></div><div class="col-xs-9" ng-show="model.saveDataList.length"><table class="table-rounded"><col style="width: 15%"><col style="width: 30%"><col style="width: 15%"><col style="width: 15%"><col style="width: 15%"><col style="width: 10%"><thead class="background-dark"><tr><th>Date</th><th>Particulars</th><th class="text-right">Debit</th><th class="text-right">Credit</th><th class="text-right">Balance</th><th>&nbsp;</th></tr></thead></table><div class="smart-scroll-y" style="height: calc(100vh - 245px)"><table class="table-rounded"><col style="width: 15%"><col style="width: 30%"><col style="width: 15%"><col style="width: 15%"><col style="width: 15%"><col style="width: 10%"><tbody><tr ng-repeat="data in model.saveDataList | orderBy:'transactionDate'" ng-class="ui.addClass(data)"><td>{{data.transactionDate|date:'yyyy-MM-dd'}}</td><td>{{data.refNunber}}{{data.description}}</td><td class="text-right">{{data.debit|number:2}}</td><td class="text-right">{{data.credit|number:2}}</td><td class="text-right">{{data.balance|number:2}}</td><td><a class="btn btn-danger" ng-click="ui.delete(data)"><span class="glyphicon glyphicon-remove"></span></a></td></tr></tbody></table></div><div class="col-xs-9 nopadding" style="position: fixed;bottom: 1px;margin-left:-15px"><table class="table-rounded background-dark col-lg-12"><col style="width: 15%"><col style="width: 30%"><col style="width: 15%"><col style="width: 15%"><col style="width: 15%"><col style="width: 10%"><tbody><tr class="background-dark"><td></td><td></td><td><input class="form-control text-right" ng-model="model.data.debitTotal" ng-disabled="true"></td><td><input class="form-control text-right" ng-model="model.data.creditTotal" ng-disabled="true"></td><td></td></tr></tbody></table></div></div><div class="placeholder col-md-9" ng-hide="model.saveDataList.length" style="height: calc(100vh - 160px); padding: 0px 10px 10px 10px"><h1>RECONCILIATION CHEQUE EMPTY :(</h1></div></div><div class="fab-container"><a class="fab fab-success" ng-show="ui.mode === 'NEW'" ng-click="ui.addReconciliationData();"><i class="glyphicon glyphicon-plus"></i></a> <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a> <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a></div><script type="text/ng-template" id="reconciliationPopup.html"><div class="col-lg-12 background-light">
+    <div class="row">
+    <div class="modal-header bg-primary">
+    <div class="col-lg-12">
+    <center>
+    <label> Bank Reconciliation </label>
+    </center>
+    </div>
+    </div>
+    <div class="modal-body" style="height:450px;padding-left:0px;padding-right:0px">
+    <div class="col-xs-12 ">
+    <table class="table-rounded control-table square-table">
+    <col style="width: 20%"/>
+    <col style="width: 20%"/>
+    <col style="width: 20%"/>
+    <col style="width: 10%"/>
+    <col style="width: 10%"/>
+    <col style="width: 10%"/>
+    <theader>
+    <tr>
+    <td>
+    accont
+    <input type="text" class="form-control" ng-model="model.tempData.accAccount"
+            uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.incomeExpenceAccList | filter:$viewValue | orderBy:'accCode' |limitTo:10" 
+            typeahead-input-formatter="model.accountLable($model)" 
+            typeahead-editable="false"
+            typeahead-on-select="ui.popupSelectAccAccount($model)"
+    />
+    </td>
+    <td>
+    Branch
+    <input type="text" class="form-control" ng-model="model.tempData.branch"
+            uib-typeahead="branch.indexNo as (branch.branchCode + ' - ' + branch.name) for branch in model.branchList |filter:$viewValue|limitTo:10" 
+            typeahead-input-formatter="model.branchLable(model.tempData.branch)" 
+            typeahead-editable="false"/>
+    </td>
+    <td>
+    Date
+    <input type="date" class="form-control" ng-model="model.tempData.transactionDate"/>
+    </td>
+    <td>
+    Debit
+    <input type="text" class="form-control" ng-model="model.tempData.debit"
+        ng-disabled="model.disableValue!=='debit'"/>
+    </td>
+    <td>
+    Credit {{model.disableValue}}
+    <input type="text" class="form-control" ng-model="model.tempData.credit"
+        ng-disabled="model.disableValue!=='credit'"/>
+    </td>
+    <td class="text-right" style="padding-left: 5px;">
+    <a class="btn btn-primary" style="margin-top: 28px" id="btnAddData" ng-click="ui.popupAddData()">
+    <span class="glyphicon glyphicon-plus"></span>
+    </a>
+    </td>
+    </tr>
+    </theader>
+    </table>
+    </div>
+    <div class="col-xs-12">
+    <table class="table-rounded control-table">
+     <col style="width: 20%"/>
+    <col style="width: 20%"/>
+    <col style="width: 20%"/>
+    <col style="width: 10%"/>
+    <col style="width: 10%"/>
+    <col style="width: 10%"/>
+    <theader>
+    <tr>
+    <td>Account</td>
+    <td>Branch</td>
+    <td>Date</td>
+    <td>Debit</td>
+    <td>Credit</td>
+    <td>&nbsp</td>
+    </tr>
+    </theader>
+    </table>
+    </div>
+    <div class="col-xs-12 smart-scroll-y" style="height: calc(100vh - 344px);">
+    <table class="table-rounded control-table">
+     <col style="width: 20%"/>
+    <col style="width: 20%"/>
+    <col style="width: 20%"/>
+    <col style="width: 10%"/>
+    <col style="width: 10%"/>
+    <col style="width: 10%"/>
+    <theader>
+    <tr ng-repeat='data in model.popupDataList'>
+    <td>{{model.accountLable(data.accAccount)}}</td>
+    <td>{{model.branchLable(data.branch)}}</td>
+    <td>{{data.transactionDate|date}}</td>
+    <td>{{data.debit|number:2}}</td>
+    <td>{{data.credit|number:2}}</td>
+    <td><a class="btn btn-danger" ng-click=""><span class="glyphicon glyphicon-remove"></span></a></td>
+    </tr>
+    </theader>
+    </table>
+    </div>
+
+    </div>
+    <div class="modal-footer bg-primary">
+    <div class="col-lg-12">
+    <center>
+    <input type="button" style="width:75px" class='btn btn-defsult' value="Cancel" ng-click="ui.modelCancel()" />
+    <input type="button" style="width:75px" class='btn btn-success' value="Save" ng-disabled="popupDisabled"  ng-click="ui.popupSave();"/>
+    </center>
+    </div>
+    </div>
+    </div>
+    </div></script>

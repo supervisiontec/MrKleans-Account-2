@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.master.account.category1;
+package com.mac.care_point.master.account_type;
 
-import com.mac.care_point.master.account.model.MAccCategory1;
+import com.mac.care_point.master.account_type.model.MAccAccountType;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class Category1Service {
+public class AccountTypeService {
 
     @Autowired
-    private Category1Repository category1Repository;
-    
-   public List<MAccCategory1> findAll() {
-        return category1Repository.findAll();
+    private AccountTypeRepository accountTypeRepository;
+
+    public List<MAccAccountType> findAllAccType() {
+        return accountTypeRepository.findAll();
     }
-    
+
 }

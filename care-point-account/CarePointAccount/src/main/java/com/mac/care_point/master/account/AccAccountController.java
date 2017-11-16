@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.master.account.acc_account;
+package com.mac.care_point.master.account;
 
 import com.mac.care_point.master.account.model.MAccAccount;
 import com.mac.care_point.transaction.setting.SettingRepository;
-import com.mac.care_point.transaction.setting.model.MAccSetting;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,9 +30,6 @@ public class AccAccountController {
     @Autowired
     private AccAccountService accAccountService;
 
-    @Autowired
-    private SettingRepository settingRepository;
-
     @RequestMapping(method = RequestMethod.GET)
     public List<MAccAccount> findAll() {
         return accAccountService.findAll();
@@ -41,19 +37,29 @@ public class AccAccountController {
 
     @RequestMapping(value = "/save-new-account", method = RequestMethod.POST)
     public MAccAccount saveNewAccount(@RequestBody MAccAccount accAccount) {
-        Integer user = SecurityUtil.getCurrentUser().getIndexNo();
-
-        accAccount.setUser(user);
+        accAccount.setUser(SecurityUtil.getCurrentUser().getIndexNo());
         return accAccountService.saveNewAccount(accAccount);
     }
-
+//
     @RequestMapping(value = "/delete-account/{index}", method = RequestMethod.DELETE)
     public Integer saveNewAccount(@PathVariable Integer index) {
         return accAccountService.deleteAccount(index);
     }
-
+    @RequestMapping(value = "/find-only-account", method = RequestMethod.GET)
+    public List<MAccAccount> findAccount() {
+        return accAccountService.findByIsAccAccount(true);
+    }
+    @RequestMapping(value = "/get-account-flow/{acc}", method = RequestMethod.GET)
+    public List<MAccAccount> getAccountFlow(@PathVariable Integer acc) {
+        return accAccountService.getAccFlow(acc);
+    }
+//
     @RequestMapping(value = "/find-account-value/{index}", method = RequestMethod.GET)
     public BigDecimal findAccountValue(@PathVariable Integer index) {
         return accAccountService.findAccountValue(SecurityUtil.getCurrentUser().getBranch(), index);
+    }
+    @RequestMapping(value = "/find-account-value-all/{index}", method = RequestMethod.GET)
+    public BigDecimal findAccountValuewithBranch(@PathVariable Integer index) {
+        return accAccountService.findAccountValue(index);
     }
 }

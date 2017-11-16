@@ -3,21 +3,33 @@
 <div class="index-content-body ">
 
     <div class="col-xs-3 background-dark">
-        <div class="row" style="display: flex; flex-flow: column; height: calc(100vh - 53px);padding: 5px">
+        <div class="row smart-scroll-y" style="display: flex; flex-flow: column; height: calc(100vh - 53px);padding: 5px">
 
             <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
                 <table class="table-rounded control-table">
                     <col style="width: 100%"/>
                     <tbody>
                         <tr>
-                            <td>Current Branch :
-                                <input type="text" class="form-control" ng-model="model.data.branch" 
-                                       uib-typeahead="branch.indexNo as (branch.branchCode + ' - ' + branch.name) for branch in model.branchList |filter:$viewValue|limitTo:10" 
-                                       typeahead-input-formatter="model.branchLable(model.data.branch)" 
-                                       typeahead-on-select=""
-                                       typeahead-editable="false"
-                                       ng-disabled="true" />    
+                            <td>Number :
+                                <input type="text" class="form-control" ng-model="model.data.number" 
+                                       ng-disabled="ui.mode !== 'IDEAL'" />    
                             </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table">
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
+                    <tbody>
+                        <tr>
+                            <td ng-repeat="type in model.accTypeList">
+                                {{type.name}} :
+                                <input type="radio" name='a' ng-click="ui.selectAccType(type)" ng-disabled="ui.mode != 'NEW'"/>    
+                            </td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -29,11 +41,12 @@
                         <tr>
                             <td>Main Account :
                                 <input type="text" class="form-control" ng-model="model.data.accAccount" 
-                                       uib-typeahead="account.indexNo as (account.indexNo + ' - ' + account.name) for account in model.accAccountList |filter:$viewValue | filter:{isBankAccount:true} |limitTo:10" 
+                                       uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.accAccountList |filter:$viewValue | filter:{'accType' : model.type} | limitTo:10" 
                                        typeahead-input-formatter="model.accountLable(model.data.accAccount)" 
                                        typeahead-on-select="model.getValue(model.data.accAccount)"
                                        typeahead-editable="false"
-                                       ng-disabled="ui.mode !== 'NEW' " />   
+                                       ng-disabled="ui.mode !== 'NEW'"
+                                       id="account"/>   
                             </td>
                         </tr>
                     </tbody>
@@ -49,7 +62,58 @@
                     </tbody>
                 </table>
             </div>
-            
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;" ng-show="model.selectAccType.name==='CASH' || model.selectAccType.name==='ONLINE'">
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>Reference No :<input class="form-control" ng-model="model.data.refNumber" ng-disabled="ui.mode !== 'NEW'" ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;" ng-show="model.selectAccType.name==='BANK'">
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>Cheque No :<input class="form-control" ng-model="model.data.refNumber" ng-disabled="ui.mode !== 'NEW'" ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;" ng-show="model.selectAccType.name==='BANK'">
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>Cheque Date :<input class="form-control"  type="date" ng-model="model.data.chequeDate" ng-disabled="ui.mode !== 'NEW'" ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>Transaction Date :
+                                <input class="form-control" placeholder="" type="date" ng-model="model.data.transactionDate" ng-disabled="ui.mode !== 'NEW'" >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>Description :<input class="form-control" placeholder="" ng-model="model.data.description" ng-disabled="ui.mode !== 'NEW'" ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="col-xs-9 background-light">
@@ -58,7 +122,6 @@
                 <col style="width: 20%"/>
                 <col style="width: 17%"/>
                 <col style="width: 29%"/>
-                <col style="width: 20%"/>
                 <col style="width: 17%"/>
                 <col style="width: 7%"/>
                 <tbody>
@@ -66,11 +129,12 @@
                         <td>
                             Account :
                             <input type="text" class="form-control" ng-model="model.tempData.accAccount" 
-                                   uib-typeahead="account.indexNo as (account.indexNo + ' - ' + account.name) for account in model.accAccountList |filter:$viewValue |limitTo:10" 
+                                   uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.accAccountList | filter:$viewValue |filter:{indexNo : '!' + model.data.accAccount} |limitTo:10" 
                                    typeahead-input-formatter="model.accountLable(model.tempData.accAccount)" 
                                    typeahead-on-select=""
                                    typeahead-editable="false"
-                                   ng-disabled="ui.mode !== 'NEW'" />
+                                   ng-disabled="ui.mode !== 'NEW'"
+                                   id='subAccount'/>
                         </td>
                         <td>
                             Branch :
@@ -86,12 +150,8 @@
                             <input class="form-control" ng-model="model.tempData.description" ng-disabled="ui.mode !== 'NEW'">
                         </td>
                         <td>
-                            Date :
-                            <input class="form-control" type="date" ng-model="model.tempData.transactionDate" ng-disabled="ui.mode !== 'NEW'">
-                        </td>
-                        <td>
                             Amount:
-                            <input class="form-control" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'">
+                            <input class="form-control" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAdd($event)">
                         </td>
                         <td>
                             <a class="btn btn-primary" style="margin-top: 28px" id="btnAddData" ng-click="ui.addData()">
@@ -109,7 +169,6 @@
             <col style="width: 20%"/>
             <col style="width: 17%"/>
             <col style="width: 26%"/>
-            <col style="width: 20%"/>
             <col style="width: 17%"/>
             <col style="width: 10%"/>
 
@@ -140,7 +199,7 @@
                         <td>{{data.transactionDate|date:'yyyy-MM-dd'}}</td>
                         <td class="text-right">{{data.debit}}</td>
                         <td>
-                            <a class="btn btn-default" ng-click="ui.edit($index)"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a class="btn btn-default" ng-click="ui.edit($index,data)"><span class="glyphicon glyphicon-edit"></span></a>
                             <a class="btn btn-danger" ng-click="ui.delete($index)"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
@@ -172,8 +231,8 @@
         </div>
     </div>
 
-    <div class="placeholder col-md-9" ng-hide="model.saveDataList.length" style="height: calc(100vh - 245px); padding: 0px 10px 10px 10px;">
-        <h1>PETTY CASH DETAILS EMPTY :(</h1>
+    <div class="placeholder col-md-9" ng-hide="model.saveDataList.length" style="height: calc(100vh - 160px); padding: 0px 10px 10px 10px;">
+        <h1>VOUCHER DETAILS EMPTY :(</h1>
     </div>
 
 </div>

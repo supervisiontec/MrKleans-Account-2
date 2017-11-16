@@ -18,7 +18,9 @@
                         "refNumber": null,
                         "type": null,
                         "typeIndexNo": null,
-                        "description": null
+                        "description": null,
+                        "bankReconciliation": false,
+                        "reconciliationGroup":0
                     };
                     return data;
                 };
@@ -29,16 +31,6 @@
                         "branch": null,
                         "debit": 0.00,
                         "credit": 0.00,
-                        "category1": {
-                            "indexNo": null,
-                            "name": null,
-                            "orderNo": 1
-                        },
-                        "category2": {
-                            "indexNo": null,
-                            "name": null,
-                            "orderNo": 1
-                        },
                         "cop": false,
                         "description": null,
                         "date": null

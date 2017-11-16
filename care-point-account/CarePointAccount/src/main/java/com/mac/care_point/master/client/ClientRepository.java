@@ -18,5 +18,5 @@ public interface ClientRepository extends JpaRepository<Client, Integer>{
     public List<Client> findByNic(String nic);
     
     public List<Client> findByIsNewOrderByName(boolean b);
- 
+    
 }

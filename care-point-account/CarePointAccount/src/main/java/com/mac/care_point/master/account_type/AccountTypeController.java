@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.master.account.category2;
+package com.mac.care_point.master.account_type;
 
-import com.mac.care_point.master.account.model.MAccCategory2;
+import com.mac.care_point.master.account_type.model.MAccAccountType;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/care-point/account/master/category2")
-public class Category2Controller {
+@RequestMapping("/api/care-point/master/account-type")
+public class AccountTypeController {
     
-     @Autowired
-    private Category2Service category2Service;
+    @Autowired
+    private AccountTypeService accountTypeService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<MAccCategory2> findAll() {
-        return category2Service.findAll();
+    public List<MAccAccountType> findAllAccType() {
+        return accountTypeService.findAllAccType();
     }
 }

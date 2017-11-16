@@ -40,50 +40,43 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+
+            <div class="row col-xs-12 nopadding" ng-show="model.accflowList.length" style="flex: 0 0 auto;">
                 <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
+                    <col style="width: 30%"/>
+                    <col style="width: 70%"/>
                     <tbody>
-                        <tr>
+                        <tr ng-repeat="acc in model.accflowList | orderBy:'accCode'">
                             <td>
-                                <label class="control-label">Sub Category 1</label>
-                                <input class="form-control" ng-model="model.tempData.category1" ng-disabled="true"
-                                       uib-typeahead="accCategory1.indexNo as (accCategory1.indexNo + ' - ' + accCategory1.name) for accCategory1 in model.accCategory1List |filter:$viewValue|limitTo:10" 
-                                       typeahead-input-formatter="model.accCategory1Lable(model.tempData.category1)" 
-                                       typeahead-editable="false">
+                                <label class="label label-default"> {{acc.accCode}}</label>
+                            </td>
+                            <td ng-if="acc.level==1" style="padding-left: 0px">
+                                {{acc.name}}
+                            </td>
+                            <td ng-if="acc.level==2" style="padding-left: 5px">
+                                {{acc.name}}
+                            </td>
+                            <td ng-if="acc.level==3" style="padding-left: 10px">
+                                {{acc.name}}
+                            </td>
+                            <td ng-if="acc.level==4" style="padding-left: 15px">
+                                {{acc.name}}
+                            </td>
+                            <td ng-if="acc.level==5" style="padding-left: 20px">
+                                {{acc.name}}
+                            </td>
+                            <td ng-if="acc.level==6" style="padding-left: 25px">
+                                {{acc.name}}
+                            </td>
+                            <td ng-if="acc.level==7" style="padding-left: 30px">
+                                {{acc.name}}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
-                <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <label class="control-label">Sub Category 2</label>
-                                <input class="form-control" ng-model="model.tempData.category2"
-                                       uib-typeahead="accCategory2.indexNo as (accCategory2.indexNo + ' - ' + accCategory2.name) for accCategory2 in model.accCategory2List |filter:$viewValue|limitTo:10" 
-                                       typeahead-input-formatter="model.accCategory2Lable(model.tempData.category2)" 
-                                       ng-disabled="true">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
-                <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <label class="control-label">COP</label>&nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" ng-model="model.tempData.cop" ng-disabled="true">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="placeholder" ng-hide="model.accflowList.length" style="height: calc(100vh - 341px); padding: 0px 10px 10px 10px;">
+                <h1>select an account to view account flow  :(</h1>
             </div>
         </div>
     </div>
@@ -91,8 +84,7 @@
     <div class="col-xs-9 background-light">
         <div class="row col-xs-12 nopadding">
             <table class="table-rounded control-table square-table">
-                <col style="width: 17%"/>
-                <col style="width: 17%"/>
+                <col style="width: 34%"/>
                 <col style="width: 17%"/>
                 <col style="width: 17%"/>
                 <col style="width: 17%"/>
@@ -100,19 +92,9 @@
                 <tbody>
                     <tr>
                         <td>
-                            <label class="control-label">Main Account</label>
-                            <input type="text" class="form-control" ng-model="model.tempData.accMain" 
-                                   uib-typeahead="accMain.indexNo as (accMain.indexNo + ' - ' + accMain.name) for accMain in model.accCategoryMainList |filter:$viewValue|limitTo:10" 
-                                   typeahead-input-formatter="model.accMainLable(model.tempData.accMain)" 
-                                   typeahead-on-select=""
-                                   typeahead-editable="false"
-                                   id="accMain"
-                                   ng-disabled="ui.mode !== 'NEW'" />
-                        </td>
-                        <td>
                             <label class="control-label">Account Name</label>
                             <input type="text" class="form-control" ng-model="model.tempData.accAccount" 
-                                   uib-typeahead="account.indexNo as (account.indexNo + ' - ' + account.name) for account in model.accAccountList |filter:$viewValue |filter:{accMainIndex:model.tempData.accMain==null?'':model.tempData.accMain} |limitTo:10" 
+                                   uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.accAccountList |filter:$viewValue |limitTo:10" 
                                    typeahead-input-formatter="model.accountLable(model.tempData.accAccount)" 
                                    typeahead-on-select="model.setMainAccount(model.tempData.accAccount)"
                                    typeahead-editable="false"
