@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("bankReconciliationController", function ($scope, bankReconciliationModel, $timeout, $uibModalStack, $uibModal, Notification, ConfirmPane) {
+            .controller("bankReconciliationController", function ($scope, $filter, bankReconciliationModel, $timeout, $uibModalStack, $uibModal, Notification, ConfirmPane) {
                 $scope.model = new bankReconciliationModel();
                 $scope.ui = {};
                 $scope.model.currentBranch = {};
@@ -20,17 +20,26 @@
 
                 };
                 $scope.ui.selectReconciliationCheque = function (data) {
+                    var check = true;
                     if (!$scope.model.data.transactionDate) {
+                        check = false;
                         Notification.error('select a reconciliation date !');
-                    } else {
-                        if (!$scope.model.data.accAccount) {
-                            Notification.error('select an account to reconcile selected cheque !');
-                        } else {
-                            ConfirmPane.primaryConfirm("DO YOU WANT TO RECONCILE THIS CHEQUE !")
-                                    .confirm(function () {
-                                        $scope.model.addReconciliationCheque(data);
-                                    });
-                        }
+                    }
+                    if (!$scope.model.data.accAccount) {
+                        check = false;
+                        Notification.error('select an account to reconcile selected cheque !');
+                    }
+                    var transactionDate = $filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
+                    var newDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+                    if (transactionDate > newDate) {
+                        check = false;
+                        Notification.error("transfer date not valid ! ");
+                    }
+                    if (check) {
+                        ConfirmPane.primaryConfirm("DO YOU WANT TO RECONCILE THIS CHEQUE !")
+                                .confirm(function () {
+                                    $scope.model.addReconciliationCheque(data);
+                                });
                     }
                 };
                 $scope.ui.addReconciliationData = function () {

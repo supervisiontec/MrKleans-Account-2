@@ -14,14 +14,16 @@
                         "debit": 0.00,
                         "credit": 0.00,
                         "accAccount": null,
-                        "formName": 'PAYMENT VOUCHER',
+                        "formName": 'payment_voucher',
                         "refNumber": null,
-                        "type": 'VOUCHER',
+                        "type": 'voucher',
                         "typeIndexNo": null,
                         "description": '',
                         "chequeDate": null,
                         "bankReconciliation": false,
-                        "reconciliationGroup":0
+                        "reconcileAccount":null,
+                        "isMain":false,
+                        "isCheque":false
 
                     };
                     return data;
@@ -38,14 +40,16 @@
                         "debit": 0.00,
                         "credit": 0.00,
                         "accAccount": null,
-                        "formName": 'PAYMENT VOUCHER',
+                        "formName": 'payment_voucher',
                         "refNumber": null,
-                        "type": 'VOUCHER',
+                        "type": 'voucher',
                         "typeIndexNo": null,
                         "description": '',
                         "chequeDate": null,
                         "bankReconciliation": false,
-                        "reconciliationGroup":0
+                        "reconcileAccount":null,
+                        "isMain":false,
+                        "isCheque":false
                     };
                     return data;
                 };

@@ -75,25 +75,30 @@
                         });
 
                 if (!this.saveDataList.length) {
+                    that.loadTransactions(year, month, that.data.accAccount);
 
-                    bankReconciliationService.loadTransactions(year, month, this.data.accAccount)
-                            .success(function (data) {
-                                that.saveDataList = data;
-
-                                var b_f = bankReconciliationFactory.Data();
-                                b_f.transactionDate = new Date(fDate);
-                                b_f.description = 'B / f ';
-                                b_f.balance = that.data.monthStart;
-                                that.saveDataList.unshift(b_f);
-
-                                that.balanceCalculator();
-
-                            });
                 }
 
             },
+            loadTransactions: function (year, month, account) {
+                var that = this;
+                var fDate = year + '-' + month + '-' + 01;
+                console.log('load Transaction');
+                bankReconciliationService.loadTransactions(year, month, account)
+                        .success(function (data) {
+                            that.saveDataList = data;
+
+                            var b_f = bankReconciliationFactory.Data();
+                            b_f.transactionDate = new Date(fDate);
+                            b_f.description = 'B / f ';
+                            b_f.balance = that.data.monthStart;
+                            that.saveDataList.unshift(b_f);
+
+                            that.balanceCalculator();
+
+                        });
+            },
             balanceCalculator: function () {
-                console.log('balanceCalculator');
                 var that = this;
                 that.saveDataList = $filter('orderBy')(that.saveDataList, 'transactionDate');
                 that.totBalance = that.data.monthStart;
@@ -111,7 +116,6 @@
                 that.data.debitTotal = debit;
             },
             reconciliationValueCaluclator: function () {
-                console.log('reconciliationValueCaluclator');
                 var debit = 0.00;
                 var credit = 0.00;
                 angular.forEach(this.reconciliationList, function (data) {
@@ -233,6 +237,7 @@
                 that.popupDataList.push(that.tempData);
                 that.tempData = bankReconciliationFactory.tempDate();
                 that.tempData.branch = that.currentBranch.indexNo;
+
             },
             popupSave: function () {
                 var defer = $q.defer();
@@ -246,6 +251,9 @@
                         .success(function (data) {
                             Notification.success('Other Reconcile data Save Success !');
                             that.popupDataList = [];
+                            var year = $filter('date')(that.data.transactionDate, 'yyyy');
+                            var month = $filter('date')(that.data.transactionDate, 'MM');
+                            that.loadTransactions(year, month, that.data.accAccount);
 
                             defer.resolve(data);
                         })

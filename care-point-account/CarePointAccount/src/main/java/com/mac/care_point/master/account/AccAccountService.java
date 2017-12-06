@@ -38,8 +38,7 @@ public class AccAccountService {
     public MAccAccount saveNewAccount(MAccAccount accAccount) {
         if (accAccount.getIndexNo() != null) {
             return accAccountRepository.save(accAccount);
-        } 
-        else {
+        } else {
             MAccAccount subAccountOf = accAccountRepository.findOne(accAccount.getSubAccountOf());
             accAccount.setLevel(Integer.parseInt(subAccountOf.getLevel()) + 1 + "");
             accAccount.setAccMain(subAccountOf.getAccMain());
@@ -91,11 +90,12 @@ public class AccAccountService {
         }
     }
 //
+
     public BigDecimal findAccountValue(Integer branch, Integer accAccount) {
-        String fDate="2017-01-01";
-        String tDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        
-        return accAccountRepository.findAccountValue(branch, accAccount,fDate , tDate);
+        String fDate = "2017-01-01";
+        String tDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        return accAccountRepository.findAccountValue(branch, accAccount, fDate, tDate);
 
     }
 //
@@ -106,23 +106,42 @@ public class AccAccountService {
 
     public List<MAccAccount> getAccFlow(Integer acc) {
         ArrayList<MAccAccount> flowList = new ArrayList<MAccAccount>();
-        Integer accNo=acc;
+        Integer accNo = acc;
         for (int i = 0; i < 10; i++) {
             MAccAccount findOne = accAccountRepository.findOne(accNo);
             flowList.add(findOne);
-            if (findOne.getSubAccountOf()==null) {
+            if (findOne.getSubAccountOf() == null) {
                 break;
             }
-            accNo=findOne.getSubAccountOf();
-            
+            accNo = findOne.getSubAccountOf();
+
         }
         return flowList;
     }
 
     public BigDecimal findAccountValue(Integer index) {
-        String fDate="2017-01-01";
-        String tDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        
-        return accAccountRepository.findAccountValue(index,fDate , tDate);
+        String fDate = "2017-01-01";
+        String tDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        return accAccountRepository.findAccountValue(index, fDate, tDate);
+    }
+
+    public List<MAccAccount> findByIsAccAccountAndAccTypeOrAccType(boolean b, String cash, String bank) {
+        ArrayList<MAccAccount> returnList = new ArrayList<MAccAccount>();
+        List<MAccAccount> list = accAccountRepository.findByIsAccAccountAndAccTypeOrAccType(b, cash, bank);
+        for (MAccAccount mAccAccount : list) {
+            if (mAccAccount.getIsAccAccount()) {
+                returnList.add(mAccAccount);
+            }
+        }
+        return returnList;
+    }
+
+    public List<MAccAccount> findTypeAccount(String expense) {
+        return accAccountRepository.findTypeAccount(expense);
+    }
+
+    public MAccAccount getOverPaymentIssueAccount(String overPaymentIssue) {
+        return accAccountRepository.getOverPaymentIssueAccount(overPaymentIssue);
     }
 }

@@ -1,120 +1,261 @@
 <div class="index-content-header"></div>
 
 <div class="index-content-body ">
-
-    <div class="col-xs-3 background-dark">
-        <div class="row" style="display: flex; flex-flow: column; height: calc(100vh - 53px);padding: 5px">
-            <div class="col-xs-12 nopadding" style="flex: 0 0 auto;padding-right: 22px;" ng-show="true">
-                <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
+    <div class="col-xs-4">
+        <table class="table-rounded control-table">
+            <colgroup>
+                <col style="width: 100%">
+            </colgroup>
+            <tbody>
+                <tr class="select-primary-row-table-header">
+                    <td><label class="control-label text-center">CHEQUE RETURN</label></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-xs-12 background-light nopadding">
+            <div class="row col-xs-12 nopadding">
+                <table class="table-rounded control-table square-table">
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
                     <tbody>
                         <tr>
                             <td>
-                    <center>
-                        <label class="h4">
-                            <b>BANK ACCOUNT DETAILS</b>
-                        </label>
-                    </center>
-                    </td>
-                    </tr>
-                    </tbody>
-                </table> 
-            </div>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
-                <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
-                    <tbody>
-                        <tr>
-                            <td>From Date :<input class="form-control" smart-input="date" id="toBranch" placeholder="" ng-model="model.data"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
-                <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
-                    <tbody>
-                        <tr>
-                            <td>To Date:<input class="form-control" smart-input="date" placeholder="" ng-model="model.data"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
-                <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
-                    <tbody>
-                        <tr>
-                            <td>Bank Name :<input class="form-control" placeholder="" ng-model="model.data"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
-                <table class="table-rounded control-table">
-                    <col style="width: 100%"/>
-                    <tbody>
-                        <tr>
-                            <td>Pay To  :<input class="form-control" placeholder="" ng-model="model.data"></td>
+                                IN HAND
+                                <input type="radio" name='type' checked style="margin-left: 10px" ng-model="model.typeCash" 
+                                       ng-click="ui.checkType('INHAND')"
+                                       ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                DEPOSITED
+                                <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeBank" 
+                                       ng-click="ui.checkType('DEPOSITED')"
+                                       ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                ISSUED
+                                <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeOnline" 
+                                       ng-click="ui.checkType('ISSUED')"
+                                       ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
-    <div class="col-xs-9">
-        <table class="table-rounded ">
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
+        <div class="background-dark">
 
-            <thead class="background-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Date</th>
-                    <th>Cheque No</th>
-                    <th>Amount</th>
-                    <th>type</th>
-                    <th>Serial No</th>
-                    <th>Account Type</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-    <div class="col-xs-9" ng-show="model.data.transferItemList.length">
-        <div class="smart-scroll-y" style="height: calc(100vh - 200px);">
-            <table class="table-rounded">
-                <col style="width: 15%"/>
-                <col style="width: 45%"/>
-                <col style="width: 15%"/>
-                <col style="width: 15%"/>
+            <table class="table-rounded control-table" style="padding: 3px;">
+                <colgroup>
+                    <col style="width: 100%">
+                </colgroup>
                 <tbody>
-                    <tr class="background-dark" ng-repeat="unit in model.data.transferItemList">
-                        <td><span class="label label-default">{{model.getItemBarcode(unit.item)}}</span></td>
-                        <td class="over-flow-hidden">{{model.getItemDescription(unit.item)}}</td>
-                        <td class="text-right">{{unit.qty| number:2}}</td>
-                        <td></td>
+                    <tr class="background-light">
                         <td>
-                            <a class="btn btn-warning" ng-hide="unit.status" ng-click="ui.unitCheck($index)"><span class="glyphicon glyphicon-question-sign"></span></a>
-                            <a class="btn btn-success" ng-show="unit.status" ng-click="ui.unitUncheck($index)"><span class="glyphicon glyphicon-ok"></span></a>
+                            <input type="text" class="search-input" ng-model='model.data.searchText'
+                                   ng-disabled="ui.mode !== 'NEW'"
+                                   placeholder="search cheque no"/>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
+        <table class="table-rounded control-table" ng-show="model.chequeList.length">
+            <colgroup>
+                <col style="width: 33.3%"/>
+                <col style="width: 33.3%"/>
+                <col style="width: 33.3%"/>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td><label>Cheque No</label></td>
+                    <td><label>Transaction Date</label></td>
+                    <td><label>Amount</label></td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="background-dark smart-scroll-y" style="height: calc(100vh - 505px)" ng-show="model.chequeList.length">
+            <table class="table-rounded control-table table-hover" style="padding: 3px;">
+                <colgroup>
+                    <col style="width: 33.3%">
+                    <col style="width: 33.3%">
+                    <col style="width: 25%">
+                    <col style="width: 8%">
+                </colgroup>
+                <tbody>
+                    <tr ng-repeat="cheque in model.chequeList | filter:{'refNumber' : model.data.searchText}"
+                        ng-click='model.selectCheque(cheque)' ng-class="model.selectedCheque.refNumber===cheque.refNumber?'selected':''">
+                        <td>
+                            <label class="label label-default"> {{cheque.refNumber}}</label>
+                        </td>
+                        <td>
+                            {{cheque.transactionDate}}
+                        </td>
+                        <td>
+                            {{(cheque.credit-cheque.debit)|number:2}}
+                        </td>
+                        <td>
+                            <label class="label label-warning">{{(cheque.debit-cheque.credit)>0?'+':'-'}}</label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="placeholder col-md-12 nopadding" ng-hide="model.chequeList.length" style="height: calc(100vh - 218px); padding: 0px 10px 0px 10px;">
+            <h1>SELECT A TYPE OR EMPTY CHEQUE :(</h1>
+        </div>
+        <table class="table-rounded control-table" style="padding: 3px;">
+            <colgroup>
+                <col style="width: 40%">
+                <col style="width: 60%">
+            </colgroup>
+            <tbody>
+                <tr class="background-light" ng-show='model.tempData.supplier'>
+                    <td>
+                        <label class="control-label">Supplier</label>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" ng-model='model.tempData.supplier'
+                               ng-disabled="true"/>
+                    </td>
+                </tr>
+                <tr class="background-light"  ng-show='model.tempData.transactionNo'>
+                    <td>
+                        <label class="control-label">Transaction No</label>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" ng-model='model.tempData.transactionNo'
+                               ng-disabled="true"/>
+                    </td>
+                </tr>
+                <tr class="background-light" ng-show='model.tempData.transactionDate'>
+                    <td>
+                        <label class="control-label">Transaction Date</label>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" ng-model='model.tempData.transactionDate'
+                               ng-disabled="true"/>
+                    </td>
+                </tr>
+                <tr class="background-light" ng-show='model.tempData.formName'>
+                    <td>
+                        <label class="control-label">Form Name</label>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" ng-model='model.tempData.formName'
+                               ng-disabled="true"/>
+                    </td>
+                </tr>
+                <tr class="background-light" ng-show='model.tempData.user'>
+                    <td>
+                        <label class="control-label">User</label>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" ng-model='model.tempData.user'
+                               ng-disabled="true"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-xs-8 background-dark">
+        <div class="row" style="display: flex; flex-flow: column; padding: 5px">
+
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table">
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Number :
+                                <input type="text" class="form-control" ng-model="model.data.number" 
+                                       ng-disabled="ui.mode !== 'IDEAL'" />    
+                            </td>
+                            <td>
+                                Transaction Date :
+                                <input class="form-control" placeholder="" type="date" ng-model="model.data.transactionDate" ng-disabled="ui.mode !== 'NEW'" >
+                            </td>
+                            <td>
+                                Description :
+                                <input class="form-control" placeholder="" ng-model="model.data.description" ng-disabled="ui.mode !== 'NEW'" >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 100%">
+                </colgroup>
+                <tbody>
+                    <tr class="select-primary-row-table-header">
+                        <td><label class="control-label text-center">BILL DETAILS</label></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 14%"/>
+                    <col style="width: 15%"/>
+                    <col style="width: 25%"/>
+                    <col style="width: 20%"/>
+                    <col style="width: 13%"/>
+                    <col style="width: 13%"/>
+                    <col style="width: 5%"/>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td><label>Ref No</label></td>
+                        <td><label>Trans. Date</label></td>
+                        <td><label>Acc Account</label></td>
+                        <td><label>Description</label></td>
+                        <td class="text-right"><label>Debit</label></td>
+                        <td class="text-right"><label>Credit</label></td>
+                        <td>&nbsp;</td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <div class="smart-scroll-y" style="height: calc(100vh - 233px)" ng-show="model.chequeDetailList.length">
+                <table class="table-rounded control-table table-hover">
+                    <col style="width: 14%"/>
+                    <col style="width: 15%"/>
+                    <col style="width: 25%"/>
+                    <col style="width: 20%"/>
+                    <col style="width: 13%"/>
+                    <col style="width: 13%"/>
+                    <col style="width: 5%"/>
+                    <tbody>
+                        <tr ng-repeat="detail in model.chequeDetailList | orderBy:'transactionDate'" style="{{detail.refNumber===model.selectedCheque.refNumber && detail.isCheque?'background-color:#f2dede':''}}">
+                            <td><label>{{detail.refNumber===null?'- - -':detail.refNumber}}</label></td>
+                            <td><label>{{detail.transactionDate}}</label></td>
+                            <td><label>{{model.accountLable(detail.accAccount)}}</label></td>
+                            <td><label>{{detail.description}}</label></td>
+                            <td class='text-right'><label>{{(detail.debit)| number:2}}</label></td>
+                            <td class='text-right'><label>{{(detail.credit)| number:2}}</label></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="placeholder col-md-12" ng-hide="model.chequeDetailList.length" style="height: calc(100vh - 250px); padding: 0px 10px 0px 10px;">
+                <h1>SELECT A CHEQUE TO VIEW DETAILS :(</h1>
+            </div>
+        </div>
     </div>
 
-    <div class="placeholder col-md-9" ng-hide="model.data.transferItemList.length" style="height: calc(100vh - 200px); padding: 0px 20px 10px 16px;">
-        <h1>CHEQUE DETAILS EMPTY :(</h1>
-    </div>
+
 </div>
 
 <div class="fab-container">
-    <a class="fab fab-lg fab-primary" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
-    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW' || ui.mode === 'EDIT'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
 </div>
+
+
+

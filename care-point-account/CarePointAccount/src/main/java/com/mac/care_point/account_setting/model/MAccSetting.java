@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.transaction.setting.model;
+package com.mac.care_point.account_setting.model;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -20,25 +20,35 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "m_acc_setting")
-public class MAccSetting implements Serializable{
+public class MAccSetting implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "index_no")
     private Integer indexNo;
-   
+
+    @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    
+
     @Column(name = "acc_account")
-    private int accAccount;
+    private Integer accAccount;
 
     public MAccSetting() {
     }
 
-    public MAccSetting(Integer indexNo, String name, int accAccount) {
+    public MAccSetting(Integer indexNo, String name, Integer accAccount) {
         this.indexNo = indexNo;
         this.name = name;
+        this.accAccount = accAccount;
+    }
+
+    public Integer getAccAccount() {
+        return accAccount;
+    }
+
+    public void setAccAccount(Integer accAccount) {
         this.accAccount = accAccount;
     }
 
@@ -58,13 +68,6 @@ public class MAccSetting implements Serializable{
         this.name = name;
     }
 
-    public int getAccAccount() {
-        return accAccount;
-    }
+    
 
-    public void setAccAccount(int accAccount) {
-        this.accAccount = accAccount;
-    }
-    
-    
 }

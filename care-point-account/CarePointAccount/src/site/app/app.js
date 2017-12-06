@@ -59,29 +59,29 @@
                             templateUrl: "app/accounts/bank-reconciliation/bank-reconciliation.html",
                             controller: "bankReconciliationController"
                         })
-                        .when("/transaction/write-cheque", {
-                            templateUrl: "app/accounts/cheque/write-cheque.html"
-//                            controller: "chequeController"
+                        .when("/transaction/fund-transfer", {
+                            templateUrl: "app/accounts/fund-transfer/fund-transfer.html",
+                            controller: "fundTransferController"
                         })
-                        .when("/transaction/voucher", {
+                        .when("/transaction/general-voucher", {
                             templateUrl: "app/accounts/voucher/voucher.html",
                             controller: "voucherController"
                         })
-                        .when("/transaction/fund-transfer", {
-                            templateUrl: "app/accounts/fund-transfer/fund-transfer.html"
-//                            controller: "chequeController"
+                        .when("/transaction/trial-balance", {
+                            templateUrl: "app/accounts/trial-balance/trial-balance.html",
+                            controller: "trialBalanceController"
                         })
-                        .when("/transaction/deposit", {
-                            templateUrl: "app/accounts/deposit/deposit.html"
-//                            controller: "chequeController"
+                        .when("/transaction/supplier-payment", {
+                            templateUrl: "app/accounts/supplier-payment/supplier-payment.html",
+                            controller: "supplierPaymentController"
                         })
                         .when("/transaction/return-cheque", {
-                            templateUrl: "app/accounts/return-cheque/return-cheque.html"
-//                            controller: "chequeController"
+                            templateUrl: "app/accounts/return-cheque/return-cheque.html",
+                            controller: "returnChequeController"
                         })
-                        .when("/transaction/payment-to-diposit", {
-                            templateUrl: "app/accounts/payment-to-deposit/payment-to-deposit.html"
-//                            controller: "chequeController"
+                        .when("/transaction/accrued-bill", {
+                            templateUrl: "app/accounts/accrued-bill/accrued-bill.html",
+                            controller: "accruedBillController"
                         })
                         .when("/transaction/journal", {
                             templateUrl: "app/accounts/journal/journal.html",

@@ -60,10 +60,16 @@ public class MSupplier implements Serializable {
     @Column(name = "credit_period")
     private Integer creditPeriod;
 
+    @Column(name = "acc_account")
+    private Integer accAccount;
+
+    @Column(name = "type")
+    private String type;
+
     public MSupplier() {
     }
 
-    public MSupplier(Integer indexNo, String name, String contactName, String contactNo, String addressLine1, String addressLine2, String addressLine3, Integer creditPeriod) {
+    public MSupplier(Integer indexNo, String name, String contactName, String contactNo, String addressLine1, String addressLine2, String addressLine3, Integer creditPeriod, Integer accAccount, String type) {
         this.indexNo = indexNo;
         this.name = name;
         this.contactName = contactName;
@@ -72,6 +78,24 @@ public class MSupplier implements Serializable {
         this.addressLine2 = addressLine2;
         this.addressLine3 = addressLine3;
         this.creditPeriod = creditPeriod;
+        this.accAccount = accAccount;
+        this.type = type;
+    }
+
+    public Integer getAccAccount() {
+        return accAccount;
+    }
+
+    public void setAccAccount(Integer accAccount) {
+        this.accAccount = accAccount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Integer getIndexNo() {

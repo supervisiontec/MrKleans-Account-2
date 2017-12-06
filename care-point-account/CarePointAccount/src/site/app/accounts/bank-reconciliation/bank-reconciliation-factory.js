@@ -14,16 +14,17 @@
                         "debit": 0.00,
                         "credit": 0.00,
                         "accAccount": null,
-                        "formName":'PAYMENT VOUCHER',
+                        "formName":'bank_reconciliation',
                         "refNumber": null,
-                        "type": 'VOUCHER',
+                        "type": 'reconciliation',
                         "typeIndexNo": null,
                         "description": '',
                         "chequeDate": null,
                         "monthStart": null,
                         "balance":0.00,
                         "deleteRefNo":0,
-                        "reconciliationGroup":0
+                        "reconcileAccount":null,
+                        "reconcileGroup":0
 
                     };
                     return data;
@@ -40,14 +41,15 @@
                         "debit": 0.00,
                         "credit": 0.00,
                         "accAccount": null,
-                        "formName":'PAYMENT VOUCHER',
+                        "formName":'bank_reconciliation',
                         "refNumber": null,
-                        "type": 'VOUCHER',
+                        "type": 'reconciliation',
                         "typeIndexNo": null,
                         "description": '',
                         "chequeDate": null,
                         "deleteRefNo":0,
-                        "reconciliationGroup":0
+                        "reconcileAccount":null,
+                        "reconcileGroup":0
                         
 
                     };

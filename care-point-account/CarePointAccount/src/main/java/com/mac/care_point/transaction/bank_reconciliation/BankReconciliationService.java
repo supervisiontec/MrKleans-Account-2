@@ -5,6 +5,10 @@
  */
 package com.mac.care_point.transaction.bank_reconciliation;
 
+import com.mac.care_point.common.Constant;
+import com.mac.care_point.common.SearchCodeGenarator;
+import com.mac.care_point.master.branch.BranchRepository;
+import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.transaction.account_ledger.JournalRepository;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.transaction.bank_reconciliation.model.ReconciliationMix;
@@ -32,6 +36,9 @@ public class BankReconciliationService {
 
     @Autowired
     private JournalRepository journalRepository;
+    
+     @Autowired
+    private BranchRepository branchRepository;
 
     public List<TAccLedger> getReconciliationDetail(String date, Integer accAccount) {
         return bankReconciliationRepository.getReconciliationDetails(date, accAccount);
@@ -48,8 +55,10 @@ public class BankReconciliationService {
 
     @Transactional
     public boolean save(ReconciliationMix mix) {
-        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), "RECONCILIATION");
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.RECONCILIATION);
         Integer count = 0;
+        String searchCode=getSearchCode(Constant.CODE_BANK_RECONCILIATION,SecurityUtil.getCurrentUser().getBranch(),number);
+        
         for (TAccLedger tAccLedger : mix.getDataList()) {
             int deleteNo = journalRepository.getDeleteNumber();
 
@@ -64,16 +73,21 @@ public class BankReconciliationService {
             tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getIndexNo());
             tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             tAccLedger1.setDescription(findOne.getDescription());
-            tAccLedger1.setFormName("BANK RECONCILIATION");
+            tAccLedger1.setFormName(Constant.FORM_BANK_RECONCILIATION);
             tAccLedger1.setNumber(number);
+            tAccLedger1.setSearchCode(searchCode);
             tAccLedger1.setDeleteRefNo(deleteNo);
-            tAccLedger1.setReconciliationGroup(findOne.getReconciliationGroup());
+            tAccLedger1.setReconcileAccount(findOne.getReconcileAccount());
             tAccLedger1.setRefNumber(findOne.getRefNumber());
             tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
             tAccLedger1.setTransactionDate(tAccLedger.getTransactionDate());
-            tAccLedger1.setType("RECONCILIATION");
+            tAccLedger1.setType(Constant.RECONCILIATION);
             tAccLedger1.setTypeIndexNo(null);
             tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+            tAccLedger1.setReconcileAccount(findOne.getReconcileAccount());
+            tAccLedger1.setReconcileGroup(findOne.getReconcileGroup());
+            tAccLedger1.setIsMain(tAccLedger.getIsCheque());
+            tAccLedger1.setIsCheque(true);
 
             bankReconciliationRepository.save(tAccLedger1);
 
@@ -86,16 +100,20 @@ public class BankReconciliationService {
             bankLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             bankLedger.setDebit(findOne.getDebit());
             bankLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
-            bankLedger.setDescription(findOne.getDescription());
-            bankLedger.setFormName("BANK RECONCILIATION");
+            bankLedger.setDescription(tAccLedger1.getDescription());
+            bankLedger.setFormName(Constant.FORM_BANK_RECONCILIATION);
             bankLedger.setNumber(number);
+            bankLedger.setSearchCode(searchCode);
             bankLedger.setDeleteRefNo(deleteNo);
-            bankLedger.setReconciliationGroup(0);
+            bankLedger.setReconcileAccount(0);
+            bankLedger.setReconcileGroup(0);
             bankLedger.setRefNumber(null);
             bankLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
             bankLedger.setTransactionDate(tAccLedger.getTransactionDate());
-            bankLedger.setType("RECONCILIATION");
+            bankLedger.setType(Constant.RECONCILIATION);
             bankLedger.setTypeIndexNo(null);
+            bankLedger.setIsMain(false);
+            bankLedger.setIsCheque(false);
             bankLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 
             bankReconciliationRepository.save(bankLedger);
@@ -103,7 +121,6 @@ public class BankReconciliationService {
 
         }
         if (count == mix.getDataList().size()) {
-            System.out.println(count);
             return true;
         }
         return false;
@@ -121,8 +138,9 @@ public class BankReconciliationService {
 
     @Transactional
     public void savePopup(ReconciliationMix data) {
-        int count = 0;
-        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), "RECONCILIATION");
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.RECONCILIATION);
+        String searchCode=getSearchCode(Constant.CODE_BANK_RECONCILIATION,SecurityUtil.getCurrentUser().getBranch(),number);
+        
         for (TAccLedger tAccLedger : data.getDataList()) {
             int deleteNo = journalRepository.getDeleteNumber();
             tAccLedger.setBankReconciliation(false);
@@ -130,15 +148,18 @@ public class BankReconciliationService {
             tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
             tAccLedger.setDeleteRefNo(deleteNo);
-            tAccLedger.setDescription("other bank reconciliation");
-            tAccLedger.setFormName("BANK RECONCILIATION");
+            tAccLedger.setDescription(tAccLedger.getDescription());
+            tAccLedger.setFormName(Constant.FORM_BANK_RECONCILIATION);
             tAccLedger.setNumber(number);
-            tAccLedger.setReconciliationGroup(0);
+            tAccLedger.setReconcileAccount(null);
+            tAccLedger.setReconcileGroup(0);
             tAccLedger.setRefNumber(null);
+            tAccLedger.setSearchCode(searchCode);
             tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
-            tAccLedger.setType("RECONCILIATION");
-//            tAccLedger.setTransactionDate(new SimpleDateFormat("HH:mm:ss").format(tAccLedger.getTransactionDate()));
+            tAccLedger.setType(Constant.RECONCILIATION);
             tAccLedger.setTypeIndexNo(null);
+            tAccLedger.setIsMain(false);
+            tAccLedger.setIsCheque(false);
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
             bankReconciliationRepository.save(tAccLedger);
 
@@ -152,26 +173,31 @@ public class BankReconciliationService {
             bankLedger.setCredit(debit);
             bankLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             bankLedger.setDebit(credit);
+            bankLedger.setSearchCode(searchCode);
             bankLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
             bankLedger.setDescription(tAccLedger.getDescription());
-            bankLedger.setFormName("BANK RECONCILIATION");
+            bankLedger.setFormName(Constant.FORM_BANK_RECONCILIATION);
             bankLedger.setNumber(number);
             bankLedger.setDeleteRefNo(deleteNo);
-            bankLedger.setReconciliationGroup(0);
+            bankLedger.setReconcileAccount(null);
+            bankLedger.setReconcileGroup(0);
             bankLedger.setRefNumber(null);
             bankLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
             bankLedger.setTransactionDate(tAccLedger.getTransactionDate());
-            bankLedger.setType("RECONCILIATION");
+            bankLedger.setType(Constant.RECONCILIATION);
             bankLedger.setTypeIndexNo(null);
+            bankLedger.setIsMain(true);
+            bankLedger.setIsCheque(false);
             bankLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 
             bankReconciliationRepository.save(bankLedger);
-            count++;
         }
-//        if (count == data.getDataList().size()) {
-//            return true;
-//        }
-//        return false;
-    }
 
+    }
+     private String getSearchCode(String code, Integer branch, int number) {
+         MBranch branchModel = branchRepository.findOne(branch);
+        String branchCode = branchModel.getBranchCode();
+        return code + "/" + branchCode + "/" + number;
+    }
+    
 }

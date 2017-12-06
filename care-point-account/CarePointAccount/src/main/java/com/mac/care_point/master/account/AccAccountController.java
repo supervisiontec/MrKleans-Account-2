@@ -6,7 +6,6 @@
 package com.mac.care_point.master.account;
 
 import com.mac.care_point.master.account.model.MAccAccount;
-import com.mac.care_point.transaction.setting.SettingRepository;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/care-point/account/master/acc-account")
 public class AccAccountController {
 
+    private final String overPaymentIssue="over_payment_issue";
+    
     @Autowired
     private AccAccountService accAccountService;
 
@@ -49,11 +50,23 @@ public class AccAccountController {
     public List<MAccAccount> findAccount() {
         return accAccountService.findByIsAccAccount(true);
     }
+    @RequestMapping(value = "/find-only-cahs-bank", method = RequestMethod.GET)
+    public List<MAccAccount> findCahsBank() {
+        return accAccountService.findByIsAccAccountAndAccTypeOrAccType(true,"CASH","BANK");
+    }
+    @RequestMapping(value = "/find-over-payment-issue-account", method = RequestMethod.GET)
+    public MAccAccount getOverPaymentIssueAccount() {
+        return accAccountService.getOverPaymentIssueAccount(overPaymentIssue);
+    }
+//    type='income','expense','asset','liability','capital'
+    @RequestMapping(value = "/find-type-accounts", method = RequestMethod.GET)
+    public List<MAccAccount> findTypeAccount() {
+        return accAccountService.findTypeAccount("EXPENSE");
+    }
     @RequestMapping(value = "/get-account-flow/{acc}", method = RequestMethod.GET)
     public List<MAccAccount> getAccountFlow(@PathVariable Integer acc) {
         return accAccountService.getAccFlow(acc);
     }
-//
     @RequestMapping(value = "/find-account-value/{index}", method = RequestMethod.GET)
     public BigDecimal findAccountValue(@PathVariable Integer index) {
         return accAccountService.findAccountValue(SecurityUtil.getCurrentUser().getBranch(), index);

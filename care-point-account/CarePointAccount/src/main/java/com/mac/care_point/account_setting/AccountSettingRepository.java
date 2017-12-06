@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.transaction.setting;
+package com.mac.care_point.account_setting;
 
-import com.mac.care_point.transaction.setting.model.MAccSetting;
-import java.util.List;
+import com.mac.care_point.account_setting.model.MAccSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author 'Kasun Chamara'
  */
-public interface SettingRepository extends JpaRepository<MAccSetting, Integer> {
+public interface AccountSettingRepository extends JpaRepository<MAccSetting, Integer> {
 
-    public List<MAccSetting> findByName(String petty_cash);
-
+    public MAccSetting findByName(String name);
 }

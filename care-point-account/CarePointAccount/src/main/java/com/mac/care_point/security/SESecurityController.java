@@ -5,12 +5,15 @@
  */
 package com.mac.care_point.security;
 
+import com.mac.care_point.security.model.MUser;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -28,6 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/security")
 public class SESecurityController {
 
+    @Autowired 
+    private MUserService userService;
+    
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public Principal login(Principal principal) {
         return principal;
@@ -51,6 +57,10 @@ public class SESecurityController {
     @RequestMapping(value = "/user-current-branch", method = RequestMethod.GET)
     public Integer getCurrentBranch() {
         return SecurityUtil.getCurrentUser().getBranch();
+    }
+    @RequestMapping(value = "/user-list", method = RequestMethod.GET)
+    public List<MUser> getUsers() {
+        return userService.getUsers();
     }
 
 }

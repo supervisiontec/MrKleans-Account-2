@@ -65,4 +65,8 @@ public class MUserService implements UserDetailsService {
         return securityUser;
     }
 
+    public List<MUser> getUsers() {
+        return mUserRepository.findAll();
+    }
+
 }

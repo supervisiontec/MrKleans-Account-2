@@ -5,6 +5,10 @@
  */
 package com.mac.care_point.transaction.account_ledger;
 
+import com.mac.care_point.common.Constant;
+import com.mac.care_point.common.SearchCodeGenarator;
+import com.mac.care_point.master.branch.BranchRepository;
+import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.text.SimpleDateFormat;
@@ -25,20 +29,30 @@ public class JournalService {
 
     @Autowired
     private JournalRepository journalRepository;
+   
+    @Autowired
+    private BranchRepository branchRepository;
 
     public Integer saveJournal(List<TAccLedger> list) {
         int count = 0;
-        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), "JOURNAL");
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.JOURNAL);
         int deleteNumber = journalRepository.getDeleteNumber();
+        String searchCode=getSearchCode(Constant.CODE_JOURNAL,SecurityUtil.getCurrentUser().getBranch(),number);
+        
         for (TAccLedger tAccLedger : list) {
             tAccLedger.setNumber(number);
+            tAccLedger.setSearchCode(searchCode);
             tAccLedger.setDeleteRefNo(deleteNumber);
             tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
             tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-            tAccLedger.setFormName("JOURNAL");
+            tAccLedger.setFormName(Constant.FORM_JOURNAL);
             tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
-            tAccLedger.setType("JOURNAL");
+            tAccLedger.setType(Constant.JOURNAL);
+            tAccLedger.setReconcileAccount(null);
+            tAccLedger.setBankReconciliation(false);
+            tAccLedger.setIsMain(Boolean.FALSE);
+            tAccLedger.setIsCheque(Boolean.FALSE);
             TAccLedger save = journalRepository.save(tAccLedger);
             if (save.getIndexNo() != null) {
                 count++;
@@ -49,5 +63,13 @@ public class JournalService {
         }
         return 0;
     }
+
+    private String getSearchCode(String code, Integer branch, int number) {
+         MBranch branchModel = branchRepository.findOne(branch);
+        String branchCode = branchModel.getBranchCode();
+        return code + "/" + branchCode + "/" + number;
+    }
+
+   
 
 }

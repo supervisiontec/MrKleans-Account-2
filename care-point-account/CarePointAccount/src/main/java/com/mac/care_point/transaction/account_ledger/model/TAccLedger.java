@@ -38,6 +38,10 @@ public class TAccLedger implements Serializable {
     @Basic(optional = false)
     @Column(name = "number")
     private Integer number;
+    
+    @Basic(optional = false)
+    @Column(name = "search_code")
+    private String searchCode;
 
     @Basic(optional = false)
     @Column(name = "`current_date`")
@@ -78,7 +82,7 @@ public class TAccLedger implements Serializable {
 
     @Column(name = "type_index_no")
     private Integer typeIndexNo;
-    
+
     @Column(name = "delete_ref_no")
     private Integer deleteRefNo;
 
@@ -90,20 +94,30 @@ public class TAccLedger implements Serializable {
 
     @Column(name = "cheque_date")
     private String chequeDate;
-   
+
     @Column(name = "bank_reconciliation")
     private Boolean bankReconciliation;
+
+    @Column(name = "reconcile_account")
+    private Integer reconcileAccount;
+
+    @Column(name = "reconcile_group")
+    private Integer reconcileGroup;
    
-    @Column(name = "reconciliation_group")
-    private Integer reconciliationGroup;
+    @Column(name = "is_main")
+    private boolean isMain;
+   
+    @Column(name = "is_cheque")
+    private boolean isCheque;
 
     public TAccLedger() {
     }
 
-    public TAccLedger(Integer indexNo, String transactionDate, Integer number, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconciliationGroup) {
+    public TAccLedger(Integer indexNo, String transactionDate, Integer number, String searchCode, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, boolean isCheque) {
         this.indexNo = indexNo;
         this.transactionDate = transactionDate;
         this.number = number;
+        this.searchCode = searchCode;
         this.currentDate = currentDate;
         this.time = time;
         this.branch = branch;
@@ -120,9 +134,52 @@ public class TAccLedger implements Serializable {
         this.accAccount = accAccount;
         this.chequeDate = chequeDate;
         this.bankReconciliation = bankReconciliation;
-        this.reconciliationGroup = reconciliationGroup;
+        this.reconcileAccount = reconcileAccount;
+        this.reconcileGroup = reconcileGroup;
+        this.isMain = isMain;
+        this.isCheque = isCheque;
     }
 
+    public String getSearchCode() {
+        return searchCode;
+    }
+
+    public void setSearchCode(String searchCode) {
+        this.searchCode = searchCode;
+    }
+
+    public boolean getIsCheque() {
+        return isCheque;
+    }
+
+    public void setIsCheque(boolean isCheque) {
+        this.isCheque = isCheque;
+    }
+
+    public boolean getIsMain() {
+        return isMain;
+    }
+
+    public void setIsMain(boolean isMain) {
+        this.isMain = isMain;
+    }
+
+
+    public Integer getReconcileAccount() {
+        return reconcileAccount;
+    }
+
+    public void setReconcileAccount(Integer reconcileAccount) {
+        this.reconcileAccount = reconcileAccount;
+    }
+
+    public Integer getReconcileGroup() {
+        return reconcileGroup;
+    }
+
+    public void setReconcileGroup(Integer reconcileGroup) {
+        this.reconcileGroup = reconcileGroup;
+    }
 
     public Integer getIndexNo() {
         return indexNo;
@@ -268,14 +325,6 @@ public class TAccLedger implements Serializable {
         this.bankReconciliation = bankReconciliation;
     }
 
-    public Integer getReconciliationGroup() {
-        return reconciliationGroup;
-    }
-
-    public void setReconciliationGroup(Integer reconciliationGroup) {
-        this.reconciliationGroup = reconciliationGroup;
-    }
-
     public Integer getDeleteRefNo() {
         return deleteRefNo;
     }
@@ -284,5 +333,4 @@ public class TAccLedger implements Serializable {
         this.deleteRefNo = deleteRefNo;
     }
 
-    
 }

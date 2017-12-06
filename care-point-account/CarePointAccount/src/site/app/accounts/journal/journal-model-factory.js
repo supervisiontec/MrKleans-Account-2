@@ -20,7 +20,7 @@
                         "typeIndexNo": null,
                         "description": null,
                         "bankReconciliation": false,
-                        "reconciliationGroup":0
+                        "reconcileAccount":null
                     };
                     return data;
                 };
