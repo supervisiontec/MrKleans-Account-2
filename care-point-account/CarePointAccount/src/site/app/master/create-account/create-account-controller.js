@@ -23,6 +23,9 @@
                     $scope.ui.mode = "EDIT";
 
                 };
+                $scope.ui.refersh=function (){
+                  $scope.model.refresh();  
+                };
                 $scope.ui.delete = function (acc) {
                     if (!acc.isAccAccount) {
                         Notification.error("Can't delete because there are another transaction with relation  !");

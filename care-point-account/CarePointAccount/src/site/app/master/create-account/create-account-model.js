@@ -8,13 +8,13 @@
         employeeModel.prototype = {
             data: {},
             accAccountList: [],
-            accTypeList:["COMMON","CASH","BANK"],
-            
+            accTypeList: ["COMMON", "CASH", "BANK"],
+
             //constructor
             constructor: function () {
                 var that = this;
                 that.data = createAccountFactory.Data();
-                
+
                 this.loadAccAccount();
             },
             loadAccAccount: function () {
@@ -23,6 +23,10 @@
                         .success(function (data) {
                             that.accAccountList = data;
                         });
+            },
+            refresh: function () {
+                this.loadAccAccount();
+                this.data=createAccountFactory.Data();
             },
             clearData: function () {
                 var that = this;
@@ -47,7 +51,7 @@
                         });
                 return defer.promise;
             }
-            
+
             , accAccountLabel: function (model) {
                 var label;
                 angular.forEach(this.accAccountList, function (value) {
@@ -60,7 +64,7 @@
             },
             save: function () {
                 var that = this;
-                
+
                 console.log(this.data);
                 var defer = $q.defer();
                 createAccountService.saveNewAccount(JSON.stringify(that.data))
