@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.account_setting.model;
+package com.mac.care_point.master.form_name.model;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -13,14 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author kasun
  */
 @Entity
-@Table(name = "m_acc_setting")
-public class MAccSetting implements Serializable {
+@Table(name = "m_form_name")
+public class MFormName implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,27 +30,16 @@ public class MAccSetting implements Serializable {
     private Integer indexNo;
 
     @Basic(optional = false)
+    @NotNull
     @Column(name = "name")
     private String name;
 
-    @Column(name = "acc_account")
-    private Integer accAccount;
-
-    public MAccSetting() {
+    public MFormName() {
     }
 
-    public MAccSetting(Integer indexNo, String name, Integer accAccount) {
+    public MFormName(Integer indexNo, String name) {
         this.indexNo = indexNo;
         this.name = name;
-        this.accAccount = accAccount;
-    }
-
-    public Integer getAccAccount() {
-        return accAccount;
-    }
-
-    public void setAccAccount(Integer accAccount) {
-        this.accAccount = accAccount;
     }
 
     public Integer getIndexNo() {
@@ -67,7 +57,5 @@ public class MAccSetting implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    
 
 }

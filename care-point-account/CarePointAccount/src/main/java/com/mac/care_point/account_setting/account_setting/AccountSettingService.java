@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.account_setting;
+package com.mac.care_point.account_setting.account_setting;
 
-import com.mac.care_point.account_setting.model.MAccSetting;
+import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,10 @@ public class AccountSettingService {
     
     public List<MAccSetting> findAll() {
         return accountSettingRepository.findAll();
+    }
+
+    public Integer save(List<MAccSetting> settingList) {
+        return accountSettingRepository.save(settingList).size();
     }
     
 }

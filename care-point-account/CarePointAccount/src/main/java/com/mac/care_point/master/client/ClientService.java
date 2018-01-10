@@ -5,8 +5,8 @@
  */
 package com.mac.care_point.master.client;
 
-import com.mac.care_point.account_setting.AccountSettingRepository;
-import com.mac.care_point.account_setting.model.MAccSetting;
+import com.mac.care_point.account_setting.account_setting.AccountSettingRepository;
+import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import com.mac.care_point.common.Constant;
 import com.mac.care_point.master.account.AccAccountService;
 import com.mac.care_point.master.account.model.MAccAccount;

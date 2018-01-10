@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.account_setting;
+package com.mac.care_point.account_setting.account_setting;
 
-import com.mac.care_point.account_setting.model.MAccSetting;
+import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

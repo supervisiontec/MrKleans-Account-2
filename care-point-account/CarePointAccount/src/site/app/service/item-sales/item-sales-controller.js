@@ -241,7 +241,7 @@
                         Notification.error('Select Invoice Item to save !');
                     }
                     if (check) {
-                        ConfirmPane.successConfirm("Do you want to Item Sale!")
+                        ConfirmPane.successConfirm("Do you want to save Item Sale!")
                                 .confirm(function () {
                                     $scope.model.saveItemSale()
                                             .then(function (data) {
