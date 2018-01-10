@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 public interface ItemUnitRepository extends JpaRepository<MItemUnits, Serializable> {
 

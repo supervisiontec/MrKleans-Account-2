@@ -7,13 +7,10 @@ package com.mac.care_point;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.*;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  *
- * @author Mohan
+ * @author kasun
  */
 @SpringBootApplication
 public class Application {

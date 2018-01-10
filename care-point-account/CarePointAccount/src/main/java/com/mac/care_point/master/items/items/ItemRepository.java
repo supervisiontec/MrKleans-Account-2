@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 public interface ItemRepository extends JpaRepository<MItem, Integer> {
 

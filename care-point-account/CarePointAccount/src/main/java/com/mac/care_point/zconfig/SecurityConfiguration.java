@@ -20,7 +20,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 @Configuration
 @EnableWebSecurity

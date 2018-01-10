@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author Supervision
+ * @author kasun
  */
 public interface ClientRepository extends JpaRepository<Client, Integer>{
 

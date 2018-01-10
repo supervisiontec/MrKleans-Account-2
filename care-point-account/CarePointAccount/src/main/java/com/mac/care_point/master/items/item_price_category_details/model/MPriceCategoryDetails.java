@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author kavish manjitha
+ * @author kasun
  */
 @Entity
 @Table(name = "m_price_category_details")

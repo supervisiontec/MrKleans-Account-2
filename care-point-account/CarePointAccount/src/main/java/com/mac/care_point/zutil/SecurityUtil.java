@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 public class SecurityUtil {
 

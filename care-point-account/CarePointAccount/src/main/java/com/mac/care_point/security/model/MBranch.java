@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kavish manjitha
+ * @author kasun
  */
 @Entity(name = "com.mac.care_point.security.model.MBranch")
 @Table(name = "m_branch")

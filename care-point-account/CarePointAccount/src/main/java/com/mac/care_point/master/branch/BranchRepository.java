@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author L T430
+ * @author kasun
  */
 public interface BranchRepository extends JpaRepository<MBranch, Integer>{
 

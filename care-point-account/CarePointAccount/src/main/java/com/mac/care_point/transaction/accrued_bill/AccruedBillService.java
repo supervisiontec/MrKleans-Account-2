@@ -6,7 +6,6 @@
 package com.mac.care_point.transaction.accrued_bill;
 
 import com.mac.care_point.common.Constant;
-import com.mac.care_point.common.SearchCodeGenarator;
 import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.transaction.account_ledger.JournalRepository;
@@ -39,7 +38,9 @@ public class AccruedBillService {
         int deleteNumber = journalRepository.getDeleteNumber();
         String searchCode = getSearchCode(Constant.CODE_ACCRUED_BILL, SecurityUtil.getCurrentUser().getBranch(), number);
         int count = 0;
-
+        System.out.println("%%$$%%$$%%$$%%%$$%$$$%%$%%$%%$%$%$%$%");
+        System.out.println(searchCode);
+        System.out.println("%%$$%%$$%%$$%%%$$%$$$%%$%%$%%$%$%$%$%");
         accruedBillMix.getData().setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
         accruedBillMix.getData().setNumber(number);
         accruedBillMix.getData().setDeleteRefNo(deleteNumber);
@@ -54,7 +55,7 @@ public class AccruedBillService {
 
         TAccLedger save = journalRepository.save(accruedBillMix.getData());
         save.setReconcileGroup(save.getIndexNo());
-        journalRepository.save(accruedBillMix.getData());
+        journalRepository.save(save);
 
         for (TAccLedger tAccLedger : accruedBillMix.getDataList()) {
             tAccLedger.setNumber(number);

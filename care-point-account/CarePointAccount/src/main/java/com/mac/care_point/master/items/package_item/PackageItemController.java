@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author Nidura Prageeth
+ * @author kasun
  */
 @CrossOrigin
 @RestController

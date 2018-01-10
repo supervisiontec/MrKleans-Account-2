@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 public interface AccAccountRepository extends JpaRepository<MAccAccount, Integer> {
 

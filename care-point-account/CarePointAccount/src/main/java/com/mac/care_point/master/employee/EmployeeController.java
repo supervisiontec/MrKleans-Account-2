@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
- * @author kavish manjitha
+ * @author kasun
  */
 @RestController
 @CrossOrigin

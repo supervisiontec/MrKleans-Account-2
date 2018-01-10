@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author L T430
+ * @author kasun
  */
 public interface ItemCheckDetailRepository extends JpaRepository<MItemCheckDetail, Integer>{
     

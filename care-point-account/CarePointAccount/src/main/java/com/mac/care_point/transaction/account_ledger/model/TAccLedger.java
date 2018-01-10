@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 @Entity
 @Table(name = "t_acc_ledger")

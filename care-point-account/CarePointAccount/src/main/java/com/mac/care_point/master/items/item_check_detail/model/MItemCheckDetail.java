@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author L T430
+ * @author kasun
  */
 @Entity(name = "com.mac.care_point.master.items.item_check_detail.model.MItemCheckDetail")
 @Table(name = "m_item_check_detail")

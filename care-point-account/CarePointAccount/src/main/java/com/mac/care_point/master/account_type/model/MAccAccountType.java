@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 @Entity
 @Table(name = "m_acc_account_type")

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author Mohan
+ * @author kasun
  */
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 public class EntityNotFoundException extends SystemException {

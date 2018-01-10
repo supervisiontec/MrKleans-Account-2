@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 public class PingRespond {
 

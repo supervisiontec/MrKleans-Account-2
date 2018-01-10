@@ -1,0 +1,111 @@
+<div class="index-content-header">
+</div>
+
+<div class="index-content-body ">
+
+    <div class="col-xs-4 background-dark">
+        <div class="row" style="display: flex; flex-flow: column; height: calc(100vh - 92px);">
+            <div class="col-xs-12" style="flex: 0 0 auto; height: 95px; padding-right: 22px;">
+                <table class="table-rounded control-table">
+                    <col style="width: 35%"/>
+                    <col style="width: 65%"/>
+                    <tbody>
+                        <tr>
+                            <td><label>Name :</label></td>
+                            <td><input class="form-control" ng-model="model.supplier.name" id="name" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"> </td>
+                        </tr>
+                        <tr>
+                            <td><label>Contact Name :</label></td>
+                            <td><input class="form-control" ng-model="model.supplier.contactName" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"> </td>
+                        </tr>
+                        <tr>
+                            <td><label>Contact No :</label></td>
+                            <td><input class="form-control" ng-model="model.supplier.contactNo" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"> </td>
+                        </tr>
+                        <tr>
+                            <td><label>Type :</label></td>
+                            <td>
+                                <select style="padding-left: 1px;" class="form-control" id="resident" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" ng-model="model.supplier.type">
+                                    <option value="NORMAL">NORMAL</option>
+                                    <option value="ACCRUED">ACCRUED</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Credit Period :</label></td>
+                            <td><input class="form-control" ng-model="model.supplier.creditPeriod" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Address 01 :</label></td>
+                            <td><input class="form-control" ng-model="model.supplier.addressLine1" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Address 02 :</label></td>
+                            <td><input class="form-control" ng-model="model.supplier.addressLine2" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Address 03 :</label></td>
+                            <td><input class="form-control" ng-model="model.supplier.addressLine3" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-8 background-light">
+        <div class="row" style="display: flex; flex-flow: column;">
+            <div class="col-xs-12">
+                <div class="row col-xs-5">
+                    <input type="text" class="search-input" ng-model="model.search.name" placeholder="search">
+                </div>
+                <table class="table-rounded">
+                    <col style="width: 15%">
+                    <col style="width: 25%">
+                    <col style="width: 25%">
+                    <col style="width: 15%">
+                    <col style="width: 10%">
+                    <col style="width: 10%">
+                    <thead class="background-dark">
+                        <tr>
+                            <th> <label>#</label> </th>
+                            <th> <label>Name</label></th>
+                            <th> <label>Contact Name</label></th>
+                            <th> <label>Contact No</label></th>
+                            <th> <label>Type</label></th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="smart-scroll-y" style="height: calc(100vh - 150px);">
+                    <table class="table-rounded">
+                        <col style="width: 9%">
+                        <col style="width: 28%">
+                        <col style="width: 28%">
+                        <col style="width: 15%">
+                        <col style="width: 10%">
+                        <col style="width: 10%">
+                        <tbody>
+                            <tr ng-repeat="supplier in model.supplierList| filter:model.search.name | orderBy:'indexNo'">
+                                <td><label class="label label-default">{{supplier.indexNo|fixedLength:5}}</label></td>
+                                <td>{{supplier.name}}</td>
+                                <td>{{supplier.contactName===null?'- - -':supplier.contactName}}</td>
+                                <td>{{supplier.contactNo===null?'- - -':supplier.contactNo}}</td>
+                                <td ng-show="supplier.type==='NORMAL'"><label class="label label-primary">{{supplier.type}}</label></td>
+                                <td ng-show="supplier.type!=='NORMAL'"><label class="label label-warning">{{supplier.type}}</label></td>
+                                <td class="text-right" style="padding-left: 5px;">
+                                    <a class="btn btn-primary" ng-click="ui.edit(supplier, $index)"><span class="glyphicon glyphicon-edit"></span></a>
+                                    <a class="btn btn-danger" ng-click="http.deleteSupplier(supplier.indexNo, $index)"><span class="glyphicon glyphicon-trash"></span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="fab-container">
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL' || ui.mode === 'SELECTED'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW' || ui.mode === 'EDIT'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+</div>

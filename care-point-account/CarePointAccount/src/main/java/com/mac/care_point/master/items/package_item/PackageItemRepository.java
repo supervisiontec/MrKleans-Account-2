@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author Nidura Prageeth
+ * @author kasun
  */
 public interface PackageItemRepository extends JpaRepository<MPackageItem, Serializable>{
 

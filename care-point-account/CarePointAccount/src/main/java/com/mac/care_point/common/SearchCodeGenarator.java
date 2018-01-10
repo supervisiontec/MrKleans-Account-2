@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 public class SearchCodeGenarator {
     @Autowired

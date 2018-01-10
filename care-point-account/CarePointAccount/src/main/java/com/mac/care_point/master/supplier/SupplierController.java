@@ -9,13 +9,14 @@ import com.mac.care_point.master.supplier.model.MSupplier;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author L T430
+ * @author kasun
  */
 @CrossOrigin
 @RestController
@@ -28,5 +29,9 @@ public class SupplierController {
     @RequestMapping(method = RequestMethod.GET)
     public List<MSupplier> findAll() {
         return supplierService.findAll();
+    }
+     @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public MSupplier saveSupplier(@RequestBody MSupplier supplier) {
+        return supplierService.saveSupplier(supplier);
     }
 }

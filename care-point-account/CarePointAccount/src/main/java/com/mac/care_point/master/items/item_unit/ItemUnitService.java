@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

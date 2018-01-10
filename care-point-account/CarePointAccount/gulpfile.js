@@ -95,7 +95,7 @@ gulp.task('build-other', function () {
     //images
     gulp.src('src/site/img/*.*')
             .pipe(debug())
-            .pipe(gulp.dest('src/main/resources/static/img'))
+            .pipe(gulp.dest('src/main/resources/static/img'));
     //web fonts
     gulp.src('bower_components/bootstrap/dist/fonts/*.*')
             .pipe(debug())

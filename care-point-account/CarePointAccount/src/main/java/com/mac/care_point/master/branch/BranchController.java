@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author L T430
+ * @author kasun
  */
 @CrossOrigin
 @RestController

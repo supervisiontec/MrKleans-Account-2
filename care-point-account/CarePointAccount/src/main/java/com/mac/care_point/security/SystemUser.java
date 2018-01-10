@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.User;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 public class SystemUser extends User {
 

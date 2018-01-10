@@ -6,9 +6,24 @@
         "ui.bootstrap",
         //master
         "clientModule",
+        "supplierModule",
         "vehicleModule",
+        "itemModule",
+        // service
         "app",
-        "vehicleEntranceModule"
+        "dashBoardModule",
+        //transaction
+        "itemSalesModule",
+        "paymentVoucherModule",
+        "purchaseOrderApproveModule",
+        "purchaseOrderRequestModule",
+        "grnApproveModule",
+        "directGrnModule",
+        "grnModule",
+        //setting
+        "accountSettingModule"
+        
+        
     ]);
 
     //constants
@@ -34,8 +49,8 @@
                         })
                         //home
                         .when("/account/home", {
-                            templateUrl: "app/service/vehicle-entrance/vehicle-entrance.html",
-                            controller: "vehicleEntranceController"
+                            templateUrl: "app/service/dash-board/dash-board.html",
+                            controller: "dashBoardController"
                         })
 
                         //reports
@@ -49,11 +64,22 @@
                             templateUrl: "app/master/create-account/create-account.html",
                             controller: "createAccountController"
                         })
-                        //setting
-                        .when("/setting/account-settings", {
-                            templateUrl: "app/master/account-settings/account-settings.html"
-//                            controller: "reOrderLevelController"
+
+                        .when("/master/client", {
+                            templateUrl: "app/master/client/client.html",
+                            controller: "clientController"
                         })
+                        
+                        .when("/master/supplier", {
+                            templateUrl: "app/master/supplier/supplier.html",
+                            controller: "supplierController"
+                        })
+                        
+                        .when("/master/item", {
+                            templateUrl: "app/master/item/item.html",
+                            controller: "itemController"
+                        })
+                        
                         //transaction
                         .when("/transaction/bank-reconciliation", {
                             templateUrl: "app/accounts/bank-reconciliation/bank-reconciliation.html",
@@ -86,6 +112,42 @@
                         .when("/transaction/journal", {
                             templateUrl: "app/accounts/journal/journal.html",
                             controller: "journalController"
+                        })
+                        
+                        // services
+                        
+                        .when("/service/item-sales", {
+                            templateUrl: "app/service/item-sales/item-sales.html",
+                            controller: "itemSalesController"
+                        })
+                        .when("/service/customer-payment", {
+                            templateUrl: "app/service/payment-voucher/payment-voucher.html",
+                            controller: "customerPaymentVoucherController"
+                        })
+                        .when("/service/grn-request", {
+                            templateUrl: "app/service/grn/grn-request/grn-request.html",
+                            controller: "grnController"
+                        })
+                        .when("/service/grn-approve", {
+                            templateUrl: "app/service/grn/grn-approve/grn-approve.html",
+                            controller: "grnApproveController"
+                        })
+                        .when("/service/grn-direct", {
+                            templateUrl: "app/service/grn/grn-direct/grn.html",
+                            controller: "directGrnController"
+                        })
+                        .when("/service/purchase-order-request", {
+                            templateUrl: "app/service/purchase-order/request/purchase-order-request.html",
+                            controller: "purchaseOrderRequestController"
+                        })
+                        .when("/service/purchase-order-approve", {
+                            templateUrl: "app/service/purchase-order/approve/purchase-order-approve.html",
+                            controller: "purchaseOrderApproveController"
+                        })
+                        // setting
+                        .when("/setting/account-settings", {
+                            templateUrl: "app/account-setting/account-settings.html",
+                            controller: "accountSettingController"
                         })
                         
                         //otherwise

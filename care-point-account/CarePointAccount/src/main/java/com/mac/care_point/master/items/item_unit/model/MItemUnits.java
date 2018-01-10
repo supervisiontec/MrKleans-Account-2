@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 @Entity
 @Table(name = "m_item_units")

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 @CrossOrigin
 @RestController

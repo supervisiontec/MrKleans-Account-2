@@ -30,7 +30,7 @@
                             });
                 };
                 factory.getCustomerTypes = function (callback) {
-                    var url = systemConfig.apiUrl + "/api/care-point/service/zmaster/customer-type";
+                    var url = systemConfig.apiUrl + "/api/care-point/master/customer-type";
 
                     $http.get(url)
                             .success(function (data, status, headers) {
@@ -130,12 +130,12 @@
                     var detail = $scope.model.client;
 
                     var detailJSON = JSON.stringify(detail);
-                    console.log(detailJSON);
                     clientFactory.saveClientFactory(
                             detailJSON,
                             function (data) {
+                                $scope.model.clientList.splice($scope.model.customerPlace(data.indexNo),1);
                                 $scope.model.clientList.push(data);
-                                Notification.success(data.indexNo + " - " + "Client Save Successfully");
+                                Notification.success(data.indexNo + " - " +data.name+ " Save Successfully");
                                 $scope.model.reset();
                             },
                             function (data) {
@@ -170,7 +170,7 @@
                 $scope.ui.editNewClient = function (client, index) {
                     $scope.ui.mode = "EDIT";
                     $scope.model.client = client;
-                    $scope.model.newClientList.splice(index, 1);
+                    $scope.model.newClientList.splice($scope.model.customerPlace(client.indexNo), 1);
 
                 };
                 $scope.ui.customerTypeLable = function (customerType) {
@@ -191,7 +191,7 @@
                 //focus
                 $scope.ui.focus = function () {
                     $timeout(function () {
-                        document.querySelectorAll("#nicText")[0].focus();
+                        document.querySelectorAll("#resident")[0].focus();
                     }, 10);
                 };
 
@@ -212,12 +212,18 @@
                 };
                 $scope.model.findCustomer = function (client) {
                     for (var i = 0; i < $scope.model.clientList.length; i++) {
-                        console.log(client + " : " + $scope.model.clientList[i].indexNo);
                         if ($scope.model.clientList[i].indexNo === parseInt(client)) {
                             return $scope.model.clientList[i];
                         }
                     }
                     $scope.ui.mode = "EDIT";
+                };
+                $scope.model.customerPlace = function (clientId) {
+                    for (var i = 0; i < $scope.model.clientList.length; i++) {
+                        if ($scope.model.clientList[i].indexNo === parseInt(clientId)) {
+                            return i;
+                        }
+                    }
                 };
 
                 $scope.ui.init = function () {
@@ -241,11 +247,9 @@
 
                     var client = parseInt($routeParams.client);
                     if (client) {
-                        console.log(client);
 
                         $timeout(function () {
                             $scope.model.client = $scope.model.findCustomer(client);
-                            console.log($scope.model.client);
                         }, 2000);
 
 

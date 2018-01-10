@@ -7,7 +7,7 @@ package com.mac.care_point.system.exception.handler;
 
 /**
  *
- * @author Don
+ * @author kasun
  */
 public class SystemException extends RuntimeException {
 

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author kavish manjitha
+ * @author kasun
  */
 public interface MBranchRepository extends JpaRepository<MBranch, Integer>{
     

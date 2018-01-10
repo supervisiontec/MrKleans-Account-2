@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author Kavish Manjitha
+ * @author kasun
  */
 public class ReportGroup implements Serializable, Comparable<ReportGroup> {
 

@@ -61,7 +61,7 @@ public class SupplierPaymentSevrice {
         int deleteNumber = journalRepository.getDeleteNumber();
         BigDecimal overPayment = new BigDecimal(0);
         overPayment = (BigDecimal) subtract(mix.getData().getCredit(), mix.getData().getBillTotal());
-        String searchCode = getSearchCode(Constant.CODE_CHEQUE_RETURN, SecurityUtil.getCurrentUser().getBranch(), number);
+        String searchCode = getSearchCode(Constant.CODE_SUPPLIER_PAYMENT, SecurityUtil.getCurrentUser().getBranch(), number);
 
         if ("BANK".equals(mix.getData().getAccType())) {
             MAccSetting unrealizedIssued = accountSettingRepository.findByName(Constant.UNREALIZED_ISSUED);

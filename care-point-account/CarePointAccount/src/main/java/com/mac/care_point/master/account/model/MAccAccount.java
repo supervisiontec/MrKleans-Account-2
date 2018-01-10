@@ -18,7 +18,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 @Entity
 @Table(name = "m_acc_account")

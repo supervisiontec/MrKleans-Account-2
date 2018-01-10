@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

@@ -141,7 +141,7 @@
                 console.log(data);
 
                 var defer = $q.defer();
-                accruedBillService.saveFundTransfer(JSON.stringify(data))
+                accruedBillService.saveAccruedBill(JSON.stringify(data))
                         .success(function (data) {
                             that.saveDataList = [];
                             defer.resolve(data);

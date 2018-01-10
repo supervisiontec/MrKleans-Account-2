@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Kalum
+ * @author kasun
  */
 @Entity
 @Table(name = "m_client")
@@ -70,9 +70,6 @@ public class Client implements Serializable {
     @Column(name = "resident")
     private String resident;
 
-    @Column(name = "customer_type")
-    private Integer customerType;
-    
     @Column(name = "is_new")
     private boolean isNew;
     
@@ -80,10 +77,13 @@ public class Client implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    @Column(name = "acc_account")
+    private Integer accAccount;
+    
     public Client() {
     }
 
-    public Client(Integer indexNo, String name, String addressLine1, String addressLine2, String addressLine3, String mobile, int branch, String nic, String resident, Integer customerType, boolean isNew, Date date) {
+    public Client(Integer indexNo, String name, String addressLine1, String addressLine2, String addressLine3, String mobile, int branch, String nic, String resident, boolean isNew, Date date, Integer accAccount) {
         this.indexNo = indexNo;
         this.name = name;
         this.addressLine1 = addressLine1;
@@ -93,10 +93,14 @@ public class Client implements Serializable {
         this.branch = branch;
         this.nic = nic;
         this.resident = resident;
-        this.customerType = customerType;
         this.isNew = isNew;
         this.date = date;
+        this.accAccount = accAccount;
     }
+
+   
+
+    
 
     public Integer getIndexNo() {
         return indexNo;
@@ -170,14 +174,6 @@ public class Client implements Serializable {
         this.resident = resident;
     }
 
-    public Integer getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(Integer customerType) {
-        this.customerType = customerType;
-    }
-
     public boolean isIsNew() {
         return isNew;
     }
@@ -193,5 +189,14 @@ public class Client implements Serializable {
     public void setDate(Date date) {
         this.date = date;
     }
-    
+
+    public Integer getAccAccount() {
+        return accAccount;
+    }
+
+    public void setAccAccount(Integer accAccount) {
+        this.accAccount = accAccount;
+    }
+
+   
 }

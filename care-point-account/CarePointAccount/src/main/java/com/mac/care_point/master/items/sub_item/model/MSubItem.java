@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Don
+ * @author kasun
  */
 @Entity
 @Table(name = "m_sub_item")

@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author L T430
+ * @author kasun
  */
 @Entity
 @Table(name = "r_consumable")

@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author L T430
+ * @author kasun
  */
 @Entity
 @Table(name = "m_branch")

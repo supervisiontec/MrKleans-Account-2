@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Nidura Prageeth
+ * @author kasun
  */
 @Entity
 @Table(name = "r_package_item")

@@ -19,8 +19,8 @@
         this.loadAccTypes = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/account-type");
         };
-        this.saveFundTransfer = function (data) {
-            return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/fund-transfer/save", data);
+        this.saveAccruedBill = function (data) {
+            return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/accred-bill/save", data);
         };
         this.setAccFlow = function (acc) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/get-account-flow/"+acc);

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author 'Kasun Chamara'
+ * @author kasun
  */
 public interface AccountTypeRepository extends JpaRepository<MAccAccountType, Integer>{
     

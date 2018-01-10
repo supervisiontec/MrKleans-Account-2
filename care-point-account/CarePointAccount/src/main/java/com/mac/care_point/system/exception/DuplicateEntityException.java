@@ -12,7 +12,7 @@ import com.mac.care_point.system.exception.handler.SystemException;
 
 /**
  *
- * @author Don
+ * @author kasun
  */
 @SystemErrorResponse(4001)
 public class DuplicateEntityException extends SystemException {

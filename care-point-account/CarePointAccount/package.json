@@ -1,7 +1,7 @@
 {
   "name": "care-point",
   "version": "1.0.0",
-  "description": "car service management system",
+  "description": "account management system",
   "author": "Kasun Chamara",
   "devDependencies": {
     "bower-npm-resolver": "^0.8.1",
