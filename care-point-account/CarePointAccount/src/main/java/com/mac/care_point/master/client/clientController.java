@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author Supervision
+ * @author kasun
  */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/care-point/master/client")
-public class clientController {
+public class ClientController {
 
     @Autowired
     private ClientService clientService;
