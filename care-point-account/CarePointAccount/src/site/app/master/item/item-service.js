@@ -55,6 +55,10 @@
         this.loadItemCheckDetails = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/item-check-detail");
         };
+        
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
 
         this.getPackageItems = function (indexNo) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/package-item/get-package-items/" + indexNo);

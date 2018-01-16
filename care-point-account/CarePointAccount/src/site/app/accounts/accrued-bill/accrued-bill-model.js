@@ -10,6 +10,7 @@
             tempData: {},
             currentBranch: {},
             selectAccType: {},
+            userPermission: {},
             accAccountList: [],
             branchList: [],
             supplierList: [],
@@ -40,7 +41,11 @@
                         .success(function (data) {
                             that.accTypeList = data;
                         });
-
+                accruedBillService.getPermission('Accrued Bill')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
+                        });
                 this.loadAccAccount();
             },
             loadAccAccount: function () {
@@ -66,9 +71,9 @@
                             .success(function (data) {
                                 that.data.value = data;
                             });
-                            that.setAccountFlow(accAccount);
+                    that.setAccountFlow(accAccount);
 
-                }else{
+                } else {
                     Notification.error("this supplier not link  to account system !");
                 }
             },

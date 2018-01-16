@@ -12,7 +12,6 @@
 
                 };
 
-
                 $scope.ui.selectGrn = function ($index, indexNo) {
                     $scope.model.selectGrn($index, indexNo);
                 };
@@ -24,17 +23,24 @@
                     $scope.model.addData();
                 };
                 $scope.ui.save = function () {
-                    ConfirmPane.primaryConfirm("Do you want to Approve this GRN !")
-                            .confirm(function () {
-                                $scope.model.save();
-                                $scope.ui.mode = 'IDEAL';
-                                $scope.chxNBT = false;
-                                $scope.chxVAT = false;
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission !');
+                    }
+                    if (check) {
+                        ConfirmPane.primaryConfirm("Do you want to Approve this GRN !")
+                                .confirm(function () {
+                                    $scope.model.save();
+                                    $scope.ui.mode = 'IDEAL';
+                                    $scope.chxNBT = false;
+                                    $scope.chxVAT = false;
 
-                            })
-                            .discard(function () {
-                                console.log('fail');
-                            });
+                                })
+                                .discard(function () {
+                                    console.log('fail');
+                                });
+                    }
                 };
                 $scope.ui.discard = function () {
 //                    $scope.model.discard();

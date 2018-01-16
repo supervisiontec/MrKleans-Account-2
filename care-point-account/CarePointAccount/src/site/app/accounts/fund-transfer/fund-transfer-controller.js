@@ -70,7 +70,10 @@
                         checkSave = false;
                         Notification.error('select a main account to save !');
                     }
-                   
+                    if (!$scope.model.userPermission.add) {
+                        checkSave = false;
+                        Notification.error('you have no permission ');
+                    }
                     if ($scope.model.saveDataList.length === 0) {
                         checkSave = false;
                         Notification.error('empty transfer item to save !');

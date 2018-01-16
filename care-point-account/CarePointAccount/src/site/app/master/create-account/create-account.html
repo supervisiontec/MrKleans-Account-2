@@ -27,12 +27,19 @@
                     <tr>
                         <td>
                             <label class="control-label">Account Type :</label>
-                            <input type="text" class="form-control" ng-model="model.data.accType" 
-                                   uib-typeahead="type as (type) for type in model.accTypeList |filter:$viewValue|limitTo:10" 
-                                   typeahead-input-formatter="" 
-                                   typeahead-on-select=""
-                                   typeahead-editable="true"
-                                   ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />
+                            <!--                            <input type="text" class="form-control" ng-model="model.data.accType" 
+                                                               uib-typeahead="type as (type) for type in model.accTypeList |filter:$viewValue|limitTo:10" 
+                                                               typeahead-input-formatter="" 
+                                                               typeahead-on-select=""
+                                                               typeahead-editable="true"
+                                                               ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" />-->
+                            <select class="form-control" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" 
+                                    ng-model="model.data.accType">
+                                <option value="COMMON">COMMON</option>
+                                <option value="CASH">CASH</option>
+                                <option value="BANK">BANK</option>
+                                <option value="CHEQUE">CHEQUE</option>
+                            </select>
                         </td>
                     </tr>
                 </tbody>
@@ -91,16 +98,42 @@
     </div>
     <div class="col-xs-8 background-light">
         <table class="table-rounded control-table">
-            <col style="width: 60%">
-            <col style="width: 40%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 5%">
             <thead class="background-dark"> 
                 <tr>
                     <td>
-                        <h4 class="text-center">Account List</h4>
+                        <input type="text" class="search-input" ng-model="ui.search.code" placeholder="by code ">
                     </td>
-
                     <td>
-                        <input type="text" class="search-input" ng-model="search" placeholder="Search..">
+                        <input type="text" class="search-input" ng-model="ui.search.name" placeholder="by name">
+                    </td>
+                    <td>
+                        <input type="text" class="search-input" ng-model="ui.search.subAccOf" placeholder="by subAccOf"
+                               uib-typeahead="acc.indexNo as (acc.accCode + ' - ' + acc.name) for acc in model.accAccountList |filter:$viewValue|limitTo:10 | orderBy:'accCode'" 
+                               typeahead-input-formatter="model.accAccountLabel($model)" 
+                               typeahead-editable="false"
+                               >
+                    </td>
+                    <td>
+                        <select class="search-input" 
+                                ng-model="ui.search.type">
+                            <option value="" class="active">BY TYPE</option>
+                            <option value="COMMON">COMMON</option>
+                            <option value="CASH">CASH</option>
+                            <option value="BANK">BANK</option>
+                            <option value="CHEQUE">CHEQUE</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="search-input" ng-model="ui.search.level" placeholder="by level">
+                    </td>
+                    <td>
+                        <input type="checkbox" ng-model="ui.search.isAcc" />
                     </td>
                 </tr>
             </thead>
@@ -117,80 +150,89 @@
                 </tr>
             </thead>
         </table>
-        <div class="smart-scroll-y" style="height: calc(100vh - 160px);">
-            <div ng-repeat="acc in model.accAccountList | orderBy:'accCode' |filter:search">
+        <div class="smart-scroll-y" style="height: calc(100vh - 160px);" ng-show="model.accAccountList.length">
+            <div ng-repeat="acc in model.accAccountList| orderBy:'accCode' 
+                        | filter:{'accCode': ui.search.code} 
+                        | filter:{'subAccountOf': ui.search.subAccOf===null?'':ui.search.subAccOf} 
+                        | filter:{'level': ui.search.level} 
+                        | filter:{'accType': ui.search.type} 
+                        | filter:{'isAccAccount': ui.search.isAcc===true?true:''} 
+                        | filter:{'name': ui.search.name}">
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level==1'>
+                     ng-if='acc.level === 1'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;">{{acc.name}}</div>
-                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount==true' class="label label-default">FINAL</label></div>
+                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
                     <div style="width: 15%;margin-top: 0px;" class="div-table">
                         <a class="btn btn-primary" ng-click="ui.edit(acc)"><span class="glyphicon glyphicon-edit" ></span></a>
                         <a class="btn btn-danger" style="margin-left: 20px" ng-click="ui.delete(acc)"><span class="glyphicon glyphicon-trash" ></span></a>
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level==2'>
+                     ng-if='acc.level === 2'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 20px">{{acc.name}}</div>
-                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount==true' class="label label-default">FINAL</label></div>
+                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
                     <div style="width: 15%;margin-top: 0px;" class="div-table">
                         <a class="btn btn-primary" ng-click="ui.edit(acc)"><span class="glyphicon glyphicon-edit" ></span></a>
                         <a class="btn btn-danger" style="margin-left: 20px" ng-click="ui.delete(acc)"><span class="glyphicon glyphicon-trash" ></span></a>
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level==3'>
+                     ng-if='acc.level === 3'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 40px">{{acc.name}}</div>
-                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount==true' class="label label-default">FINAL</label></div>
+                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
                     <div style="width: 15%;margin-top: 0px;" class="div-table">
                         <a class="btn btn-primary" ng-click="ui.edit(acc)"><span class="glyphicon glyphicon-edit" ></span></a>
                         <a class="btn btn-danger" style="margin-left: 20px" ng-click="ui.delete(acc)"><span class="glyphicon glyphicon-trash" ></span></a>
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level==4'>
+                     ng-if='acc.level === 4'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 60px">{{acc.name}}</div>
-                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount==true' class="label label-default">FINAL</label></div>
+                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
                     <div style="width: 15%;margin-top: 0px;" class="div-table">
                         <a class="btn btn-primary" ng-click="ui.edit(acc)"><span class="glyphicon glyphicon-edit" ></span></a>
                         <a class="btn btn-danger" style="margin-left: 20px" ng-click="ui.delete(acc)"><span class="glyphicon glyphicon-trash" ></span></a>
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level==5'>
+                     ng-if='acc.level === 5'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 80px">{{acc.name}}</div>
-                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount==true' class="label label-default">FINAL</label></div>
+                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
                     <div style="width: 15%;margin-top: 0px;" class="div-table">
                         <a class="btn btn-primary" ng-click="ui.edit(acc)"><span class="glyphicon glyphicon-edit" ></span></a>
                         <a class="btn btn-danger" style="margin-left: 20px" ng-click="ui.delete(acc)"><span class="glyphicon glyphicon-trash" ></span></a>
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level==6'>
+                     ng-if='acc.level === 6'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 100px">{{acc.name}}</div>
-                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount==true' class="label label-default">FINAL</label></div>
+                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
                     <div style="width: 15%;margin-top: 0px;" class="div-table">
                         <a class="btn btn-primary" ng-click="ui.edit(acc)"><span class="glyphicon glyphicon-edit" ></span></a>
                         <a class="btn btn-danger" style="margin-left: 20px" ng-click="ui.delete(acc)"><span class="glyphicon glyphicon-trash" ></span></a>
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level==7'>
+                     ng-if='acc.level === 7'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 120px">{{acc.name}}</div>
-                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount==true' class="label label-default">FINAL</label></div>
+                    <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
                     <div style="width: 15%;margin-top: 0px;" class="div-table">
                         <a class="btn btn-primary" ng-click="ui.edit(acc)"><span class="glyphicon glyphicon-edit" ></span></a>
                         <a class="btn btn-danger" style="margin-left: 20px" ng-click="ui.delete(acc)"><span class="glyphicon glyphicon-trash" ></span></a>
                     </div>
                 </div>
-                
+
             </div>
+        </div>
+        <div class="placeholder col-md-12" ng-hide="model.accAccountList.length" style="height: calc(100vh - 160px); padding: 0px 10px 10px 10px;">
+            <h1>PLEASE ADD PURCHASE ORDER REQUEST ITEM TO DISPLAY :(</h1>
         </div>
     </div>
 </div>

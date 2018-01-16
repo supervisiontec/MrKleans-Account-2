@@ -62,7 +62,6 @@ public class TInvoice implements Serializable {
     private BigDecimal netAmount;
 
     @Basic(optional = false)
-    @NotNull
     @Column(name = "branch")
     private Integer branch;
 

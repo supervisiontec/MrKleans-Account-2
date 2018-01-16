@@ -25,7 +25,7 @@
                         }
                     }
                 };
-                
+
                 $scope.ui.calculatedValue = function () {
                     $scope.model.tempData.value = $scope.model.tempData.qty * $scope.model.tempData.price;
                     $scope.model.tempData.discountValue = 0;
@@ -82,14 +82,6 @@
                     console.log($scope.model.data.vat);
                     console.log(vatRate);
                 };
-//                $scope.ui.btnFocus = function (event) {
-//                    var key = event ? event.keyCode || event.which : 13;
-//                    if (key === 13) {
-//                        var confirm = $scope.model.addData();
-//                        console.log(confirm);
-//                        $scope.ui.focus('#barcode');
-//                    }
-//                };
                 $scope.ui.edit = function (indexNo) {
                     $scope.model.edit(indexNo);
                 };
@@ -109,64 +101,32 @@
                     }, 10);
                 };
                 $scope.ui.save = function () {
-//                     $scope.model.saveDirectGrn();
-                    ConfirmPane.primaryConfirm("Do you want to Save Direct GRN !")
-                            .confirm(function () {
-                                $scope.model.saveDirectGrn()
-                                        .then(function () {
-                                            $scope.ui.mode = "IDEAL";
-                                            Notification.success("Direct GRN Save Success !");
-                                            $scope.chxVat = false;
-                                            $scope.chxNbt = false;
-                                        });
-                            })
-                            .discard(function () {
-                                Notification.error("Direct GRN Save Fail !");
-                                console.log('fail');
-                            });
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission !');
+                    }
+                    if (check) {
+                        ConfirmPane.primaryConfirm("Do you want to Save Direct GRN !")
+                                .confirm(function () {
+                                    $scope.model.saveDirectGrn()
+                                            .then(function () {
+                                                $scope.ui.mode = "IDEAL";
+                                                Notification.success("Direct GRN Save Success !");
+                                                $scope.chxVat = false;
+                                                $scope.chxNbt = false;
+                                            });
+                                })
+                                .discard(function () {
+                                    Notification.error("Direct GRN Save Fail !");
+                                    console.log('fail');
+                                });
+                    }
                 };
 //
-//                $scope.ui.save = function () {
-//                    ConfirmPane.primaryConfirm("Save Good Receive Note !")
-//                        .confirm(function () {
-//                            $scope.model.saveGrn()
-//                                    .then(function () {
-//                                        $scope.ui.mode = "IDEAL";
-//                                        $scope.model.clear();
-//                                        Notification.success("Grn Save Success !");
-//                                    });
-//                        })
-//                        .discard(function () {
-//                             Notification.error("Grn Save Fail !");
-//                            $scope.ui.mode = 'NEW';
-//                            console.log('fail');
-//                        });
-//                };
-//                
-//                $scope.ui.netValueCalculator = function () {
-//                    $scope.model.netValueCalculator();
-//                };
-//                
-//                $scope.ui.discountRate = function () {
-//                    $scope.model.discountRate();
-//                };
-//                
-//                $scope.ui.edit = function (index) {
-//                    $scope.model.edit(index);
-//                };
-//                
-//                $scope.ui.delete = function (index) {
-//                    $scope.model.delete(index);
-//                };
-
-//               
 
                 $scope.init = function () {
                     $scope.ui.mode = 'IDEAL';
-                    console.log('12345');
-//                    $scope.$watch("model.data.grnItemList", function () {
-//                        $scope.model.summaryValueCalculator();
-//                    });
                 };
 
                 $scope.init();

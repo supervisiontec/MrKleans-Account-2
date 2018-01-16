@@ -7,7 +7,7 @@
                 $scope.ui = {};
 
                 $scope.init = function () {
-                    $scope.ui.mode = 'IDEAL';
+                    $scope.ui.mode = 'NEW';
                     $scope.ui.model = 'SELECTION';
                 };
 
@@ -236,6 +236,10 @@
                         check = false;
                         Notification.error('Select Customer to save !');
                     }
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission ');
+                    }
                     if ($scope.model.jobItemList.length===0) {
                         check = false;
                         Notification.error('Select Invoice Item to save !');
@@ -308,24 +312,11 @@
                         check = false;
                         Notification.error('select a resident to save !');
                     }
-                    if (!$scope.model.popupCustomer.mobile) {
-                        check = false;
-                        Notification.error('mobile number is empty !');
-                    }
-                    if (!$scope.model.popupCustomer.nic) {
-                        check = false;
-                        Notification.error('NIC is empty !');
-                    }
-                    if (!$scope.model.popupCustomer.customerType) {
-                        check = false;
-                        Notification.error('customerType is empty !');
-                    }
                     if (check) {
                         $scope.model.registerCustomer()
                                 .then(function (data) {
                                     Notification.success(data.resident + " " + data.name + " registration successfully");
                                     $scope.model.customerLedger.client = data.indexNo;
-                                    console.log(data.indexNo + " =  index No");
                                     $scope.ui.modelCancel();
                                 });
                     }

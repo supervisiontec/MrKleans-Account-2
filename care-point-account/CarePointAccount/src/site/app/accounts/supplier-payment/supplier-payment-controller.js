@@ -32,6 +32,10 @@
                         checkSave = false;
                         Notification.error('select an account to save !');
                     }
+                    if (!$scope.model.userPermission.add) {
+                        checkSave = false;
+                        Notification.error('you have no permission ');
+                    }
                    
                     if (!$scope.model.data.credit) {
                         checkSave = false;

@@ -29,8 +29,9 @@
                                 callback(data);
                             });
                 };
-                factory.getCustomerTypes = function (callback) {
-                    var url = systemConfig.apiUrl + "/api/care-point/master/customer-type";
+
+                factory.getPermission = function (form, callback) {
+                    var url = systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/" + form;
 
                     $http.get(url)
                             .success(function (data, status, headers) {
@@ -75,7 +76,7 @@
 
     //controller
     angular.module("clientModule")
-            .controller("clientController", function ($scope, $filter, $log, $routeParams, clientFactory, Notification, $timeout) {
+            .controller("clientController", function ($scope, $rootScope, $filter, $log, $routeParams, clientFactory, Notification, $timeout) {
                 //data models 
                 $scope.model = {};
                 $scope.model.newClientList = [];
@@ -89,6 +90,9 @@
                 //current ui mode IDEAL, SELECTED, NEW, EDIT
                 $scope.ui.mode = null;
 
+                //key event
+                $rootScope.ctrlDown = false;
+
                 //------------------ model functions ---------------------------
                 //reset model
                 $scope.model.reset = function () {
@@ -100,7 +104,6 @@
                         "address3": null,
                         "mobile": null,
                         "branch": null,
-                        "type": null,
                         "nic": null,
                         "resident": null,
                         "date": null,
@@ -109,14 +112,7 @@
                     };
                 };
 
-                //------------------ validation functions ------------------------------
-                $scope.validateInput = function () {
-                    if ($scope.model.client.name | $scope.model.client.mobile | $scope.model.client.type !== null) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                };
+
 
 
                 //<-----------------http funtiion------------------->
@@ -129,60 +125,81 @@
 
                     var detail = $scope.model.client;
 
-                    var detailJSON = JSON.stringify(detail);
-                    clientFactory.saveClientFactory(
-                            detailJSON,
-                            function (data) {
-                                $scope.model.clientList.splice($scope.model.customerPlace(data.indexNo),1);
-                                $scope.model.clientList.push(data);
-                                Notification.success(data.indexNo + " - " +data.name+ " Save Successfully");
-                                $scope.model.reset();
-                            },
-                            function (data) {
-                                Notification.error(data.message);
-                            }
-                    );
+                    var check = true;
+                    if (!detail.indexNo) {
+                        if (!$scope.model.userPermission.add) {
+                            check = false;
+                            Notification.error('you have no permission !');
+                        }
+                    } else {
+                        if (!$scope.model.userPermission.update) {
+                            check = false;
+                            Notification.error('you have no permission !');
+                        }
+                    }
+                    if (!$scope.model.client.name) {
+                        check = false;
+                        Notification.error('name is empty !');
+                    }
+                    if (!$scope.model.client.resident) {
+                        check = false;
+                        Notification.error('resident is empty !');
+                    }
+                    if (check) {
 
-
+                        var detailJSON = JSON.stringify(detail);
+                        clientFactory.saveClientFactory(
+                                detailJSON,
+                                function (data) {
+                                    $scope.model.clientList.splice($scope.model.customerPlace(data.indexNo), 1);
+                                    $scope.model.clientList.push(data);
+                                    Notification.success(data.indexNo + " - " + data.name + " Save Successfully");
+                                    $scope.model.reset();
+                                    $scope.ui.focus();
+                                },
+                                function (data) {
+                                    Notification.error(data.message);
+                                }
+                        );
+                    }
                 };
 
                 $scope.http.deleteClient = function (indexNo, index) {
-                    clientFactory.deleteClientFactory(indexNo
-                            , function () {
-                                $scope.model.clientList.splice(index, 1);
-                                Notification.success(indexNo + " - " + "Client Delete Successfully");
-                            }
-                    , function (data) {
-                        Notification.error(data);
-                    });
+                    var check = true;
+                    if (!$scope.model.userPermission.delete) {
+                        check = false;
+                        Notification.error('you have no permission  !');
+                    }
+                    if (check) {
+                        clientFactory.deleteClientFactory(indexNo
+                                , function () {
+                                    $scope.model.clientList.splice(index, 1);
+                                    Notification.success(indexNo + " - " + "Client Delete Successfully");
+                                }
+                        , function (data) {
+                            Notification.error(data);
+                        });
+                    }
                 };
 
                 //<-----------------ui funtiion--------------------->
                 //save function
                 $scope.ui.save = function () {
-
-                    if ($scope.validateInput()) {
-                        $scope.http.saveClient();
-                    } else {
-                        Notification.error("Please input detail");
-                    }
+                    $scope.http.saveClient();
                 };
                 $scope.ui.editNewClient = function (client, index) {
-                    $scope.ui.mode = "EDIT";
-                    $scope.model.client = client;
-                    $scope.model.newClientList.splice($scope.model.customerPlace(client.indexNo), 1);
+                    var check = true;
+                    if (!$scope.model.userPermission.update) {
+                        check = false;
+                        Notification.error('you have no permission  !');
+                    }
+                    if (check) {
+                        $scope.ui.mode = "EDIT";
+                        $scope.model.client = client;
+                        $scope.model.newClientList.splice($scope.model.customerPlace(client.indexNo), 1);
+                    }
+                };
 
-                };
-                $scope.ui.customerTypeLable = function (customerType) {
-                    var lable = "";
-                    angular.forEach($scope.model.customerTypeList, function (value) {
-                        if (value.indexNo === customerType) {
-                            lable = value.indexNo + " - " + value.name;
-                            return;
-                        }
-                    });
-                    return lable;
-                };
                 $scope.ui.changeTab = function () {
                     $scope.ui.mode = 'IDEAL';
                     $scope.model.client = {};
@@ -225,6 +242,15 @@
                         }
                     }
                 };
+                $scope.ui.keyPressFunction = function ($event) {
+                    if ($rootScope.ctrlDown && ($event.keyCode === 83)) {
+                        $scope.ui.save();
+                    } else if ($rootScope.ctrlDown && ($event.keyCode === 78)) {
+                        $scope.ui.new();
+                    } else if ($rootScope.ctrlDown && ($event.keyCode === 70)) {
+                        $scope.ui.focus();
+                    }
+                };
 
                 $scope.ui.init = function () {
                     //set ideal mode
@@ -232,28 +258,17 @@
 
                     //reset mdel
                     $scope.model.reset();
+                    $scope.ui.new();
 
                     clientFactory.lordClientFactory(function (data) {
                         $scope.model.clientList = data;
                     });
-
-                    clientFactory.getCustomerTypes(function (data) {
-                        $scope.model.customerTypeList = data;
+                    clientFactory.getPermission('Client Registration', function (data) {
+                        $scope.model.userPermission = data;
                     });
-
                     clientFactory.getNewClientList(function (data) {
                         $scope.model.newClientList = data;
                     });
-
-                    var client = parseInt($routeParams.client);
-                    if (client) {
-
-                        $timeout(function () {
-                            $scope.model.client = $scope.model.findCustomer(client);
-                        }, 2000);
-
-
-                    }
                 };
 
                 $scope.ui.init();

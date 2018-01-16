@@ -10,6 +10,7 @@
             tempData: {},
             currentBranch: {},
             selectAccType: {},
+            userPermission: {},
             accAccountList: [],
             branchList: [],
             saveDataList: [],
@@ -33,6 +34,11 @@
                 fundTransferService.loadAccTypes()
                         .success(function (data) {
                             that.accTypeList = data;
+                        });
+                fundTransferService.getPermission('Fund Transfer')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
                         });
 
                 this.loadAccAccount();

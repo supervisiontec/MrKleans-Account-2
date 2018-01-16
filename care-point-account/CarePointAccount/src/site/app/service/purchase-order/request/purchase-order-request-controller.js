@@ -24,11 +24,11 @@
                     ConfirmPane.primaryConfirm("Do you want to remove all !")
                             .confirm(function () {
                                 $scope.model.removeAll();
-                                $scope.ui.mode="IDEAL";
+                                $scope.ui.mode = "IDEAL";
                             });
                 };
-                $scope.ui.selectRequiredItems=function (){
-                  $scope.model.selectRequiredItems();  
+                $scope.ui.selectRequiredItems = function () {
+                    $scope.model.selectRequiredItems();
                 };
 
                 $scope.ui.delete = function (indexNo) {
@@ -47,21 +47,28 @@
                 };
 
                 $scope.ui.save = function () {
-                    ConfirmPane.primaryConfirm("Save Purchase Order Request !")
-                            .confirm(function () {
-                                $scope.model.savePurchaseOrderRequest()
-                                        .then(function () {
-                                            $scope.ui.mode = "IDEAL";
-                                            $scope.model.clear();
-                                            $scope.chxNBT = false;
-                                            $scope.chxVAT = false;
-                                            Notification.success("Purchase Order Request Save Success !");
-                                        });
-                            })
-                            .discard(function () {
-                                Notification.error("Purchase Order Request Save Fail !");
-                                console.log('fail');
-                            });
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission !');
+                    }
+                    if (check) {
+                        ConfirmPane.primaryConfirm("Save Purchase Order Request !")
+                                .confirm(function () {
+                                    $scope.model.savePurchaseOrderRequest()
+                                            .then(function () {
+                                                $scope.ui.mode = "IDEAL";
+                                                $scope.model.clear();
+                                                $scope.chxNBT = false;
+                                                $scope.chxVAT = false;
+                                                Notification.success("Purchase Order Request Save Success !");
+                                            });
+                                })
+                                .discard(function () {
+                                    Notification.error("Purchase Order Request Save Fail !");
+                                    console.log('fail');
+                                });
+                    }
                 };
 
                 $scope.ui.addData = function () {

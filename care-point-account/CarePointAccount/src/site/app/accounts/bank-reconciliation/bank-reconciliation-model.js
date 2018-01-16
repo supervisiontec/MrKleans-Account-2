@@ -9,6 +9,7 @@
             data: {},
             tempData: {},
             currentBranch: {},
+            userPermission: {},
             accAccountList: [],
             incomeExpenceAccList: [],
             branchList: [],
@@ -32,7 +33,11 @@
                             that.currentBranch = data;
                             that.data.branch = data.indexNo;
                         });
-
+                bankReconciliationService.getPermission('Bank Reconciliation')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
+                        });
                 this.loadAccAccount();
             },
             loadAccAccount: function () {

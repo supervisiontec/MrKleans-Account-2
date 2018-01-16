@@ -36,6 +36,7 @@
             selectedConsumableItem: {},
             selectedItem: {},
             selectedItemFromPriceCategory: {},
+            userPermission : {},
             consumableItemIsView: false,
             selectedItemIsView: false,
             //constructor
@@ -50,10 +51,15 @@
                 that.itemCheckData = itemFactory.newItemCheckData();
                 that.priceCategoryDetail = itemFactory.newPriceCategoryDetails();
 
-                
+
                 itemService.loadSupplier()
                         .success(function (data) {
                             that.suppliers = data;
+                        });
+                itemService.getPermission('Item Registration')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
                         });
 
                 this.timeList = [

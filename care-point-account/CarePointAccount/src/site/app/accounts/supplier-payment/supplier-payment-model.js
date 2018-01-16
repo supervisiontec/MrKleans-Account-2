@@ -16,6 +16,7 @@
             accflowList: [],
             billList: [],
             accType: null,
+            userPermission: {},
             //constructor
             constructor: function () {
                 var that = this;
@@ -34,6 +35,12 @@
                             that.currentBranch = data;
                             that.data.branch = data.indexNo;
                         });
+                supplierPaymentService.getPermission('Item Registration')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
+                        });
+
 
                 this.loadAccAccount();
             },
@@ -114,11 +121,11 @@
                     var balance = bill.credit - bill.debit;
                     if (balance < bill.pay) {
                         Notification.error("Can't set over amount for this bill !");
-                        bill.pay=0.00;
+                        bill.pay = 0.00;
                     }
                     that.data.billTotal += bill.pay;
                 });
-                that.data.overPay=(that.data.credit-that.data.billTotal)>0?(that.data.credit-that.data.billTotal):0.00;
+                that.data.overPay = (that.data.credit - that.data.billTotal) > 0 ? (that.data.credit - that.data.billTotal) : 0.00;
                 this.checkOverValueAvailable();
 
             },

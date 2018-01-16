@@ -13,5 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author kasun
  */
 public interface FormNameRepository extends JpaRepository<MFormName, Integer>{
+
+    public MFormName findByName(String form);
     
 }

@@ -28,6 +28,10 @@
         this.saveSupplierPayment = function (data) {
             return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/supplier-payment/save", data);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
+
         
     };
     angular.module("appModule")

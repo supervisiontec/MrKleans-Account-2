@@ -9,6 +9,7 @@
                     data: {},
                     tempData: {},
                     summaryData: {},
+                    userPermission: {},
                     //master data lists
                     pendingPurchaseOrderList: [],
                     suppliers: [],
@@ -30,6 +31,10 @@
                         PurchaseOrderRequestService.loadItems()
                                 .success(function (data) {
                                     that.allItems = data;
+                                });
+                        PurchaseOrderRequestService.getPermission('Purchase Order Approve')
+                                .success(function (data) {
+                                    that.userPermission = data;
                                 });
                     },
                     getSupplier: function (supplier) {

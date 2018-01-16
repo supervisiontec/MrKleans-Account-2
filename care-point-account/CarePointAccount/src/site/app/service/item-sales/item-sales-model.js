@@ -24,6 +24,7 @@
                     saveData: {},
                     invoice: {},
                     popupCustomer: {},
+                    userPermission: {},
 
                     //item model
                     tempItem: {},
@@ -80,6 +81,10 @@
                                 .success(function (data) {
                                     that.cardReaderList = data;
                                 });
+                        itemSalesService.getPermission('Item Sales')
+                                .success(function (data) {
+                                    that.userPermission = data;
+                                });
 
                     },
                     saveItemSale: function () {
@@ -116,7 +121,7 @@
                         this.invoice = itemSalesFactory.invoiceData();
                         this.saveData = itemSalesFactory.saveData();
                         this.customerData = {};
-                        
+
                         this.itemsByStockLeger = [];
                         this.paymentInformationList = [];
                         this.branchSearchList = [];

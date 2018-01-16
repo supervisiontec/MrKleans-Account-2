@@ -64,18 +64,22 @@
                         checkSave = false;
                         Notification.error('total value 0.00 !');
                     }
-                    if ($scope.model.selectAccType.name==='BANK') {
-                        
+                    if (!$scope.model.userPermission.add) {
+                        checkSave = false;
+                        Notification.error('you have no permission ');
+                    }
+                    if ($scope.model.selectAccType.name === 'BANK') {
+
                         if (!$scope.model.data.refNumber) {
-                            checkSave=false;
+                            checkSave = false;
                             Notification.error('Cheque No is Empty !');
                         }
                         if (!$scope.model.data.chequeDate) {
-                            checkSave=false;
+                            checkSave = false;
                             Notification.error('plz enter Cheque Date !');
                         }
                         if (!$scope.model.data.description) {
-                            checkSave=false;
+                            checkSave = false;
                             Notification.error('Description is empty !');
                         }
                     }
@@ -102,8 +106,8 @@
                     $scope.model.selectAccType = type;
                     $scope.model.type = type.value;
                     $scope.ui.focus('#account');
-                    $scope.model.setClear();                    
-                    
+                    $scope.model.setClear();
+
                     console.log($scope.model.selectAccType);
                 };
                 $scope.ui.focusAdd = function (model) {

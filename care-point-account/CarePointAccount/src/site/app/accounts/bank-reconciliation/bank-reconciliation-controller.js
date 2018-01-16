@@ -78,6 +78,10 @@
                         cheque = false;
                         Notification.error('Reconcile Cheque is empty !');
                     }
+                    if (!$scope.model.userPermission.add) {
+                        cheque = false;
+                        Notification.error('you have no permission ');
+                    }
                     if (cheque) {
                         $scope.model.save();
                     }
@@ -97,11 +101,17 @@
                     if (data.class) {
                         $scope.model.remove(data);
                     } else {
-                        ConfirmPane.warningConfirm("DO YOU WANT TO DELETE THIS TRANSACTION !")
-                                .confirm(function () {
-                                    $scope.model.delete(data);
-                                });
-
+                        var check = true;
+                        if (!$scope.model.userPermission.delete) {
+                            check = false;
+                            Notification.error('you have no permission ');
+                        }
+                        if (check) {
+                            ConfirmPane.warningConfirm("DO YOU WANT TO DELETE THIS TRANSACTION !")
+                                    .confirm(function () {
+                                        $scope.model.delete(data);
+                                    });
+                        }
                     }
                 };
 
@@ -141,6 +151,10 @@
                     if (!$scope.model.popupDataList.length) {
                         check = false;
                         Notification.error('Empty data to save');
+                    }
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission ');
                     }
                     if (check) {
                         $scope.model.popupSave();

@@ -1,7 +1,7 @@
 (function () {
     angular.module("grnModule", ['ui.bootstrap']);
     angular.module("grnModule")
-            .controller("grnController", function ($scope, $timeout, $uibModal,$sce,$filter, GrnModel, Notification, GrnService, ConfirmPane) {
+            .controller("grnController", function ($scope, $timeout, $uibModal, $sce, $filter, GrnModel, Notification, GrnService, ConfirmPane) {
                 $scope.model = new GrnModel();
                 $scope.ui = {};
                 $scope.filterList = [];
@@ -33,22 +33,26 @@
                     $scope.model.addData();
                 };
                 $scope.ui.save = function () {
-                    ConfirmPane.primaryConfirm("Do you want to save GRN Receive !")
-                            .confirm(function () {
-                                $scope.model.save()
-                                        .then(function (data) {
-                                            ConfirmPane.successConfirm("Do You Want To Print grn request note !")
-                                                    .confirm(function () {
-                                                        $scope.ui.modalOpen(data);
-                                                    });
-                                        });
-                            })
-                            .discard(function () {
-                                ConfirmPane.successConfirm("Do You Want To Print grn request note !")
-                                        .confirm(function () {
-                                            $scope.ui.modalOpen(3);
-                                        });
-                            });
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission !');
+                    }
+                    if (check) {
+                        ConfirmPane.primaryConfirm("Do you want to save GRN Receive !")
+                                .confirm(function () {
+                                    $scope.model.save()
+                                            .then(function (data) {
+                                                ConfirmPane.successConfirm("Do You Want To Print grn request note !")
+                                                        .confirm(function () {
+                                                            $scope.ui.modalOpen(data);
+                                                        });
+                                            });
+                                })
+                                .discard(function () {
+
+                                });
+                    }
                 };
                 $scope.ui.deleteItem = function (index) {
                     console.log('deleteItem');

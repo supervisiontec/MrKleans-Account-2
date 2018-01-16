@@ -21,7 +21,8 @@
         "directGrnModule",
         "grnModule",
         //setting
-        "accountSettingModule"
+        "accountSettingModule",
+        "userPermissionModule"
         
         
     ]);
@@ -146,8 +147,12 @@
                         })
                         // setting
                         .when("/setting/account-settings", {
-                            templateUrl: "app/account-setting/account-settings.html",
+                            templateUrl: "app/setting/account-setting/account-settings.html",
                             controller: "accountSettingController"
+                        })
+                        .when("/setting/user-permission", {
+                            templateUrl: "app/setting/user-permission/user-permission.html",
+                            controller: "userPermissionController"
                         })
                         
                         //otherwise

@@ -53,7 +53,7 @@ public class ClientService {
             account.setDescription("client account");
             account.setIsAccAccount(true);
             account.setLevel(null);
-            account.setName(client.getResident()+" - "+client.getName()+" - ("+client.getMobile()+")");
+            account.setName(client.getResident()+" - "+client.getName());
             account.setSubAccountCount(0);
             account.setSubAccountOf(customerSubAccountOf.getAccAccount());
             account.setUser(SecurityUtil.getCurrentUser().getIndexNo());

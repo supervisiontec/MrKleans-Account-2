@@ -23,7 +23,13 @@
                 };
                 // save
                 $scope.ui.save = function () {
-                    ConfirmPane.primaryConfirm("DO YOU WANT TO SAVE CHEQUE RETURN !")
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission to delete Consumable Item !');
+                    }
+                    if (check) {
+                        ConfirmPane.primaryConfirm("DO YOU WANT TO SAVE CHEQUE RETURN !")
                                 .confirm(function () {
                                     $scope.model.save()
                                             .then(function (data) {
@@ -31,6 +37,7 @@
                                                 $scope.ui.mode = "IDEAL";
                                             });
                                 });
+                    }
                 };
 
 

@@ -25,6 +25,10 @@
         this.getSelectedChequeDetails = function (deleteIndex) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/return-cheque/get-selected-cheque-details/"+deleteIndex);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
+
         this.save = function (data) {
             return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/return-cheque/save", data);
         };

@@ -10,6 +10,7 @@
             data: {},
             tempData: {},
             currentBranch: {},
+            userPermission: {},
             dataList: [],
             accAccountList: [],
             accflowList: [],
@@ -32,6 +33,10 @@
                 journalService.currentBranch()
                         .success(function (data) {
                             that.currentBranch = data;
+                        });
+                journalService.getPermission('Journal')
+                        .success(function (data) {
+                            that.userPermission = data;
                         });
             },
             setAccountFlow: function (acc) {

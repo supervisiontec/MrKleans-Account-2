@@ -12,6 +12,7 @@
                     summaryData: {},
                     reOrderData: {},
                     reOrderTempData: {},
+                    userPermission: {},
                     //master data lists
                     suppliers: [],
                     allItems: [],
@@ -36,7 +37,10 @@
                                 .success(function (data) {
                                     that.allItems = data;
                                 });
-//                        that.loadReOrderItem();
+                        PurchaseOrderRequestService.getPermission('Purchase Order Request')
+                                .success(function (data) {
+                                    that.userPermission = data;
+                                });
                     },
                     supplierLable: function (model) {
                         var label;

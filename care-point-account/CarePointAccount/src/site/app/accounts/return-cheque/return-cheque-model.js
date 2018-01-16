@@ -18,12 +18,13 @@
             chequeDetailList: [],
             accType: null,
             selectedCheque: {},
+             userPermission : {},
             //constructor
             constructor: function () {
                 var that = this;
                 that.data = returnChequeFactory.Data();
                 that.tempData = returnChequeFactory.tempData();
-                
+
                 returnChequeService.loadBranch()
                         .success(function (data) {
                             that.branchList = data;
@@ -41,6 +42,11 @@
                         .success(function (data) {
                             that.userList = data;
                         });
+                returnChequeService.getPermission('Item Registration')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
+                        });
                 this.loadAccAccount();
             },
             loadAccAccount: function () {
@@ -53,7 +59,7 @@
 
             selectCheque: function (cheque) {
                 var that = this;
-                that.selectedCheque=cheque;
+                that.selectedCheque = cheque;
                 that.tempData.supplier = "";
                 angular.forEach(that.supplierList, function (supplier) {
                     if (supplier.indexNo === cheque.typeIndexNo) {

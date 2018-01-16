@@ -8,6 +8,7 @@
         employeeModel.prototype = {
             data: {},
             accAccountList: [],
+            userPermission: {},
             accTypeList: ["COMMON", "CASH", "BANK"],
 
             //constructor
@@ -16,6 +17,7 @@
                 that.data = createAccountFactory.Data();
 
                 this.loadAccAccount();
+                this.loadPermission();
             },
             loadAccAccount: function () {
                 var that = this;
@@ -24,10 +26,19 @@
                             that.accAccountList = data;
                         });
             },
+            loadPermission: function () {
+                var that = this;
+                createAccountService.getPermission('Create Account')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
+                        });
+            },
             refresh: function () {
                 this.loadAccAccount();
-                this.data=createAccountFactory.Data();
+                this.data = createAccountFactory.Data();
             },
+
             clearData: function () {
                 var that = this;
                 that.data = createAccountFactory.Data();
@@ -64,7 +75,6 @@
             },
             save: function () {
                 var that = this;
-
                 console.log(this.data);
                 var defer = $q.defer();
                 createAccountService.saveNewAccount(JSON.stringify(that.data))

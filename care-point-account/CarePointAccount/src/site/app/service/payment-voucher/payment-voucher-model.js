@@ -21,6 +21,7 @@
                     information: {},
                     paymentInformation: {},
                     saveData: {},
+                    userPermission: {},
 
                     paymentInformationList: [],
                     branchSearchList: [],
@@ -47,7 +48,7 @@
                                 .success(function (data) {
                                     that.clientList = data;
                                 });
-                        
+
                         customerPaymentVoucherService.loadBank()
                                 .success(function (data) {
                                     that.bankList = data;
@@ -61,6 +62,10 @@
                         customerPaymentVoucherService.loadCardType()
                                 .success(function (data) {
                                     that.cardTypeList = data;
+                                });
+                        customerPaymentVoucherService.getPermission('Customer Payment')
+                                .success(function (data) {
+                                    that.userPermission = data;
                                 });
                     },
 
@@ -149,7 +154,7 @@
                         return lable;
                     }
 
-                    
+
                     , clientBalance: function (indexNo) {
                         var that = this;
                         customerPaymentVoucherService.getClientBalance(indexNo)

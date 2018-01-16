@@ -18,7 +18,17 @@
                                 callback(data);
                             });
                 };
-               
+                factory.getPermission = function (form, callback) {
+                    var url = systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/" + form;
+
+                    $http.get(url)
+                            .success(function (data, status, headers) {
+                                callback(data);
+                            })
+                            .error(function (data, status, headers) {
+                                callback(data);
+                            });
+                };
 
                 factory.saveSupplierFactory = function (summary, callback, errorCallback) {
                     var url = systemConfig.apiUrl + "/api/care-point/master/supplier/save";
@@ -105,38 +115,50 @@
                     supplierFactory.saveSupplierFactory(
                             detailJSON,
                             function (data) {
-                                $scope.model.supplierList.splice($scope.model.supplierPlace(data.indexNo),1);
+                                $scope.model.supplierList.splice($scope.model.supplierPlace(data.indexNo), 1);
                                 $scope.model.supplierList.push(data);
-                                Notification.success(data.indexNo + " - " +data.name+ " Save Successfully");
+                                Notification.success(data.indexNo + " - " + data.name + " Save Successfully");
                                 $scope.model.reset();
                             },
                             function (data) {
                                 Notification.error(data.message);
                             }
                     );
-
-
                 };
 
                 $scope.http.deleteSupplier = function (indexNo, index) {
-                    supplierFactory.deleteSupplierFactory(indexNo
-                            , function () {
-                                $scope.model.supplierList.splice(index, 1);
-                                Notification.success(indexNo + " - " + "Supplier Delete Successfully");
-                            }
-                    , function (data) {
-                        Notification.error(data);
-                    });
+                    var check = true;
+                    if (!$scope.model.userPermission.delete) {
+                        ch = false;
+                        Notification.error('you have no permission  !');
+                    }
+                    if (check) {
+                        supplierFactory.deleteSupplierFactory(indexNo
+                                , function () {
+                                    $scope.model.supplierList.splice(index, 1);
+                                    Notification.success(indexNo + " - " + "Supplier Delete Successfully");
+                                }
+                        , function (data) {
+                            Notification.error(data);
+                        });
+                    }
                 };
 
                 //<-----------------ui funtiion--------------------->
                 //save function
                 $scope.ui.save = function () {
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        ch = false;
+                        Notification.error('you have no permission !');
+                    }
 
-                    if ($scope.validateInput()) {
-                        $scope.http.saveSupplier();
-                    } else {
-                        Notification.error("Please input detail");
+                    if (check) {
+                        if ($scope.validateInput()) {
+                            $scope.http.saveSupplier();
+                        } else {
+                            Notification.error("Please input detail");
+                        }
                     }
                 };
                 $scope.ui.editNewSupplier = function (supplier, index) {
@@ -175,11 +197,18 @@
 
                 //edit funtion
                 $scope.ui.edit = function (supplier, index) {
-                    $scope.ui.mode = "EDIT";
-                    $scope.model.supplier = supplier;
-                    $scope.model.supplierList.splice( $scope.model.supplierPlace(supplier.indexNo), 1);
+                    var check = true;
+                    if (!$scope.model.userPermission.update) {
+                        check = false;
+                        Notification.error('you have no permission  !');
+                    }
+                    if (check) {
+                        $scope.ui.mode = "EDIT";
+                        $scope.model.supplier = supplier;
+                        $scope.model.supplierList.splice($scope.model.supplierPlace(supplier.indexNo), 1);
 
-                    $scope.ui.focus();
+                        $scope.ui.focus();
+                    }
                 };
                 $scope.model.findSupplier = function (supplier) {
                     for (var i = 0; i < $scope.model.supplierList.length; i++) {
@@ -207,6 +236,11 @@
                     supplierFactory.lordSupplierFactory(function (data) {
                         $scope.model.supplierList = data;
                     });
+                    supplierFactory.getPermission('Supplier Registration', function (data) {
+                        $scope.model.userPermission = data;
+                        console.log(data);
+                    });
+
                 };
 
                 $scope.ui.init();

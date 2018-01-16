@@ -37,6 +37,10 @@
                         check = false;
                         Notification.error('total debit and credit amount is deference!');
                     }
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission ');
+                    }
                     if (check) {
                         ConfirmPane.successConfirm("DO YOU WANT TO SAVE !")
                                 .confirm(function () {

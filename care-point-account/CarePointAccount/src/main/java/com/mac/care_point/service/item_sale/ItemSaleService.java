@@ -120,7 +120,7 @@ public class ItemSaleService {
         }
         itemSaleModel.getInvoice().setJobCard(job.getIndexNo());
         itemSaleModel.getInvoice().setDate(new Date());
-        itemSaleModel.getInvoice().setNumber(commonRepository.getNextInvoiceNumber(itemSaleModel.getInvoice().getBranch(), Constant.FORM_ITEM_SALES));
+        itemSaleModel.getInvoice().setNumber(commonRepository.getNextInvoiceNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.FORM_ITEM_SALES));
         itemSaleModel.getInvoice().setStatus(Constant.FORM_ITEM_SALES);
         TInvoice saveInvoice = invoiceRepository.save(itemSaleModel.getInvoice());
 

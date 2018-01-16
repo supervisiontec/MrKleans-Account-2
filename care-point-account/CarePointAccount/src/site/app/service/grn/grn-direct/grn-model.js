@@ -11,6 +11,7 @@
                     data: {},
                     tempData: {},
                     summaryData: {},
+                    userPermission: {},
                     //master data lists
                     items: [],
                     suppliers: [],
@@ -28,16 +29,19 @@
                         GrnService.loadItems()
                                 .success(function (data) {
                                     that.items = data;
-
                                 });
 
                         GrnService.loadSuppliers()
                                 .success(function (data) {
                                     that.suppliers = data;
                                 });
+                                
+                        GrnService.getPermission('Grn Direct')
+                                .success(function (data) {
+                                    that.userPermission = data;
+                                });
 
-                    }
-                    ,
+                    },
                     itemLable: function (index) {
                         var label;
                         var that = this;
@@ -198,7 +202,7 @@
                         }
                     }
                     , clear: function () {
-                       this.data = grnModelFactory.newData();
+                        this.data = grnModelFactory.newData();
                         this.tempData = grnModelFactory.tempData();
                         this.summaryData = grnModelFactory.summaryData();
 

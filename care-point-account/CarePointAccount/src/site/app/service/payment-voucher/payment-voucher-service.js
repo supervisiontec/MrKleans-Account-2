@@ -46,6 +46,9 @@
         this.loadBranchByBank = function (bank) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/service/bank-branch/find-by-branch/" + bank);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
 
     };
 

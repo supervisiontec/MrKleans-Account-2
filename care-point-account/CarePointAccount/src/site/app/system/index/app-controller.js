@@ -1,7 +1,8 @@
 (function () {
     angular.module("appModule")
-            .controller("appController", function ($scope, $cookies, $rootScope, $filter, $location, SecurityService) {
+            .controller("appController", function ($scope, $cookies, $rootScope,$window, $filter, $location, SecurityService) {
                 $scope.hamburgerOpen = true;
+                $scope.ui = {};
 
                 //route loading
                 $rootScope.$watch("layout.loading", function () {
@@ -13,7 +14,7 @@
                 $scope.homepageUrls = [];
 
                 $scope.currentPageName = '';
-                
+
                 $scope.loginUser = "";
                 $scope.currentBranch = "";
                 $scope.loginUser = $cookies.get("nick-name");
@@ -56,5 +57,17 @@
                                 $location.path("/login");
                             });
                 };
+
+                angular.element($window).bind("keyup", function ($event) {
+                    if ($event.keyCode === 18)
+                        $rootScope.ctrlDown = false;
+                    $scope.$apply();
+                });
+
+                angular.element($window).bind("keydown", function ($event) {
+                    if ($event.keyCode === 18)
+                        $rootScope.ctrlDown = true;
+                    $scope.$apply();
+                });
             });
 }());

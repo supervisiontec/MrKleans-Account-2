@@ -22,6 +22,9 @@
         this.delete = function (indexNo) {
             return $http.delete(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/delete-account/"+ indexNo);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
     };
     angular.module("appModule")
             .service("voucherService", service);

@@ -10,6 +10,7 @@
             tempData: {},
             currentBranch: {},
             selectAccType: {},
+            userPermission: {},
             accAccountList: [],
             branchList: [],
             saveDataList: [],
@@ -34,7 +35,11 @@
                         .success(function (data) {
                             that.accTypeList = data;
                         });
-
+                voucherService.getPermission('General Voucher')
+                        .success(function (data) {
+                            console.log(data);
+                            that.userPermission = data;
+                        });
                 this.loadAccAccount();
             },
             loadAccAccount: function () {

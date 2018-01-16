@@ -34,6 +34,9 @@
         this.delete = function (index) {
             return $http.delete(systemConfig.apiUrl + "/api/care-point/transaction/bank-reconciliation/delete/"+index);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
         
     };
     angular.module("appModule")

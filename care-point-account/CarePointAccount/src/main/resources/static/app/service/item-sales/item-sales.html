@@ -130,6 +130,7 @@
                                             <option value="Mr">Mr</option>
                                             <option value="Mrs">Mrs</option>
                                             <option value="Miss">Miss</option>
+                                            <option value="M/S">M/S</option>
                                             <option value="Rev">Rev</option>
                                             <option value="Dr">Dr</option>
                                         </select>
@@ -161,18 +162,6 @@
                             <col style="width: 35%"/>
                             <col style="width: 65%"/>
                             <tbody>
-                                
-                               
-                                <tr>
-                                    <td><label>Customer Type :</label></td>
-                                    <td>
-                                        <input class="form-control" ng-model="model.popupCustomer.customerType" 
-                                        ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" 
-                                        uib-typeahead="customerType.indexNo as (customerType.indexNo+ ' - ' +customerType.name) for customerType in model.customerTypeList |filter:$viewValue |limitTo:10" 
-                                        typeahead-input-formatter="model.customerTypeLable(model.popupCustomer.customerType);">
-                                    </td>
-                                </tr>
-                                
                                 <tr>
                                     <td><label>Address 01 :</label></td>
                                     <td><input class="form-control" ng-model="model.popupCustomer.addressLine1" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'"></td>

@@ -81,6 +81,9 @@
         this.registerCustomer = function (client) {
             return $http.post(systemConfig.apiUrl + "/api/care-point/master/client/insert-client",client);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
     };
 
     angular.module("appModule")

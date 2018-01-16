@@ -73,7 +73,16 @@
                 };
 
                 $scope.ui.saveAdvancePayment = function () {
-                    if ($scope.model.payment.totalAmount) {
+                    var check = true;
+                    if (!$scope.model.payment.totalAmount) {
+                        check = false;
+                        Notification.error('Empty Value to save Advance Payment');
+                    }
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission ');
+                    }
+                    if (check) {
                         ConfirmPane.successConfirm("Do you want to save advance payment !")
                                 .confirm(function () {
                                     $scope.model.saveAdvancePayment()
@@ -83,41 +92,53 @@
 
                                             });
                                 });
-                    } else {
-                        Notification.error('Empty Value to save Advance Payment');
                     }
                 };
                 $scope.ui.saveBalancePayment = function () {
-                    if ($scope.model.payment.totalAmount) {
-                        if ($scope.model.payment.totalAmount === $scope.model.information.invoiceTotalPayment) {
-                            //default save
-                            ConfirmPane.successConfirm("Do you want to save balance payment !")
-                                    .confirm(function () {
-                                        $scope.ui.saveBalancePaymentSecond();
-                                    });
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission ');
+                    }
+                    if (check) {
+                        if ($scope.model.payment.totalAmount) {
+                            if ($scope.model.payment.totalAmount === $scope.model.information.invoiceTotalPayment) {
+                                //default save
+                                ConfirmPane.successConfirm("Do you want to save balance payment !")
+                                        .confirm(function () {
+                                            $scope.ui.saveBalancePaymentSecond();
+                                        });
 
-                        } else if ($scope.model.payment.totalAmount > $scope.model.information.invoiceTotalPayment) {
-                            //over payment
-                            ConfirmPane.warningConfirm("There is a Balance Payment.Do you wate to Save ? ")
-                                    .confirm(function () {
-                                        $scope.ui.saveBalancePaymentSecond();
-                                    });
+                            } else if ($scope.model.payment.totalAmount > $scope.model.information.invoiceTotalPayment) {
+                                //over payment
+                                ConfirmPane.warningConfirm("There is a Balance Payment.Do you want to Save ? ")
+                                        .confirm(function () {
+                                            $scope.ui.saveBalancePaymentSecond();
+                                        });
+                            } else {
+                                //dont save
+                                Notification.error("Pay Amount and Paid Total doesn't Match !");
+                            }
                         } else {
-                            //dont save
-                            Notification.error("Pay Amount and Paid Total doesn't Match !");
+                            Notification.error('Empty Value to save Advance Payment');
                         }
-                    } else {
-                        Notification.error('Empty Value to save Advance Payment');
                     }
 
                 };
                 $scope.ui.saveBalancePaymentSecond = function () {
-                    $scope.model.saveBalancePayment()
-                            .then(function (data) {
-                                $scope.ui.mode = "IDEAL";
-                                Notification.success('Customer Balance Payment Save Successfully !');
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission ');
+                    }
+                    if (check) {
+                        $scope.model.saveBalancePayment()
+                                .then(function (data) {
+                                    $scope.ui.mode = "IDEAL";
+                                    Notification.success('Customer Balance Payment Save Successfully !');
 
-                            });
+                                });
+                    }
                 };
 
                 $scope.ui.insertClientOverPaymentSettlment = function () {
@@ -129,223 +150,6 @@
                     }
                 };
 
-//                $scope.ui.deleteOverPayment = function () {
-//                    $scope.paymentVoucherModel.settlementAmount = 0.0;
-//                    $scope.paymentVoucherModel.deleteOverPayment();
-//                };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//                $scope.prineModel.currentReportGroup = {};
-//                $scope.prineModel.currentReport = {};
-//                $scope.prineModel.currentReport.parameterValues = {};
-//
-//
-//
-//                //variables pass data to methods
-//                $scope.selectedJobCardIndexNo = null;
-//                $scope.selectJobCardServiceChagers = null;
-//                $scope.employeeResponsibiltySelect = true;
-//
-//                $scope.ui.selectedJobCardRow = function (jobCard) {
-//
-//                    $scope.paymentVoucherModel.clear();
-//                    //job card seletion
-//                    $scope.selectedJobCardIndexNo = jobCard.indexNo;
-//
-//                    $scope.paymentVoucherModel.invoiceData.jobCard = jobCard.indexNo;
-//                    $scope.paymentVoucherModel.getJobItemHistory(jobCard.indexNo);
-//
-//                    $scope.paymentVoucherModel.getClientOverPayment(jobCard.client);
-//
-//                    $scope.selectJobCardServiceChagers = jobCard.serviceChagers;
-//                };
-//
-//                $scope.ui.clear = function () {
-//                    $scope.selectedJobCardIndexNo = null;
-//                    $scope.selectJobCardServiceChagers = null;
-//                    $scope.paymentVoucherModel.clear();
-//                    $scope.paymentVoucherModel.cashPayment = 0.0;
-//                    $scope.paymentVoucherModel.settlementAmount = 0.0;
-//                };
-//
-//                $scope.ui.load = function (e) {
-//                    var code = e ? e.keyCode || e.which : 13;
-//                    if (code === 13) {
-//                        $scope.paymentVoucherModel.loadInvoiceData()
-//                                .then(function () {
-//                                    $scope.ui.mode = 'SELECT';
-//                                });
-//                    }
-//                };
-//
-//                $scope.ui.getRepEmployeeData = function (indexNo) {
-//                    $scope.paymentVoucherModel.employeeData = $scope.paymentVoucherModel.employee(indexNo);
-//                };
-//
-//                $scope.ui.modalOpen = function (indexNo) {
-//
-////---------------------------------- invoice ----------------------------------
-//                    var reportName = "Invoice";
-//                    //get report details
-//                    paymentVoucherService.reportData(reportName)
-//                            .success(function (data) {
-//                                $scope.prineModel.currentReport.report = data;
-//
-//                                //get report paramiters
-//                                paymentVoucherService.listParameters(data)
-//                                        .success(function (data) {
-//                                            $scope.prineModel.currentReport.parameters = data;
-//                                        });
-//
-//                                //set paramiters values
-//                                $scope.prineModel.currentReport.parameterValues.INVOICE_NO = indexNo;
-//
-//                                //view reports
-//                                paymentVoucherService.viewReport(
-//                                        $scope.prineModel.currentReport.report,
-//                                        $scope.prineModel.currentReport.parameters,
-//                                        $scope.prineModel.currentReport.parameterValues
-//                                        )
-//                                        .success(function (response) {
-//                                            var file = new Blob([response], {type: 'application/pdf'});
-//                                            var fileURL = URL.createObjectURL(file);
-//
-//                                            $scope.content = $sce.trustAsResourceUrl(fileURL);
-//
-//                                            $uibModal.open({
-//                                                animation: true,
-//                                                ariaLabelledBy: 'modal-title',
-//                                                ariaDescribedBy: 'modal-body',
-//                                                templateUrl: 'invoice_popup.html',
-//                                                scope: $scope,
-//                                                size: 'lg'
-//                                            });
-//
-//                                        });
-//                            });
-////---------------------------------- end invoice ----------------------------------
-//                };
-//
-//                $scope.ui.invoiceViewer = function () {
-//                    console.log("Invoice_From_Job_Card");
-//                    console.log("Invoice_From_Job_Card");
-//                    var reportName = "Invoice_From_Job_Card";
-//                    //get report details
-//                    paymentVoucherService.reportData(reportName)
-//                            .success(function (data) {
-//                                $scope.prineModel.currentReport.report = data;
-//
-//                                //get report paramiters
-//                                paymentVoucherService.listParameters(data)
-//                                        .success(function (data) {
-//                                            $scope.prineModel.currentReport.parameters = data;
-//                                        });
-//
-//                                //set paramiters values
-//                                $scope.prineModel.currentReport.parameterValues.JOB_CARD = $scope.selectedJobCardIndexNo;
-//
-//                                //view reports
-//                                paymentVoucherService.viewReport(
-//                                        $scope.prineModel.currentReport.report,
-//                                        $scope.prineModel.currentReport.parameters,
-//                                        $scope.prineModel.currentReport.parameterValues
-//                                        )
-//                                        .success(function (response) {
-//                                            var file = new Blob([response], {type: 'application/pdf'});
-//                                            var fileURL = URL.createObjectURL(file);
-//
-//                                            $scope.content = $sce.trustAsResourceUrl(fileURL);
-//
-//                                            $uibModal.open({
-//                                                animation: true,
-//                                                ariaLabelledBy: 'modal-title',
-//                                                ariaDescribedBy: 'modal-body',
-//                                                templateUrl: 'invoice_popup.html',
-//                                                scope: $scope,
-//                                                size: 'lg'
-//                                            });
-//
-//                                        });
-//                            });
-//                };
-//
-//                $scope.ui.saveInvoice = function () {
-//                    if ($scope.selectedJobCardIndexNo) {
-//                        if ($scope.paymentVoucherModel.paymentData.chequeAmount > 0 || $scope.paymentVoucherModel.paymentData.balance > 0) {
-//                            if (!$scope.paymentVoucherModel.paymentData.respEmployee) {
-//                                optionPane.dangerMessage("plase select reponsibilty employee");
-//                                $scope.employeeResponsibiltySelect = false;
-//                            } else {
-//                                ConfirmPane.successConfirm("Do you want to save invoice")
-//                                        .confirm(function () {
-//                                            $scope.paymentVoucherModel.saveInvoice()
-//                                                    .then(function (data) {
-//                                                        $scope.ui.mode = "IDEAL";
-//                                                        $scope.ui.clear();
-//                                                        ConfirmPane.successConfirm("Do You Want To Print Invoice")
-//                                                                .confirm(function () {
-//                                                                    console.log(data);
-//                                                                    $scope.ui.modalOpen(data.indexNo);
-//                                                                });
-//                                                    });
-//                                        });
-//                            }
-//                        } else {
-//                            ConfirmPane.successConfirm("Do you want to save invoice")
-//                                    .confirm(function () {
-//                                        $scope.paymentVoucherModel.saveInvoice()
-//                                                .then(function (data) {
-//                                                    $scope.ui.mode = "IDEAL";
-//                                                    $scope.ui.clear();
-//                                                    ConfirmPane.successConfirm("Do You Want To Print Invoice")
-//                                                            .confirm(function () {
-//                                                                console.log(data);
-//                                                                $scope.ui.modalOpen(data.indexNo);
-//                                                            });
-//                                                });
-//                                    });
-//                        }
-//                    } else {
-//                        Notification.error("select vehicle");
-//                    }
-//                };
-//
-//                
-//
-//                $scope.ui.getCardAndChequePaymentDelete = function (number) {
-//                    $scope.paymentVoucherModel.getCardAndChequePaymentDelete(number);
-//                };
-//
-//                
-//
-//                
-//
-//                
-//
-//                $scope.ui.getDiscountRate = function () {
-//                    $scope.paymentVoucherModel.invoiceData.discountRate = parseFloat(($scope.paymentVoucherModel.invoiceData.discountAmount * 100) / $scope.paymentVoucherModel.invoiceData.amount);
-//                    $scope.paymentVoucherModel.invoiceData.netAmount = parseFloat($scope.paymentVoucherModel.invoiceData.amount - $scope.paymentVoucherModel.invoiceData.discountAmount);
-//                };
-//
-//                $scope.ui.getDiscountAmount = function () {
-//                    $scope.paymentVoucherModel.invoiceData.discountAmount = parseFloat(($scope.paymentVoucherModel.invoiceData.amount * $scope.paymentVoucherModel.invoiceData.discountRate) / 100);
-//                    $scope.paymentVoucherModel.invoiceData.netAmount = parseFloat($scope.paymentVoucherModel.invoiceData.amount - $scope.paymentVoucherModel.invoiceData.discountAmount);
-//                };
 
                 $scope.init = function () {
                     $scope.$watch("[model.balanceInvoiceList]", function (newVal, oldVal) {

@@ -11,6 +11,7 @@
                     data: {},
                     tempData: {},
                     summaryData: {},
+                    userPermission: {},
                     suppliers: [],
                     items: [],
                     mainList: [],
@@ -39,6 +40,11 @@
                                 .success(function (data) {
                                     that.approvedPurchaseOrderItemList = data;
                                 });
+                        GrnService.getPermission('Grn Approve')
+                                .success(function (data) {
+                                    that.userPermission = data;
+                                });
+
 
 
                     }
@@ -175,7 +181,7 @@
                             saveConfirmation = false;
                             Notification.error("Can't be Approved this GRN without Supplier !");
                         }
-                        if (that.data.nbt>=3 || that.data.nbt<=-1 ) {
+                        if (that.data.nbt >= 3 || that.data.nbt <= -1) {
                             saveConfirmation = false;
                             Notification.error("NBT Out Of Range !");
                         }

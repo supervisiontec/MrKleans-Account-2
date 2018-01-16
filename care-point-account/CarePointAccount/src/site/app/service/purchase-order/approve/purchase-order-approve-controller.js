@@ -142,25 +142,30 @@
                     }
                 };
                 $scope.ui.save = function () {
-                    ConfirmPane.primaryConfirm("Save Purchase Order Request !")
-                            .confirm(function () {
-                                $scope.model.save()
-                                        .then(function (data) {
-                                            $scope.ui.mode = "NEW";
-                                            Notification.success(data.number +" Purchase Order Approved !");
-                                            $scope.chxNBT = false;
-                                            $scope.chxVAT = false;
-                                            ConfirmPane.successConfirm("Do You Want To Print Purchase Order !")
-                                                    .confirm(function () {
-                                                        $scope.ui.modalOpen(data.indexNo);
-                                                    });
-                                        });
-                            })
-                            .discard(function () {
-                                Notification.error("Purchase Order Approved Fail !");
-                                console.log('fail');
-                                
-                            });
+                    var check = true;
+                    if (!$scope.model.userPermission.add) {
+                        check = false;
+                        Notification.error('you have no permission !');
+                    }
+                    if (check) {
+                        ConfirmPane.primaryConfirm("Save Purchase Order Request !")
+                                .confirm(function () {
+                                    $scope.model.save()
+                                            .then(function (data) {
+                                                $scope.ui.mode = "NEW";
+                                                Notification.success(data.number + " Purchase Order Approved !");
+                                                $scope.chxNBT = false;
+                                                $scope.chxVAT = false;
+                                                ConfirmPane.successConfirm("Do You Want To Print Purchase Order !")
+                                                        .confirm(function () {
+                                                            $scope.ui.modalOpen(data.indexNo);
+                                                        });
+                                            });
+                                })
+                                .discard(function () {
+                                    Notification.error("Purchase Order Approved Fail !");
+                                });
+                    }
                 };
 
                 $scope.ui.modalOpen = function (indexNo) {

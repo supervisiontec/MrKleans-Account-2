@@ -82,7 +82,10 @@
                         checkSave = false;
                         Notification.error('insert description to save !');
                     }
-                    
+                     if (!$scope.model.userPermission.add) {
+                        checkSave = false;
+                        Notification.error('you have no permission ');
+                    }
                     var transactionDate=$filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
                     var newDate=$filter('date')(new Date(), 'yyyy-MM-dd');
                     if (transactionDate>newDate) {

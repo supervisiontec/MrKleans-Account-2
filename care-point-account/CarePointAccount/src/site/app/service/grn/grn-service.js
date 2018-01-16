@@ -43,11 +43,9 @@
         this.saveDirectGrn = function (data) {
             return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/grn/save-direct-grn", data);
         };
-
-
-
-
-
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/" + form);
+        };
 //          print
         this.listParameters = function (report) {
             return $http.post(systemConfig.apiUrl + "/api/v1/report/report-viewer/report-parameters", JSON.stringify(report));

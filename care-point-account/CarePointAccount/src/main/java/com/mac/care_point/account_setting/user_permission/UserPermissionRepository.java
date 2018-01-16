@@ -6,6 +6,7 @@
 package com.mac.care_point.account_setting.user_permission;
 
 import com.mac.care_point.account_setting.user_permission.model.TUserPermissionDetails;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -13,5 +14,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author kasun
  */
 public interface UserPermissionRepository extends JpaRepository<TUserPermissionDetails, Integer>{
+
+    public List<TUserPermissionDetails> findByUser(Integer user);
+
+    public List<TUserPermissionDetails> findByUserAndFormName(Integer user, Integer form);
     
 }

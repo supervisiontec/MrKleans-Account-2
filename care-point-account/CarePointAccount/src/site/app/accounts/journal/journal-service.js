@@ -17,6 +17,9 @@
         this.saveJournal = function (journalList) {
             return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/journal/save", journalList);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
     };
     angular.module("appModule")
             .service("journalService", service);

@@ -25,6 +25,9 @@
         this.setAccFlow = function (acc) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/get-account-flow/"+acc);
         };
+        this.getPermission = function (form) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
+        };
         
     };
     angular.module("appModule")

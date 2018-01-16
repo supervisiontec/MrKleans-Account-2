@@ -10,6 +10,7 @@
                     //model factory data
                     data: {},
                     tempData: {},
+                    userPermission: {},
                     pendingPurchaseOrderList: [],
                     purchaseOrderItemList: [],
                     suppliers: [],
@@ -42,7 +43,13 @@
                                 .success(function (data) {
                                     that.approvedPurchaseOrderList = data;
                                 });
+                        
                         this.getPendingOrderTotalAmount();
+                        
+                        GrnService.getPermission('Grn Request')
+                                .success(function (data) {
+                                    that.userPermission = data;
+                                });
 
                     }
                     , getSupplier: function (supplier) {
