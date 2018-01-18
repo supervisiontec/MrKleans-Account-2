@@ -115,8 +115,11 @@
 
                 $scope.ui.selectUser = function (user) {
                     userPermissionFactory.loadUserPermissionDetails(user, function (data) {
-                        $scope.model.detailList = data;
-
+                        $scope.model.detailList = [];
+                        angular.forEach(data, function (value) {
+                            value.name = $scope.model.formLabel(value.formName);
+                            $scope.model.detailList.push(value);
+                        });
                     });
                 };
                 $scope.ui.refresh = function () {
@@ -151,7 +154,7 @@
                     });
                     $scope.model.permission.view = selected;
                     $scope.model.permission.add = selected;
-                    $scope.model.permission.edit = selected;
+                    $scope.model.permission.update = selected;
                     $scope.model.permission.delete = selected;
                 };
                 $scope.ui.setViewPermission = function (selected) {

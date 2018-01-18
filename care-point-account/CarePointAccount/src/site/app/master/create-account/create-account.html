@@ -146,7 +146,7 @@
                 <tr>
                     <th>CODE</th>
                     <th>DESCRIPTION</th>
-                    <th>&nbsp;</th>
+                    <th>COUNT &nbsp;&nbsp;<label class="label label-primary">{{model.accAccountList.length}}</label></th>
                 </tr>
             </thead>
         </table>
@@ -158,8 +158,9 @@
                         | filter:{'accType': ui.search.type} 
                         | filter:{'isAccAccount': ui.search.isAcc===true?true:''} 
                         | filter:{'name': ui.search.name}">
+                
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level === 1'>
+                     ng-if='acc.level === "1"'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;">{{acc.name}}</div>
                     <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
@@ -169,7 +170,7 @@
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level === 2'>
+                     ng-if='acc.level ==="2"'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 20px">{{acc.name}}</div>
                     <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
@@ -179,7 +180,7 @@
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level === 3'>
+                     ng-if='acc.level === "3"'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 40px">{{acc.name}}</div>
                     <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
@@ -189,7 +190,7 @@
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level === 4'>
+                     ng-if='acc.level === "4"'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 60px">{{acc.name}}</div>
                     <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
@@ -199,7 +200,7 @@
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level === 5'>
+                     ng-if='acc.level === "5"'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 80px">{{acc.name}}</div>
                     <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
@@ -209,7 +210,7 @@
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level === 6'>
+                     ng-if='acc.level === "6"'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 100px">{{acc.name}}</div>
                     <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>
@@ -219,7 +220,7 @@
                     </div>
                 </div>
                 <div class="background-dark" style="display: flex;height: 30px;border-radius: 5px;margin-bottom: 5px"
-                     ng-if='acc.level === 7'>
+                     ng-if='acc.level === "7"'>
                     <div style="width: 15%;margin-top: 7px;margin-left: 15px" >{{acc.accCode}}</div>
                     <div style="width: 60%;margin-top: 7px;padding-left: 120px">{{acc.name}}</div>
                     <div style="width: 10%;margin-top: 7px;" class="text-left"><label ng-show='acc.isAccAccount === true' class="label label-default">FINAL</label></div>

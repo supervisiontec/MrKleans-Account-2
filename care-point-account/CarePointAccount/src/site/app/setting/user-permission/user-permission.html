@@ -51,8 +51,8 @@
         </div>
         <div class="col-xs-12 nopadding" >
             <table class="table-rounded control-table">
-                <col style="width: 18%"/>
-                <col style="width: 18%"/>
+                <col style="width: 22%"/>
+                <col style="width: 16%"/>
                 <col style="width: 18%"/>
                 <col style="width: 18%"/>
                 <col style="width: 18%"/>
@@ -60,7 +60,7 @@
                 <tbody>
                     <tr style="line-height: 40px;">
                         <td>
-                            <label>Form Name &nbsp;&nbsp;</label>
+                            <input type="text" class="search-input" ng-model="searchName" placeholder="search by name . . " ng-disabled="ui.mode !== 'NEW'"/>
                         </td>
                         <td>
                             <input type="checkbox" ng-model="model.permission.all" ng-click="ui.permissionTypeClick('all', model.permission.all)"/>
@@ -82,19 +82,17 @@
                             <input type="checkbox" ng-model="model.permission.delete" ng-click="ui.permissionTypeClick('delete', model.permission.delete)"/>
                             <label>&nbsp;&nbsp;Delete </label>
                         </td>
-                        <td>
-                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
     <div class="col-xs-12 background-dark">
-        <div class="smart-scroll-y" style="height: calc(100vh - 155px);padding-top: 10px">
-            <div class="col-xs-12 nopadding" style="display: inline-flex;" ng-repeat="permission in model.detailList">
+        <div class="smart-scroll-y" style="height: calc(100vh - 176px);padding-top: 10px">
+            <div class="col-xs-12 nopadding" style="display: inline-flex;" ng-repeat="permission in model.detailList | filter:{'name':searchName}">
                 <div class="col-xs-12 nopadding" >
                     <table class="table-rounded control-table">
-                        <col style="width: 36%"/>
+                        <col style="width: 38%"/>
                         <col style="width: 18%"/>
                         <col style="width: 18%"/>
                         <col style="width: 18%"/>
@@ -102,7 +100,7 @@
                         <tbody>
                             <tr style="line-height: 40px;">
                                 <td>
-                                    <label class="text-primary">{{model.formLabel(permission.formName)}}</label>
+                                    <label class="text-primary">{{permission.name}}</label>
                                 </td>
                                 <td>
                                     <input type="checkbox" ng-model="permission.view"/>

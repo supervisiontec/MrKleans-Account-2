@@ -45,6 +45,10 @@ public class UserPermissionController {
         System.out.println(form);
         return permissionService.findByUserAndFormName(SecurityUtil.getCurrentUser().getIndexNo(), form);
     }
+    @RequestMapping(value = "/by-view-true", method = RequestMethod.GET)
+    public Object[] findViewTrue() {
+        return permissionService.findViewTrue(SecurityUtil.getCurrentUser().getIndexNo());
+    }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Integer save(@RequestBody UserPermissionMix mix) {

@@ -11,10 +11,14 @@
             return  $http.get(systemConfig.apiUrl + "/security/login",
                     {headers: headers});
         };
-        
+
         //logout
         this.logout = function () {
-            return  $http.get(systemConfig.apiUrl + "/security/logout");
+            return $http.get(systemConfig.apiUrl + "/security/logout");
+        };
+        //permission list
+        this.getViewTrue = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-view-true");
         };
 
         //ping
@@ -27,7 +31,7 @@
             return $http.get(systemConfig.apiUrl + "/api/v1/system/environment/ping",
                     {"headers": headers});
         };
-        
+
     };
 
     angular.module("appModule")

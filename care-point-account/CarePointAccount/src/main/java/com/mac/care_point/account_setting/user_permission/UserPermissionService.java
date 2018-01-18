@@ -59,4 +59,8 @@ public class UserPermissionService {
         }
         return null;
     }
+
+    public Object[] findViewTrue(Integer user) {
+       return permissionRepository.findViewTrue(user);
+    }
 }

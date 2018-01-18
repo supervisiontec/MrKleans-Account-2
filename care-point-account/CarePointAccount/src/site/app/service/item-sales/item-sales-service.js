@@ -11,18 +11,9 @@
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/employee");
         };
 
-//        this.loadVehicle = function () {
-//            return $http.get(systemConfig.apiUrl + "/api/care-point/service/zmaster/vehicle");
-//        };
-
         this.loadItemUnits = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/item-unit");
         };
-
-
-//        this.getClientVehicles = function (index) {
-//            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/payment-voucher/get-client-vehicles/" + index);
-//        };
 
         this.getClientBalance = function (index) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/customer-payment-voucher/get-client-balance/" + index);
@@ -56,14 +47,9 @@
             return $http.get(systemConfig.apiUrl + "/api/care-point/service/bank-branch/bank");
         };
         
-        this.getCustomerTypes = function () {
-            return $http.get(systemConfig.apiUrl + "/api/care-point/master/customer-type");
-        };
-        
         this.getCardReaders = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/card-reader/by-branch");
         };
-        
 
         this.getNonPackageItemItem = function (itemKey) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/job-item/get-non-package-item/" + itemKey);

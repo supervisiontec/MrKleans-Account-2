@@ -13,7 +13,6 @@
                     itemUnits: [],
                     paymentInformationList: [],
                     branchSearchList: [],
-                    customerTypeList: [],
                     cardReaderList: [],
 
                     //transaction list
@@ -72,10 +71,6 @@
                         itemSalesService.loadCardType()
                                 .success(function (data) {
                                     that.cardTypeList = data;
-                                });
-                        itemSalesService.getCustomerTypes()
-                                .success(function (data) {
-                                    that.customerTypeList = data;
                                 });
                         itemSalesService.getCardReaders()
                                 .success(function (data) {
@@ -380,16 +375,7 @@
                         });
                         return data;
                     },
-                    customerTypeLable: function (indexNo) {
-                        var data = "";
-                        angular.forEach(this.customerTypeList, function (customerType) {
-                            if (customerType.indexNo === parseInt(indexNo)) {
-                                data = customerType.indexNo + ' - ' + customerType.name;
-                                return;
-                            }
-                        });
-                        return data;
-                    },
+                   
                     cardReaderLable: function (indexNo) {
                         var data = "";
                         angular.forEach(this.cardReaderList, function (card) {

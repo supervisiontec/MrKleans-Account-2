@@ -180,8 +180,6 @@ public class GrnService {
         supplierLedgerRepository.save(supplierLedger);
         
         // account link
-        MAccSetting inventoryAccount=accountSettingRepository.findByName(Constant.INVENTORY);
-        MAccSetting supplierSubAccountOf=accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.GRN);
         int deleteNumber = journalRepository.getDeleteNumber();
         String searchCode=getSearchCode(Constant.CODE_GRN,SecurityUtil.getCurrentUser().getBranch(),number);
@@ -191,6 +189,7 @@ public class GrnService {
         Integer supplierAccount=selectSupplier.getAccAccount();
         if (selectSupplier.getAccAccount()==null) {
             //create supplier
+            MAccSetting supplierSubAccountOf=accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
             MAccAccount account = new MAccAccount();
             account.setAccCode(null);
             account.setAccMain(null);
@@ -239,6 +238,7 @@ public class GrnService {
         
         
         TAccLedger tAccLedger2 = new TAccLedger();
+        MAccSetting inventoryAccount=accountSettingRepository.findByName(Constant.INVENTORY);
         tAccLedger2.setAccAccount(inventoryAccount.getAccAccount());
         tAccLedger2.setBankReconciliation(false);
         tAccLedger2.setBranch(SecurityUtil.getCurrentUser().getBranch());

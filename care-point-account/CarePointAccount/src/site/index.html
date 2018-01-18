@@ -12,7 +12,7 @@
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     </head>
-    <body ng-app="appModule" ng-controller="appController">
+    <body ng-app="appModule" ng-controller="appController" ng-init="init()">
         <!--side panel-->
         <div class="side-bar-left background-ultra-dark" ng-class="hamburgerOpen ? 'side-bar-hidden' : ''">
             <div>
@@ -37,51 +37,53 @@
                             </ul>
                         </li>
                         
-                        <li> 
+                        <li ng-show="ui.includeList(['Item Sales','Customer Payment','Purchase Order Request',
+                                    'Purchase Order Approve','Grn Request','Grn Approve','Grn Direct'])"> 
                             <a class="menu-header">SERVICE</a>
                             <ul>
-                                <li><a href="#/service/item-sales" ng-click="toggleHamburger('Item Sales');">Item Sales</a></li> 
-                                <li><a href="#/service/customer-payment" ng-click="toggleHamburger('Customer Payment');">Customer Payment</a></li> 
-                                <li><a href="#/service/purchase-order-request" ng-click="toggleHamburger('Purchase Order Request');">Purchase Order Request</a></li> 
-                                <li><a href="#/service/purchase-order-approve" ng-click="toggleHamburger('Purchase Order Approve');">Purchase Order Approve</a></li> 
-                                <li><a href="#/service/grn-request" ng-click="toggleHamburger('Grn Request');">Grn Request</a></li> 
-                                <li><a href="#/service/grn-approve" ng-click="toggleHamburger('Grn Approve');">Grn Approve</a></li> 
-                                <li><a href="#/service/grn-direct" ng-click="toggleHamburger('Grn Direct');">Grn Direct</a></li> 
+                                <li ng-show="ui.include('Item Sales')"><a href="#/service/item-sales" ng-click="toggleHamburger('Item Sales');">Item Sales</a></li> 
+                                <li ng-show="ui.include('Customer Payment')"><a href="#/service/customer-payment" ng-click="toggleHamburger('Customer Payment');">Customer Payment</a></li> 
+                                <li ng-show="ui.include('Purchase Order Request')"><a href="#/service/purchase-order-request" ng-click="toggleHamburger('Purchase Order Request');">Purchase Order Request</a></li> 
+                                <li ng-show="ui.include('Purchase Order Approve')"><a href="#/service/purchase-order-approve" ng-click="toggleHamburger('Purchase Order Approve');">Purchase Order Approve</a></li> 
+                                <li ng-show="ui.include('Grn Request')"><a href="#/service/grn-request" ng-click="toggleHamburger('Grn Request');">Grn Request</a></li> 
+                                <li ng-show="ui.include('Grn Approve')"><a href="#/service/grn-approve" ng-click="toggleHamburger('Grn Approve');">Grn Approve</a></li> 
+                                <li ng-show="ui.include('Grn Direct')"><a href="#/service/grn-direct" ng-click="toggleHamburger('Grn Direct');">Grn Direct</a></li> 
                             </ul>
                         </li>
-                        <li> 
+                        <li ng-show="ui.includeList(['Journal','General Voucher','Bank Reconciliation','Fund Transfer',
+                       'Accrued Bill','Supplier Payment','Return Cheque','Trial Balance'])"> 
                             <a class="menu-header">TRANSACTION</a>
                             <ul>
-                                <li><a href="#/transaction/journal" ng-click="toggleHamburger('Journal');">Journal</a></li> 
-                                <li><a href="#/transaction/general-voucher" ng-click="toggleHamburger('General Voucher');">General Voucher</a></li>    
-                                <li><a href="#/transaction/bank-reconciliation" ng-click="toggleHamburger('Bank Reconciliation');">Bank Reconciliation</a></li>    
-                                <li><a href="#/transaction/fund-transfer" ng-click="toggleHamburger('Fund Transfer');">Fund Transfer</a></li>    
-                                <li><a href="#/transaction/accrued-bill" ng-click="toggleHamburger('Accrued Bill');">Accrued Bill</a></li>    
-                                <li><a href="#/transaction/supplier-payment" ng-click="toggleHamburger('Supplier Payment');">Supplier Payment</a></li>    
-                                <li><a href="#/transaction/return-cheque" ng-click="toggleHamburger('Return Cheque');">Return Cheque</a></li>    
-                                <li><a href="#/transaction/trial-balance" ng-click="toggleHamburger('Trial Balance');">Trial Balance</a></li>    
+                                <li ng-show="ui.include('Journal')"><a href="#/transaction/journal" ng-click="toggleHamburger('Journal');">Journal</a></li> 
+                                <li ng-show="ui.include('General Voucher')"><a href="#/transaction/general-voucher" ng-click="toggleHamburger('General Voucher');">General Voucher</a></li>    
+                                <li ng-show="ui.include('Bank Reconciliation')"><a href="#/transaction/bank-reconciliation" ng-click="toggleHamburger('Bank Reconciliation');">Bank Reconciliation</a></li>    
+                                <li ng-show="ui.include('Fund Transfer')"><a href="#/transaction/fund-transfer" ng-click="toggleHamburger('Fund Transfer');">Fund Transfer</a></li>    
+                                <li ng-show="ui.include('Accrued Bill')"><a href="#/transaction/accrued-bill" ng-click="toggleHamburger('Accrued Bill');">Accrued Bill</a></li>    
+                                <li ng-show="ui.include('Supplier Payment')"><a href="#/transaction/supplier-payment" ng-click="toggleHamburger('Supplier Payment');">Supplier Payment</a></li>    
+                                <li ng-show="ui.include('Return Cheque')"><a href="#/transaction/return-cheque" ng-click="toggleHamburger('Return Cheque');">Return Cheque</a></li>    
+                                <li ng-show="ui.include('Trial Balance')"><a href="#/transaction/trial-balance" ng-click="toggleHamburger('Trial Balance');">Trial Balance</a></li>    
                             </ul>
                         </li>
-                        <li>
+                        <li ng-show="ui.include('Reports')">
                             <a class="menu-header">REPORTS</a>
                             <ul>
-                                <li><a href="#/reports/general/report-viewer" ng-click="toggleHamburger('REPORTS');">REPORTS</a></li>
+                                <li ng-show="ui.include('Reports')"><a href="#/reports/general/report-viewer" ng-click="toggleHamburger('Reports');">REPORTS</a></li>
                             </ul>
                         </li>
-                        <li> 
+                        <li ng-show="ui.includeList(['Create Account','Item Registration','Client Registration','Supplier Registration'])"> 
                             <a class="menu-header">REGISTRATION</a>
                             <ul>
-                                <li><a href="#/master/create-account" ng-click="toggleHamburger('Create Accounts');">Create Accounts</a></li>
-                                <li><a href="#/master/item" ng-click="toggleHamburger('Item Registration');">Item Registration</a></li>
-                                <li><a href="#/master/client" ng-click="toggleHamburger('Client Registration');">Client Registration</a></li>
-                                <li><a href="#/master/supplier" ng-click="toggleHamburger('Supplier Registration');">Supplier Registration</a></li>
+                                <li ng-show="ui.include('Create Account')"><a href="#/master/create-account" ng-click="toggleHamburger('Create Account');">Create Accounts</a></li>
+                                <li ng-show="ui.include('Item Registration')"><a href="#/master/item" ng-click="toggleHamburger('Item Registration');">Item Registration</a></li>
+                                <li ng-show="ui.include('Client Registration')"><a href="#/master/client" ng-click="toggleHamburger('Client Registration');">Client Registration</a></li>
+                                <li ng-show="ui.include('Supplier Registration')"><a href="#/master/supplier" ng-click="toggleHamburger('Supplier Registration');">Supplier Registration</a></li>
                             </ul>
                         </li>
-                        <li> 
+                        <li ng-show="ui.includeList(['Account Setting','User Permission'])"> 
                             <a class="menu-header">SETTING</a>
                             <ul>
-                                <li><a href="#/setting/account-settings" ng-click="toggleHamburger('Account Setting');">Account Setting</a></li>
-                                <li><a href="#/setting/user-permission" ng-click="toggleHamburger('User Permission');">User Permission</a></li>
+                                <li ng-show="ui.include('Account Setting')"><a href="#/setting/account-settings" ng-click="toggleHamburger('Account Setting');">Account Setting</a></li>
+                                <li ng-show="ui.include('User Permission')"><a href="#/setting/user-permission" ng-click="toggleHamburger('User Permission');">User Permission</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -90,7 +92,7 @@
         </div>
         <!--end side panel-->
         <div class="index-middle">
-            <div class="index-header  background-light">
+            <div class="index-header background-light">
 
                 <div class="hamburger" ng-click="toggleHamburger();" >
                     <div ng-class="hamburgerOpen ? '' : 'open'">
