@@ -7,8 +7,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mac.care-point</groupId>
-    <artifactId>care-point-account</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>sv-account</artifactId>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <name>CarePointAccount</name>

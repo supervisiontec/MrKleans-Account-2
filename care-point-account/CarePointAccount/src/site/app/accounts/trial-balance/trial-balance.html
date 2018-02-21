@@ -2,16 +2,16 @@
 <div class="index-content-body ">
     <div class="col-xs-12">
         <div class="row smart-scroll-y" style="display: flex; flex-flow: column; height: calc(100vh - 51px);">
-            <div class="col-xs-12">
-                <div class="col-sm-3">
-                    <table class="table-rounded control-table square-table">
+            <div class="col-xs-12 nopadding">
+                <div class="col-sm-4">
+                    <table class="table-rounded control-table square-table nopadding">
                         <col style="width: 20%"/>
                         <col style="width: 60%"/>
                         <col style="width: 20%"/>
                         <tbody>
                             <tr style="height: 80px">
                                 <td>Date :</td>
-                                <td>
+                                <td class="nopadding">
                                     <input class="form-control" type="date" id="date" ng-model="model.date" ng-disabled="'NEW' !== 'NEW'">
                                 </td>
                                 <td>
@@ -24,13 +24,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-sm-9">
-                    <div class="col-sm-9 text-center center-block">
-                        <h4>CAREPOINT pvt(ltd)</h4>
+                <div class="col-sm-8">
+                    <div class="col-sm-8 text-center center-block">
+                        <h4>Supervision Accounting</h4>
                         <h4>Trial Balance</h4>
                         <h4>{{model.date|date:'yyyy-MM-dd'}}</h4>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
 
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="nopadding" ng-show="model.loderView">
+            <div ng-show="model.loderView" style="margin-top: -5px">
                 <div class="col-sm-3 nopadding" style="height: calc(100vh - 157px);" >
                     
                 </div>

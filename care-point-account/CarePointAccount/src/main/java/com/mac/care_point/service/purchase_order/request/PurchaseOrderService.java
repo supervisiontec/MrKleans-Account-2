@@ -46,9 +46,6 @@ public class PurchaseOrderService {
         } else {
             purchaseOrder.setNumber(1);
         }
-        System.out.println(purchaseOrder.getGrandTotal());
-        System.out.println(purchaseOrder.getGrandTotal());
-        System.out.println(purchaseOrder.getGrandTotal());
 
         for (TPurchaseOrderDetail detail : purchaseOrder.getPurchaseOrderItemList()) {
             detail.setPurchaseOrder(purchaseOrder);

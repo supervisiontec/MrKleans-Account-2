@@ -240,7 +240,7 @@
                         check = false;
                         Notification.error('you have no permission ');
                     }
-                    if ($scope.model.jobItemList.length===0) {
+                    if ($scope.model.jobItemList.length === 0) {
                         check = false;
                         Notification.error('Select Invoice Item to save !');
                     }
@@ -251,11 +251,15 @@
                                             .then(function (data) {
                                                 $scope.ui.mode = "IDEAL";
                                                 $scope.itemKey = "";
+                                                $scope.itemCount = 0;
+                                                $scope.totalAmount = 0;
+                                                $scope.model.clear();
                                                 Notification.success('Item Sale Save Successfully !');
 
                                             });
                                 });
-                    };
+                    }
+                    ;
                 };
 
                 //delete item

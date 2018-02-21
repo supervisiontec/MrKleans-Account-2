@@ -127,9 +127,9 @@ public class ItemSaleService {
         //save customer ledger
         TCustomerLedger customerLedger1 = new TCustomerLedger();
         customerLedger1.setClient(itemSaleModel.getCustomerLedger().getClient());
-        customerLedger1.setDebitAmount(BigDecimal.ZERO);
+        customerLedger1.setCreditAmount(BigDecimal.ZERO);
         customerLedger1.setDate(new Date());
-        customerLedger1.setCreditAmount(itemSaleModel.getInvoice().getNetAmount());
+        customerLedger1.setDebitAmount(itemSaleModel.getInvoice().getNetAmount());
         customerLedger1.setFormName(Constant.FORM_ITEM_SALES);
         customerLedger1.setInvoice(saveInvoice.getIndexNo());
         customerLedger1.setPayment(null);

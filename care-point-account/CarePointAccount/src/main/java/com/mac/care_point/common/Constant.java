@@ -29,6 +29,7 @@ public interface Constant {
     public static final String ACCRUED = "accrued";
     public static final String RECONCILIATION = "reconciliation";
     public static final String SUPPLIER_PAYMENT = "supplier_payment";
+    public static final String CUSTOMER_PAYMENT = "customer_payment";
     public static final String CHEQUE_RETURN = "cheque_return";
     public static final String FUND_TRANSFER = "transfer";
     public static final String ADVANCE = "advance";
@@ -43,6 +44,7 @@ public interface Constant {
     public static final String FORM_FUND_TRANSFER = "fund_transfer";
     public static final String FORM_CHEQUE_RETURN = "cheque_return";
     public static final String FORM_PAYMENT_VOUCHER = "payment_voucher";
+    public static final String FORM_CUSTOMER_PAYMENT = "customer_payment";
     public static final String FORM_ITEM_SALES = "item_sales";
     public static final String FORM_ADVANCE = "ADVANCE_FORM";
     public static final String PAYMENT_VOUCHER_FORM = "PAYMENT_VOUCHER_FORM";
@@ -78,4 +80,11 @@ public interface Constant {
      //Branch Type
     public static final String MAIN_BRANCH = "MAIN_BRANCH";
     public static final String OTHER_BRANCH = "OTHER_BRANCH";
+ 
+    //type index detail types
+    public static final String SUPPLIER = "SUPPLIER";
+    public static final String ITEM = "ITEM";
+    public static final String CUSTOMER = "CUSTOMER";
+    public static final String VEHICLE = "VEHICLE";
+    public static final String INVOICE = "INVOICE";
 }

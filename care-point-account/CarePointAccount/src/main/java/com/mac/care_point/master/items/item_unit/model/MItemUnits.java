@@ -41,6 +41,9 @@ public class MItemUnits implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "unit")
+    private String unit;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "qty")
@@ -67,6 +70,26 @@ public class MItemUnits implements Serializable {
     private String itemUnitType;
 
     public MItemUnits() {
+    }
+
+    public MItemUnits(Integer indexNo, Integer item, String name, String unit, BigDecimal qty, BigDecimal salePriceNormal, BigDecimal salePriceRegister, BigDecimal costPrice, String itemUnitType) {
+        this.indexNo = indexNo;
+        this.item = item;
+        this.name = name;
+        this.unit = unit;
+        this.qty = qty;
+        this.salePriceNormal = salePriceNormal;
+        this.salePriceRegister = salePriceRegister;
+        this.costPrice = costPrice;
+        this.itemUnitType = itemUnitType;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public Integer getIndexNo() {

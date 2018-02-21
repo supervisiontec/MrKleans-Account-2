@@ -1,20 +1,21 @@
 (function () {
     angular.module("appModule")
-            .controller("createAccountController", function ($scope, createAccountModel, $timeout, Notification, ConfirmPane) {
+            .controller("createAccountController", function ($scope,printService,$filter, createAccountModel, $timeout, PrintPane, Notification, ConfirmPane) {
                 $scope.model = new createAccountModel();
+                $scope.printService = new printService();
                 $scope.ui = {};
 
 
                 //focus
-                $scope.ui.focus = function () {
+                $scope.ui.focus = function (id) {
                     $timeout(function () {
-                        document.querySelectorAll("#categoryMain")[0].focus();
+                        document.querySelectorAll(id)[0].focus();
                     }, 10);
                 };
                 //new
                 $scope.ui.new = function () {
                     $scope.ui.mode = "NEW";
-                    $scope.ui.focus();
+                    $scope.ui.focus("#sub_acc_of");
                 };
                 $scope.ui.edit = function (account, index) {
                     if (!$scope.model.userPermission.update) {
@@ -89,6 +90,37 @@
                                     }
                                 });
                     }
+                };
+                $scope.ui.exportExcel = function () {
+
+                    PrintPane.printConfirm("")
+                            .confirm(function () {
+//                                var divToPrint = document.getElementById("printDiv");
+//                                newWin = window.open("financial_accounts");
+//                                newWin.document.write(divToPrint.outerHTML);
+//                                newWin.print();
+//                                newWin.close();
+                            $scope.printService.printPdf('printDiv');
+                            })
+                            .discard(function () {
+                            $scope.printService.printExcel('printDiv');
+//                                var blob = new Blob([document.getElementById('printDiv').innerHTML], {
+////                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+//                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//                                });
+//                                 var date=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+//                                FileSaver.saveAs(blob, "financial_accounts("+date+").xls");
+                            });
+                };
+                $scope.ui.getFinalAccountCount = function (list) {
+                    var count = 0;
+                    angular.forEach(list, function (val) {
+                        if (val.isAccAccount) {
+                            count++;
+                        }
+                        return;
+                    });
+                    return count;
                 };
 
                 $scope.ui.init = function () {

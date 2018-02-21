@@ -46,7 +46,10 @@
                             'cheque_return',
                             'transfer',
                             'journal',
-                            'accrued'
+                            'accrued',
+                            'SYSTEM_INTEGRATION_GRN',
+                            'SYSTEM_INTEGRATION_INVOICE',
+                            'SYSTEM_INTEGRATION_PAYMENT'
                         ];
                     }
                     

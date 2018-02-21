@@ -28,7 +28,6 @@ import com.mac.care_point.transaction.account_ledger.JournalRepository;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

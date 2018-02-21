@@ -36,7 +36,7 @@ public class TInvoice implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "date")
+    @Column(name = "`date`")
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -61,6 +61,21 @@ public class TInvoice implements Serializable {
     @Column(name = "net_amount")
     private BigDecimal netAmount;
 
+    @Column(name = "nbt_rate")
+    private BigDecimal nbtRate;
+
+    @Column(name = "nbt_value")
+    private BigDecimal nbtValue;
+
+    @Column(name = "vat_rate")
+    private BigDecimal vatRate;
+
+    @Column(name = "vat_value")
+    private BigDecimal vatValue;
+
+    @Column(name = "final_value")
+    private BigDecimal finalValue;
+
     @Basic(optional = false)
     @Column(name = "branch")
     private Integer branch;
@@ -77,17 +92,44 @@ public class TInvoice implements Serializable {
     public TInvoice() {
     }
 
-    public TInvoice(Integer indexNo, Date date, int number, BigDecimal amount, BigDecimal discountRate, BigDecimal discountAmount, BigDecimal netAmount, Integer branch, String status, Integer jobCard) {
-        this.indexNo = indexNo;
-        this.date = date;
-        this.number = number;
-        this.amount = amount;
-        this.discountRate = discountRate;
-        this.discountAmount = discountAmount;
-        this.netAmount = netAmount;
-        this.branch = branch;
-        this.status = status;
-        this.jobCard = jobCard;
+    public BigDecimal getNbtRate() {
+        return nbtRate;
+    }
+
+    public void setNbtRate(BigDecimal nbtRate) {
+        this.nbtRate = nbtRate;
+    }
+
+    public BigDecimal getNbtValue() {
+        return nbtValue;
+    }
+
+    public void setNbtValue(BigDecimal nbtValue) {
+        this.nbtValue = nbtValue;
+    }
+
+    public BigDecimal getVatRate() {
+        return vatRate;
+    }
+
+    public void setVatRate(BigDecimal vatRate) {
+        this.vatRate = vatRate;
+    }
+
+    public BigDecimal getVatValue() {
+        return vatValue;
+    }
+
+    public void setVatValue(BigDecimal vatValue) {
+        this.vatValue = vatValue;
+    }
+
+    public BigDecimal getFinalValue() {
+        return finalValue;
+    }
+
+    public void setFinalValue(BigDecimal finalValue) {
+        this.finalValue = finalValue;
     }
 
     public Integer getIndexNo() {

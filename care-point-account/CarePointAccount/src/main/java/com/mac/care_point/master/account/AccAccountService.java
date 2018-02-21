@@ -36,6 +36,7 @@ public class AccAccountService {
 
     @Transactional
     public MAccAccount saveNewAccount(MAccAccount accAccount) {
+        
         if (accAccount.getIndexNo() != null) {
             return accAccountRepository.save(accAccount);
         } else {
@@ -44,8 +45,9 @@ public class AccAccountService {
             accAccount.setAccMain(subAccountOf.getAccMain());
             accAccount.setSubAccountCount(0);
             accAccount.setAccCode(subAccountOf.getSubAccountCount() == 0 ? subAccountOf.getAccCode()
-                    + ".01" : subAccountOf.getAccCode() + (subAccountOf.getSubAccountCount() <= 9 ? (".0"
-                    + (subAccountOf.getSubAccountCount() + 1)) : "." + (subAccountOf.getSubAccountCount() + 1)));
+                    + ".01" : subAccountOf.getAccCode() + (subAccountOf.getSubAccountCount() < 9 ? (".0"
+                    + (subAccountOf.getSubAccountCount() + 1)) : subAccountOf.getSubAccountCount() < 99 ? "." + (subAccountOf.getSubAccountCount() + 1)
+                    : getUpdate99(subAccountOf.getSubAccountCount(), accAccount.getSubAccountOf())));
 
             subAccountOf.setIsAccAccount(false);
             subAccountOf.setSubAccountCount(subAccountOf.getSubAccountCount() + 1);
@@ -56,38 +58,37 @@ public class AccAccountService {
 
     @Transactional
     public Integer deleteAccount(Integer index) {
-        try {
-            MAccAccount account = accAccountRepository.findOne(index);
-            if (account.getSubAccountOf() != null) {
+        MAccAccount account = accAccountRepository.findOne(index);
+        if (account.getSubAccountOf() != null) {
 
-                MAccAccount accountUpdate = accAccountRepository.findOne(account.getSubAccountOf());
-                accountUpdate.setSubAccountCount(accountUpdate.getSubAccountCount() == 1 ? 0 : accountUpdate.getSubAccountCount() - 1);
-                accountUpdate.setIsAccAccount(accountUpdate.getSubAccountCount().equals(0) ? true : false);
-                if (!accountUpdate.getSubAccountCount().equals(0)) {
+            MAccAccount accountUpdate = accAccountRepository.findOne(account.getSubAccountOf());
+            accountUpdate.setSubAccountCount(accountUpdate.getSubAccountCount() == 1 ? 0 : accountUpdate.getSubAccountCount() - 1);
+            accountUpdate.setIsAccAccount(accountUpdate.getSubAccountCount().equals(0) ? true : false);
+            if (!accountUpdate.getSubAccountCount().equals(0)) {
 //
-                    String[] splitMain = account.getAccCode().split(Pattern.quote("."));
-                    Integer mainLast = Integer.parseInt(splitMain[splitMain.length - 1]);
-                    List<MAccAccount> accUpdateList = accAccountRepository.findBySubAccountOf(account.getSubAccountOf());
+                String[] splitMain = account.getAccCode().split(Pattern.quote("."));
+                Integer mainLast = Integer.parseInt(splitMain[splitMain.length - 1]);
+                List<MAccAccount> accUpdateList = accAccountRepository.findBySubAccountOf(account.getSubAccountOf());
 
-                    for (MAccAccount mAccAccount : accUpdateList) {
-                        String[] split = mAccAccount.getAccCode().split(Pattern.quote("."));
-                        Integer last = Integer.parseInt(split[split.length - 1]);
-                        if (last > mainLast) {
-                            System.out.println("calculate code");
-                            mAccAccount.setAccCode(accountUpdate.getAccCode() + ".0" + (last - 1));
-                            accAccountRepository.save(mAccAccount);
-                        }
-
+                for (MAccAccount mAccAccount : accUpdateList) {
+                    String[] split = mAccAccount.getAccCode().split(Pattern.quote("."));
+                    Integer last = Integer.parseInt(split[split.length - 1]);
+                    if (last > mainLast) {
+                        mAccAccount.setAccCode(accountUpdate.getAccCode() + ".0" + (last - 1));
+                        accAccountRepository.save(mAccAccount);
                     }
+
                 }
-                accAccountRepository.save(accountUpdate);
             }
+            accAccountRepository.save(accountUpdate);
+        }
+        try {
             accAccountRepository.delete(index);
 
-            return index;
         } catch (RuntimeException re) {
             throw new RuntimeException("Can't delete because there are another transaction with relation  !");
         }
+        return index;
     }
 //
 
@@ -110,7 +111,7 @@ public class AccAccountService {
         for (int i = 0; i < 10; i++) {
             MAccAccount findOne = accAccountRepository.findOne(accNo);
             flowList.add(findOne);
-            if (findOne.getSubAccountOf() == null) {
+            if (findOne.getSubAccountOf() == 0) {
                 break;
             }
             accNo = findOne.getSubAccountOf();
@@ -143,5 +144,33 @@ public class AccAccountService {
 
     public MAccAccount getOverPaymentIssueAccount(String overPaymentIssue) {
         return accAccountRepository.getOverPaymentIssueAccount(overPaymentIssue);
+    }
+
+    private String getUpdate99(Integer count, Integer subAccOf) {
+        //update
+        List<MAccAccount> findBySubAccountOf = accAccountRepository.findBySubAccountOf(subAccOf);
+        for (MAccAccount mAccAccount : findBySubAccountOf) {
+            Integer last = Integer.parseInt(mAccAccount.getLevel()) - 1;
+            String[] split = new String[3];
+            split = mAccAccount.getAccCode().split("\\.");
+
+            int lastNo = Integer.parseInt(split[last]);
+            if (lastNo < 10) {
+                split[last] = "00" + lastNo;
+            } else if (lastNo < 100) {
+                split[last] = "0" + lastNo;
+
+            }
+//          
+            String accCode = String.join(".", split);
+
+            System.out.println("accCode " + accCode);
+            mAccAccount.setAccCode(accCode);
+            accAccountRepository.save(mAccAccount);
+        }
+
+        //return number
+        int lastCount = count + 1;
+        return "." + lastCount;
     }
 }

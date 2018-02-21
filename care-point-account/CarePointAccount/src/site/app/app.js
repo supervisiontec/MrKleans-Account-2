@@ -22,9 +22,8 @@
         "grnModule",
         //setting
         "accountSettingModule",
-        "userPermissionModule"
-        
-        
+        "userPermissionModule",
+        "ngFileSaver"
     ]);
 
     //constants
@@ -32,7 +31,7 @@
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? "http://localhost:8070"
+                        ? "http://localhost:8075"
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 

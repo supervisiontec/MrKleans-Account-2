@@ -6,6 +6,10 @@
 package com.mac.care_point.service.payment_voucher;
 
 import com.mac.care_point.common.Constant;
+import com.mac.care_point.master.account.model.MAccAccount;
+import com.mac.care_point.master.branch.BranchRepository;
+import com.mac.care_point.master.branch.model.MBranch;
+import com.mac.care_point.master.client.ClientRepository;
 import com.mac.care_point.service.item_sale.model.TCustomerLedger;
 import com.mac.care_point.service.item_sale.model.TPayment;
 import com.mac.care_point.service.item_sale.model.TPaymentInformation;
@@ -15,8 +19,15 @@ import com.mac.care_point.service.payment.PaymentRepository;
 import com.mac.care_point.service.payment_voucher.model.BalancePaymentModel;
 import com.mac.care_point.service.payment_voucher.model.InvoiceCustomModel;
 import com.mac.care_point.service.payment_voucher.model.PaymentVoucherModel;
+import com.mac.care_point.service.type_index_detail.TypeIndexDetailRepository;
+import com.mac.care_point.transaction.account_ledger.JournalRepository;
+import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
+import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author kasun 
+ * @author kasun
  */
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -42,6 +53,18 @@ public class PaymentVoucherService {
 
     @Autowired
     private ClientLegerRepository clientLegerRepository;
+
+    @Autowired
+    private JournalRepository accountLedgerRepository;
+
+    @Autowired
+    private BranchRepository branchRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private TypeIndexDetailRepository typeIndexDetailRepository;
 
     public Object getClientVehicles(Integer client) {
         return paymentVoucherRepository.getClientVehicles(client);
@@ -74,13 +97,15 @@ public class PaymentVoucherService {
             paymentInformation.setPayment(savePayment.getIndexNo());
             paymentInformationRepostory.save(paymentInformation);
         }
-        voucherModel.getCustomerLedger().setDebitAmount(savePayment.getTotalAmount());
+        voucherModel.getCustomerLedger().setCreditAmount(savePayment.getTotalAmount());
         voucherModel.getCustomerLedger().setInvoice(null);
         voucherModel.getCustomerLedger().setPayment(savePayment.getIndexNo());
         voucherModel.getCustomerLedger().setType(Constant.ADVANCE);
         voucherModel.getCustomerLedger().setFormName(Constant.FORM_ADVANCE);
         voucherModel.getCustomerLedger().setRefNumber(savePayment.getIndexNo());
         TCustomerLedger save = clientLegerRepository.save(voucherModel.getCustomerLedger());
+
+        saveCustomerPaymentToAccountSystem(voucherModel);
         return save.getIndexNo();
     }
 
@@ -201,5 +226,58 @@ public class PaymentVoucherService {
 
     private List<Object[]> getFIFOList(int client) {
         return paymentVoucherRepository.getFIFOList(client);
+    }
+
+    private void saveCustomerPaymentToAccountSystem(PaymentVoucherModel voucherModel) {
+        saveClientAccount(voucherModel);
+        savePaymentDetails(voucherModel);
+    }
+
+    private void saveClientAccount(PaymentVoucherModel voucherModel) {
+        int number = accountLedgerRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.SUPPLIER_PAYMENT);
+        int deleteNumber = accountLedgerRepository.getDeleteNumber();
+        int clientAccAccount = clientRepository.findByAccAccount(voucherModel.getCustomerLedger().getClient());
+        int reconcileGroup = typeIndexDetailRepository.findByTypeAndAccountRefId(Constant.INVOICE, voucherModel.getCustomerLedger().getInvoice());
+        String searchCode = getSearchCode(Constant.CODE_SUPPLIER_PAYMENT, SecurityUtil.getCurrentUser().getBranch(), number);
+
+        TAccLedger accountLedger = new TAccLedger();
+        accountLedger.setAccAccount(clientAccAccount);
+        accountLedger.setBankReconciliation(false);
+        accountLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+        accountLedger.setChequeDate(null);
+        accountLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        accountLedger.setCredit(voucherModel.getCustomerLedger().getCreditAmount());
+        accountLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+        accountLedger.setDebit(new BigDecimal(0));
+        accountLedger.setDeleteRefNo(deleteNumber);
+        accountLedger.setDescription("Customer Payment Balance Payment");
+        accountLedger.setFormName(Constant.FORM_CUSTOMER_PAYMENT);
+        accountLedger.setIsCheque(false);
+        accountLedger.setIsMain(true);
+        accountLedger.setNumber(number);
+        accountLedger.setReconcileAccount(null);
+        accountLedger.setReconcileGroup(reconcileGroup);
+        accountLedger.setRefNumber(voucherModel.getCustomerLedger().getPayment() + "");
+        accountLedger.setSearchCode(searchCode);
+        accountLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+        accountLedger.setTransactionDate(new SimpleDateFormat("yyyy-MM-dd").format(voucherModel.getCustomerLedger().getDate()));
+        accountLedger.setType(Constant.CUSTOMER_PAYMENT);
+        accountLedger.setTypeIndexNo(voucherModel.getCustomerLedger().getPayment());
+        accountLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+
+//        accountLedgerRepository.save(accountLedger);
+//        HashMap<Integer,String> map = new HashMap<>();
+//        map.put(1, searchCode)
+
+    }
+
+    private void savePaymentDetails(PaymentVoucherModel voucherModel) {
+
+    }
+
+    private String getSearchCode(String code, Integer branch, int number) {
+        MBranch branchModel = branchRepository.findOne(branch);
+        String branchCode = branchModel.getBranchCode();
+        return code + "/" + branchCode + "/" + number;
     }
 }

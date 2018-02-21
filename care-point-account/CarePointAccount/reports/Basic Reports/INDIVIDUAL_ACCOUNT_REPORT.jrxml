@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-12-26T13:28:40 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="individual_account_report" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a694d126-fa48-4d97-98c1-e97a8177fe74">
+<!-- 2018-02-20T16:43:09 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="individual_account_report" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoPages" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a694d126-fa48-4d97-98c1-e97a8177fe74">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CarePoint.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="AccountDatabaseAdapter.xml"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
@@ -13,43 +13,60 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="293"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="696"/>
 	<parameter name="ACC_ACCOUNT" class="java.lang.Integer"/>
-	<parameter name="SEARCH_CODE" class="java.lang.String"/>
 	<parameter name="FROM_DATE" class="java.util.Date"/>
 	<parameter name="TO_DATE" class="java.util.Date"/>
 	<parameter name="BRANCH" class="java.lang.Integer"/>
 	<queryString language="SQL">
-		<![CDATA[select t_acc_ledger.number,
+		<![CDATA[select 
+	"" as number,
+	"brought forward (B/F)" as search_code,
+	"" as transaction_date,
+	null as time1,
+	null as current_date1,
+	ifnull(if((sum(t_acc_ledger.debit)-sum(t_acc_ledger.credit)) <= 0 , 0 ,(sum(t_acc_ledger.debit)-sum(t_acc_ledger.credit))),0.00) as debit,
+	ifnull(if((sum(t_acc_ledger.credit)-sum(t_acc_ledger.debit)) <= 0 , 0 ,(sum(t_acc_ledger.credit)-sum(t_acc_ledger.debit))),0.00) as credit,
+	ifnull(if((sum(t_acc_ledger.debit)-sum(t_acc_ledger.credit)) <= 0 , 
+		ifnull(if((sum(t_acc_ledger.credit)-sum(t_acc_ledger.debit)) <= 0 , 0 ,(sum(t_acc_ledger.credit)-sum(t_acc_ledger.debit))*-1),0.00)
+	 	,(sum(t_acc_ledger.debit)-sum(t_acc_ledger.credit))),0.00) as balance,
+	"" as description,
+	"" as acc_account,
+	"" as branch_name
+from t_acc_ledger 
+where t_acc_ledger.branch= $P{BRANCH}  and t_acc_ledger.acc_account=  $P{ACC_ACCOUNT} 
+and ( $P{FROM_DATE}  is null or t_acc_ledger.transaction_date < $P{FROM_DATE}) 
+UNION
+(select t_acc_ledger.number, 
 	t_acc_ledger.search_code,
 	t_acc_ledger.transaction_date,
-	t_acc_ledger.time,
-	t_acc_ledger.current_date,
+	t_acc_ledger.time as time1,
+	t_acc_ledger.current_date as current_date1,
 	t_acc_ledger.debit,
 	t_acc_ledger.credit,
+	if(t_acc_ledger.debit>0,t_acc_ledger.debit,t_acc_ledger.credit*-1)as balance,
 	t_acc_ledger.description,
 	m_acc_account.name as acc_account,
-	m_user.username as user_name,
 	m_branch.name as branch_name
 from t_acc_ledger
 left JOIN m_acc_account on m_acc_account.index_no=t_acc_ledger.acc_account
-left JOIN m_user on m_user.index_no=t_acc_ledger.user
 left JOIN m_branch on m_branch.index_no=t_acc_ledger.branch
-where t_acc_ledger.branch= $P{BRANCH}  and t_acc_ledger.acc_account= $P{ACC_ACCOUNT} 
-and ($P{TO_DATE} is null or t_acc_ledger.transaction_date >=   $P{TO_DATE} ) 
-and ( $P{FROM_DATE} is null or t_acc_ledger.transaction_date <=   $P{FROM_DATE} )
-and ($P{SEARCH_CODE} is null or t_acc_ledger.search_code=$P{SEARCH_CODE} )
-order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
+where t_acc_ledger.branch= $P{BRANCH} and t_acc_ledger.acc_account=  $P{ACC_ACCOUNT} 
+and (  $P{FROM_DATE} is null or t_acc_ledger.transaction_date >= $P{FROM_DATE}  )
+and ( $P{TO_DATE} is null or t_acc_ledger.transaction_date <=  $P{TO_DATE} ) 
+order by t_acc_ledger.transaction_date,t_acc_ledger.time)]]>
 	</queryString>
-	<field name="number" class="java.lang.Integer"/>
+	<field name="number" class="java.lang.String"/>
 	<field name="search_code" class="java.lang.String"/>
-	<field name="transaction_date" class="java.sql.Date"/>
-	<field name="time" class="java.sql.Time"/>
-	<field name="current_date" class="java.sql.Date"/>
+	<field name="transaction_date" class="java.lang.String"/>
+	<field name="time1" class="java.sql.Time"/>
+	<field name="current_date1" class="java.sql.Date"/>
 	<field name="debit" class="java.math.BigDecimal"/>
 	<field name="credit" class="java.math.BigDecimal"/>
+	<field name="balance" class="java.math.BigDecimal"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="acc_account" class="java.lang.String"/>
-	<field name="user_name" class="java.lang.String"/>
 	<field name="branch_name" class="java.lang.String"/>
 	<variable name="number1" class="java.lang.Integer" resetType="Page" calculation="Count">
 		<variableExpression><![CDATA[$F{number}]]></variableExpression>
@@ -62,6 +79,9 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 	</variable>
 	<variable name="balance" class="java.lang.Double">
 		<variableExpression><![CDATA[Double.valueOf($V{debit1})-Double.valueOf($V{credit1})]]></variableExpression>
+	</variable>
+	<variable name="balance_calc" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -79,7 +99,8 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="24" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[Care point]]></text>
+				<text><![CDATA[Super Vision Accounting
+]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="52" width="368" height="25" uuid="d20061b2-9573-4781-be23-cca75273d85b"/>
@@ -121,26 +142,8 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{FROM_DATE}==null?"- - -":$P{FROM_DATE}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="643" y="60" width="157" height="15" uuid="37ed3f64-8439-4ec5-af8c-1f16502cf25f">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<text><![CDATA[Nugegoda.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="643" y="45" width="157" height="15" uuid="0f9908c6-ef57-4b61-9dd3-e4ec03541430">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<text><![CDATA[Stanley Thilakarathne Mawatha,]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="643" y="30" width="157" height="15" uuid="33b2b0cd-bee4-46c9-8212-e746e8cc901a">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<text><![CDATA[Care Point,]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="270" y="90" width="85" height="18" uuid="f56bea2a-2717-4eea-b4ad-8faba145138e">
+				<reportElement x="270" y="90" width="517" height="18" uuid="f56bea2a-2717-4eea-b4ad-8faba145138e">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
@@ -167,7 +170,7 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<text><![CDATA[BRANCH :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="270" y="110" width="85" height="18" uuid="0f080630-a0c1-4954-9bcf-1d863ad7565a">
+				<reportElement x="270" y="110" width="260" height="18" uuid="0f080630-a0c1-4954-9bcf-1d863ad7565a">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
@@ -244,7 +247,7 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<text><![CDATA[CUR DATE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="570" y="0" width="80" height="20" uuid="b039d5f1-7e39-4c28-b0f9-0245a55c4edd">
+				<reportElement x="560" y="0" width="80" height="20" uuid="b039d5f1-7e39-4c28-b0f9-0245a55c4edd">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
@@ -257,7 +260,7 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<text><![CDATA[DEBIT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="650" y="0" width="80" height="20" uuid="2fad84a0-4c14-42c7-a8d1-d1705c3d5601">
+				<reportElement x="640" y="0" width="80" height="20" uuid="2fad84a0-4c14-42c7-a8d1-d1705c3d5601">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
@@ -270,7 +273,7 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<text><![CDATA[CREDIT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="730" y="0" width="70" height="20" uuid="33e60fe8-94d3-4237-be95-97230e08a8de">
+				<reportElement x="720" y="0" width="80" height="20" uuid="33e60fe8-94d3-4237-be95-97230e08a8de">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="12">
@@ -280,10 +283,10 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[USER]]></text>
+				<text><![CDATA[Balance]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="390" y="0" width="180" height="20" uuid="1013152a-6beb-4afb-9356-90c6320e9f6d">
+				<reportElement x="390" y="0" width="170" height="20" uuid="1013152a-6beb-4afb-9356-90c6320e9f6d">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
@@ -298,55 +301,78 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		<band height="17" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="30" height="20" uuid="2a196324-d12c-4427-853f-5d8492248aaa"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+				<reportElement x="0" y="0" width="30" height="15" uuid="2a196324-d12c-4427-853f-5d8492248aaa"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$V{number1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="30" y="0" width="140" height="20" uuid="1bd8c367-9533-4503-b99e-1161a6a1d54d"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+				<reportElement x="30" y="1" width="140" height="15" uuid="1bd8c367-9533-4503-b99e-1161a6a1d54d"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{search_code}]]></textFieldExpression>
 			</textField>
-			<textField pattern="M/d/yy">
-				<reportElement x="170" y="0" width="70" height="20" uuid="dbe115fe-deb2-4fad-a194-7e8b18df9c92"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="170" y="1" width="70" height="15" uuid="dbe115fe-deb2-4fad-a194-7e8b18df9c92"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{transaction_date}]]></textFieldExpression>
 			</textField>
-			<textField pattern="M/d/yy">
-				<reportElement x="310" y="0" width="80" height="20" uuid="ff506526-ab14-4bf2-a7e5-140ec989f482"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
-				<textFieldExpression><![CDATA[$F{current_date}]]></textFieldExpression>
+			<textField pattern="yyyy-MM-dd" isBlankWhenNull="true">
+				<reportElement x="310" y="1" width="80" height="15" uuid="ff506526-ab14-4bf2-a7e5-140ec989f482"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_date1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="h:mm a">
-				<reportElement x="240" y="0" width="70" height="20" uuid="779e08a1-b26f-44b3-8fdf-d02d5ae3ac5b"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
-				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
+			<textField pattern="HH:mm:ss a" isBlankWhenNull="true">
+				<reportElement x="240" y="1" width="70" height="15" uuid="779e08a1-b26f-44b3-8fdf-d02d5ae3ac5b"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{time1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="570" y="0" width="80" height="20" uuid="d69ecfbf-d6a8-4dad-b8c4-9d38150ccf1f"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
-				<textElement textAlignment="Right"/>
+				<reportElement x="560" y="1" width="80" height="15" uuid="d69ecfbf-d6a8-4dad-b8c4-9d38150ccf1f"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{debit}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="650" y="0" width="80" height="20" uuid="ee914afa-c511-4759-a532-343293285259"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
-				<textElement textAlignment="Right"/>
+				<reportElement x="640" y="1" width="80" height="15" uuid="ee914afa-c511-4759-a532-343293285259">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{credit}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="390" y="0" width="180" height="20" uuid="952d0464-abe1-486b-a413-67c62d269993"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+				<reportElement x="390" y="1" width="170" height="15" uuid="952d0464-abe1-486b-a413-67c62d269993"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="730" y="0" width="70" height="20" uuid="c8d2cec6-6ae2-42a5-b17f-321d2e029057"/>
-				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="12"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{user_name}]]></textFieldExpression>
+			<textField pattern="#,##0.00">
+				<reportElement x="720" y="1" width="80" height="15" uuid="8b357f25-8951-45c3-8b9e-ffe9a8b027f8"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{balance_calc}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -384,14 +410,14 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 	<summary>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="510" y="3" width="60" height="17" uuid="bbb7103f-257d-4c6d-a414-f0d5fb6e4558"/>
+				<reportElement x="510" y="3" width="50" height="17" uuid="bbb7103f-257d-4c6d-a414-f0d5fb6e4558"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL :]]></text>
 			</staticText>
 			<textField pattern="#,##0.00#">
-				<reportElement x="570" y="3" width="80" height="17" uuid="b38ca485-340f-4955-85e6-b93d3f953d40">
+				<reportElement x="560" y="3" width="80" height="17" uuid="b38ca485-340f-4955-85e6-b93d3f953d40">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -405,7 +431,7 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<textFieldExpression><![CDATA[$V{debit1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#">
-				<reportElement x="650" y="3" width="80" height="17" uuid="127eefaf-372c-498e-8664-580997355414">
+				<reportElement x="640" y="3" width="80" height="17" uuid="127eefaf-372c-498e-8664-580997355414">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
 				<box rightPadding="4">
@@ -418,15 +444,15 @@ order by t_acc_ledger.transaction_date,t_acc_ledger.time]]>
 				<textFieldExpression><![CDATA[$V{credit1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#">
-				<reportElement x="731" y="3" width="69" height="17" uuid="e29d77be-ea7d-4911-825e-4fe2db8fc881"/>
-				<box>
+				<reportElement x="720" y="3" width="80" height="17" uuid="e29d77be-ea7d-4911-825e-4fe2db8fc881"/>
+				<box rightPadding="5">
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{balance}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{balance}<0.0?"("+(new DecimalFormat("#.##").format(Double.valueOf(($V{balance}*-1.0))))+")":$V{balance}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
