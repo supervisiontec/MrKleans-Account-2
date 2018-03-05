@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.master.supplier;
+package com.mac.care_point.master.vehicle;
 
-import com.mac.care_point.master.supplier.model.MSupplier;
+import com.mac.care_point.master.vehicle.model.MVehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author kasun
+ * @author chama
  */
-public interface SupplierRepository extends JpaRepository<MSupplier, Integer>{
-    
+public interface VehicleRepository extends JpaRepository<MVehicle, Integer>{
+     
 }

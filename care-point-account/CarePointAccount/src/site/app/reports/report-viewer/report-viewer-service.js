@@ -54,8 +54,17 @@
                 this.getEmployeeList = function () {
                     return $http.get(systemConfig.apiUrl + "/api/care-point/master/employee");
                 };
+                
                 this.getAccountList = function () {
                     return $http.get(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/find-only-account");
+                };
+                
+                this.getVehicleList = function () {
+                    return $http.get(systemConfig.apiUrl + "/api/care-point/master/vehicle");
+                };
+                
+                this.getItemList = function () {
+                    return $http.get(systemConfig.apiUrl + "/api/care-point/master/item");
                 };
             });
 }());

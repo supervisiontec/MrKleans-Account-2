@@ -25,6 +25,7 @@
 
                     ReportViewerService.listParameters(report)
                             .success(function (data) {
+                                console.log(data);
                                 $scope.model.currentReport.parameters = data;
                             });
 
@@ -51,10 +52,11 @@
                 };
 
                 $scope.ui.isParameterAvailable = function (param) {
+                    console.log($scope.model.currentReport.parameters);
+                    console.log(param);
                     if (typeof $scope.model.currentReport.parameters === 'undefined') {
                         return false;
                     }
-
                     return $scope.model.currentReport.parameters.indexOf(param) >= 0;
                 };
 

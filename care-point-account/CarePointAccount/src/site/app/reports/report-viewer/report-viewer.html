@@ -1,5 +1,5 @@
 <div class="index-content-header">
-    
+
 </div>
 <div class="index-content-body">
     <div class="col-xs-4 background-dark border-dark-right">
@@ -44,78 +44,131 @@
                                 </thead>
                             </table>
 
-                            <table class="control-table">
-                                <col style="width: 35%"/>
+                            <table class="control-table table-rounded">
+                                <col style="width: 40%"/>
                                 <col style="width: 60%"/>
-                                <col style="width: 5%"/>
 
                                 <tbody>                   
-                                   
+
                                     <tr ng-show="ui.isParameterAvailable('FROM_DATE')">
                                         <td><label class="control-label">FROM DATE</label></td>
                                         <td>
-                                            <input type="date" class="form-control" id="status" ng-model="model.currentReport.parameterValues.FROM_DATE " >
+                                            <input type="date" class="form-control" id="status" ng-model="model.currentReport.parameterValues.FROM_DATE" >
                                         </td>
                                     </tr>
                                     <tr ng-show="ui.isParameterAvailable('TO_DATE')">
                                         <td><label class="control-label">TO DATE</label></td>
                                         <td>
-                                            <input type="date" class="form-control" id="status" ng-model="model.currentReport.parameterValues.TO_DATE " >
+                                            <input type="date" class="form-control" id="status" ng-model="model.currentReport.parameterValues.TO_DATE" >
                                         </td>
                                     </tr>
-                                   
+                                    <tr ng-show="ui.isParameterAvailable('GRN_NO')">
+                                        <td><label class="control-label">GRN NO</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.GRN_NO" >
+                                        </td>
+                                    </tr>
                                     <tr ng-show="ui.isParameterAvailable('SUPPLIER')">
                                         <td><label class="control-label">SUPPLIER</label></td>
-                                        <td><input class="form-control" id="status" ng-model="model.currentReport.parameterValues.SUPPLIER" 
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.SUPPLIER" 
                                                    uib-typeahead="supplier.indexNo as (supplier.indexNo+ ' - ' +supplier.name) for supplier in newModel.supplierList |filter:$viewValue |limitTo:10" 
-                                                   typeahead-input-formatter="newModel.supplierLable(model.currentReport.parameterValues.SUPPLIER)"
-                                                   ></td>
+                                                   typeahead-input-formatter="newModel.supplierLable(model.currentReport.parameterValues.SUPPLIER)">
+                                        </td>
                                     </tr>
                                     <tr ng-show="ui.isParameterAvailable('BRANCH')">
                                         <td><label class="control-label">Branch</label></td>
-                                        <td><input class="form-control" id="status" ng-model="model.currentReport.parameterValues.BRANCH" 
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.BRANCH" 
                                                    uib-typeahead="branch.indexNo as (branch.branchCode+ ' - ' +branch.name) for branch in newModel.branchList |filter:$viewValue |limitTo:10" 
                                                    typeahead-input-formatter="newModel.branchLable(model.currentReport.parameterValues.BRANCH)">
                                         </td>
-                                   
+                                    </tr>
                                     <tr ng-show="ui.isParameterAvailable('ACC_ACCOUNT')">
                                         <td><label class="control-label">ACCOUNT</label></td>
-                                        <td><input class="form-control" id="status" ng-model="model.currentReport.parameterValues.ACC_ACCOUNT" 
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.ACC_ACCOUNT" 
                                                    uib-typeahead="account.indexNo as (account.accCode+ ' - ' +account.name) for account in newModel.accountList |filter:$viewValue |limitTo:10" 
                                                    typeahead-input-formatter="newModel.accountLable(model.currentReport.parameterValues.ACC_ACCOUNT)">
                                         </td>
                                     </tr>
                                     <tr ng-show="ui.isParameterAvailable('LEDGER_TYPE')">
                                         <td><label class="control-label">LEDGER TYPE</label></td>
-                                        <td><input class="form-control" id="status" ng-model="model.currentReport.parameterValues.LEDGER_TYPE" 
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.LEDGER_TYPE" 
                                                    uib-typeahead="type as (type) for type in newModel.ledgerTypeList |filter:$viewValue |limitTo:10" 
-                                                   typeahead-input-formatter="newModel.ledgerTypeLable(model.currentReport.parameterValues.LEDGER_TYPE)"
-                                                   ></td>
+                                                   typeahead-input-formatter="newModel.ledgerTypeLable(model.currentReport.parameterValues.LEDGER_TYPE)" >
+                                        </td>
                                     </tr>
                                     <tr ng-show="ui.isParameterAvailable('SEARCH_CODE')">
                                         <td><label class="control-label">SEARCH CODE</label></td>
-                                        <td><input class="form-control" id="status" ng-model="model.currentReport.parameterValues.SEARCH_CODE" 
-                                            ></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.SEARCH_CODE" >
+                                        </td>
                                     </tr>
                                     <tr ng-show="ui.isParameterAvailable('CREDIT_TYPE')">
                                         <td><label class="control-label">CREDIT TYPE</label></td>
-                                        <td><input class="form-control" id="status" ng-model="model.currentReport.parameterValues.CREDIT_TYPE" 
-                                            ></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.CREDIT_TYPE" >
+                                        </td>
                                     </tr>
                                     <tr ng-show="ui.isParameterAvailable('ACC_MAIN_NAME')">
-                                        <td><label class="control-label">ACC_MAIN_CATEGORY</label></td>
-                                        <td><input class="form-control" id="status" ng-model="model.currentReport.parameterValues.ACC_MAIN_NAME" 
-                                            ></td>
+                                        <td><label class="control-label">ACC MAIN CATEGORY</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.ACC_MAIN_NAME" >
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="ui.isParameterAvailable('INVOICE_NO')">
+                                        <td><label class="control-label">INVOICE NO</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.INVOICE_NO" >
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="ui.isParameterAvailable('CLIENT')">
+                                        <td><label class="control-label">CLIENT</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.CLIENT"
+                                                   uib-typeahead="client.indexNo as (client.indexNo+ ' - ' +client.name) for client in newModel.clientList |filter:$viewValue |limitTo:10" 
+                                                   typeahead-input-formatter="newModel.clientLable(model.currentReport.parameterValues.CLIENT)" >
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="ui.isParameterAvailable('VEHICLE')">
+                                        <td><label class="control-label">VEHICLE</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.VEHICLE" 
+                                                   uib-typeahead="vehicle.indexNo as (vehicle.indexNo+ ' - ' +vehicle.vehicleNo) for vehicle in newModel.vehicleList |filter:$viewValue |limitTo:10" 
+                                                   typeahead-input-formatter="newModel.vehicleLable(model.currentReport.parameterValues.VEHICLE)" >
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="ui.isParameterAvailable('AMOUNT')">
+                                        <td><label class="control-label">AMOUNT</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.AMOUNT" >
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="ui.isParameterAvailable('ITEM')">
+                                        <td><label class="control-label">ITEM</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.ITEM" 
+                                                   uib-typeahead="item.indexNo as (item.barcode+ ' - ' +item.name) for item in newModel.itemList |filter:$viewValue |limitTo:10" 
+                                                   typeahead-input-formatter="newModel.itemLable(model.currentReport.parameterValues.ITEM)" >
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="ui.isParameterAvailable('ITEM_TYPE')">
+                                        <td><label class="control-label">ITEM_TYPE</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.ITEM_TYPE" 
+                                               uib-typeahead="type as (type) for type in newModel.itemTypeList |filter:$viewValue |limitTo:10" 
+                                               typeahead-input-formatter="newModel.itemTypeLable(model.currentReport.parameterValues.ITEM_TYPE)" >
+                                        </td>
                                     </tr>
                                 </tbody>                 
                             </table>
-                            
                             <a class="btn btn-block btn-primary" ng-click="ui.viewCurrentReport();">VIEW</a>
                         </div>
                     </div>
                 </uib-tab>
             </uib-tabset>
-
         </div>
     </div>
 
@@ -134,7 +187,7 @@
             </div>
 
 
-            <div class="col-xs-12 placeholder" style="padding: 10px 0px 10px 0px; height: calc(100vh - 69px);" ng-show="ui.status === 'PENDING'">
+            <div class="col-xs-12 placeholder" style="padding: 10px 10px 10px 10px; height: calc(100vh - 69px);" ng-show="ui.status === 'PENDING'">
                 <h1>PREVIEW NOT AVAILABLE UNTIL VIEW THE REPORT :(</h1>
             </div>
 

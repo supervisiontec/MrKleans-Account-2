@@ -34,7 +34,7 @@ public class MAccAccountType implements Serializable{
     private String name;
     
     @Size(max = 50)
-    @Column(name = "value")
+    @Column(name = "`value`")
     private String value;
     
     @Size(max = 50)

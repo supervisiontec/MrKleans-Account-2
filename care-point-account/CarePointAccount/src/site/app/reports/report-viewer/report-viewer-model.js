@@ -8,6 +8,9 @@
                 reportViewer.prototype = {
 
                     clientList: [],
+                    vehicleList: [],
+                    itemTypeList: [],
+                    itemList: [],
                     supplierList: [],
                     branchList: [],
                     employeeList: [],
@@ -38,6 +41,14 @@
                                 .success(function (data) {
                                     that.accountList = data;
                                 });
+                        ReportViewerService.getVehicleList()
+                                .success(function (data) {
+                                    that.vehicleList = data;
+                                });
+                        ReportViewerService.getItemList()
+                                .success(function (data) {
+                                    that.itemList = data;
+                                });
                         
                         this.ledgerTypeList = [
                             'voucher',
@@ -50,6 +61,11 @@
                             'SYSTEM_INTEGRATION_GRN',
                             'SYSTEM_INTEGRATION_INVOICE',
                             'SYSTEM_INTEGRATION_PAYMENT'
+                        ];
+                        this.itemTypeList = [
+                            'STOCK',
+                            'NON_STOCK',
+                            'SERVICE'
                         ];
                     }
                     
@@ -70,6 +86,36 @@
                         angular.forEach(this.supplierList, function (supplier) {
                             if (supplier.indexNo === parseInt(id)) {
                                 lable = supplier.indexNo + " - " + supplier.name;
+                                return;
+                            }
+                        });
+                        return lable;
+                    }
+                    , clientLable: function (id) {
+                        var lable = '';
+                        angular.forEach(this.clientList, function (client) {
+                            if (client.indexNo === parseInt(id)) {
+                                lable = client.indexNo + " - " + client.name;
+                                return;
+                            }
+                        });
+                        return lable;
+                    }
+                    , itemLable: function (id) {
+                        var lable = '';
+                        angular.forEach(this.itemList, function (client) {
+                            if (client.indexNo === parseInt(id)) {
+                                lable = client.barcode + " - " + client.name;
+                                return;
+                            }
+                        });
+                        return lable;
+                    }
+                    , vehicleLable: function (id) {
+                        var lable = '';
+                        angular.forEach(this.vehicleList, function (client) {
+                            if (client.indexNo === parseInt(id)) {
+                                lable = client.indexNo + " - " + client.vehicleNo;
                                 return;
                             }
                         });
@@ -97,7 +143,9 @@
                         return lable;
                     }
                     , ledgerTypeLable: function (type) {
-                        
+                        return type;
+                    }
+                    , itemTypeLable: function (type) {
                         return type;
                     }
 
