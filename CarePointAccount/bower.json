@@ -4,7 +4,7 @@
     "authors": [
         "Kasun Chamara <chamara.kaza@gmail.com>"
     ],
-    "dependencies": {
+        "dependencies": {
         "angular": "1.5.8",
         "angular-route": "1.5.8",
         "angular-cookies": "1.5.8",
@@ -17,6 +17,7 @@
         "angular-ui-notification": "latest",
         "chart.js": "npm:chart.js#2.2.2",
         "angular-drag-and-drop-lists": "^1.4.0",
-        "pdfjs-dist": "npm:pdfjs-dist#v1.6.210"
+        "pdfjs-dist": "npm:pdfjs-dist#v1.6.210",
+        "angular-file-saver":"latest"
     }
 }
