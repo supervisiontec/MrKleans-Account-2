@@ -22,8 +22,8 @@
                         <tr>
                             <td>Number :</td>
                             <td>
-                                <input type="text" class="form-control" ng-model="model.data.number" 
-                                       ng-disabled="ui.mode !== 'IDEAL'" />    
+                                <input type="text" class="form-control" ng-model="model.data.number"  ng-keypress="ui.searchVoucherByNumber(model.data.number)"
+                                       ng-disabled="ui.mode !== 'IDEAL'" >    
                             </td>
                         </tr>
                     </tbody>
@@ -38,7 +38,7 @@
                         <tr>
                             <td ng-repeat="type in model.accTypeList">
                                 {{type.name}} :
-                                <input type="radio" name='a' ng-click="ui.selectAccType(type)" ng-disabled="ui.mode != 'NEW'"/>    
+                                <input type="radio" name='a' ng-click="ui.selectAccType(type)" ng-disabled="ui.mode !== 'NEW'"/>    
                             </td>
 
                         </tr>

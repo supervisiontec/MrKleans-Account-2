@@ -54,6 +54,9 @@
         this.reportData = function (reportName) {
             return $http.get(systemConfig.apiUrl + "/api/v1/report/report-viewer/invoice-report-data/" + reportName);
         };
+        this.findGrnByNumberAndBranch = function (number) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/grn/find-grn-by-number/" + number);
+        };
         this.getReportUrl = function (report, params, reportValues) {
             var url = systemConfig.apiUrl + "/api/v1/report/report-viewer/report";
 

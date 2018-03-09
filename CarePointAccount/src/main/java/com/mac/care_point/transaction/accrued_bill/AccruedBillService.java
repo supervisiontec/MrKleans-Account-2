@@ -14,6 +14,7 @@ import com.mac.care_point.transaction.accrued_bill.model.AccruedBillMix;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -85,6 +86,10 @@ public class AccruedBillService {
          MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
         return code + "/" + branchCode + "/" + number;
+    }
+
+    public List<TAccLedger> findAccruedBillsByNumberAndBranch(Integer number, Integer branch) {
+        return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.ACCRUED);
     }
 
 }

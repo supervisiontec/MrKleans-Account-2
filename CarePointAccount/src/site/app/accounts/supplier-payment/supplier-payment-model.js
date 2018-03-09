@@ -233,6 +233,37 @@
                             defer.reject(data);
                         });
                 return defer.promise;
+            },
+            searchByNumber: function (number) {
+                var defer = $q.defer();
+                var that = this;
+                supplierPaymentService.findSupplierPaymentByNumberAndBranch(number)
+                        .success(function (data) {
+                            if (data.length > 0) {
+//                                for (var i = 0; i < data.length; i++) {
+//                                    that.tempData = data[i];
+//                                    that.addData();
+//                                }
+//                                that.data.description = data[1].description;
+//                                that.data.refNumber = data[1].refNumber;
+//                                that.data.accAccount = data[1].accAccount;
+//                                that.accountLable(that.data.accAccount);
+                                for (var i = 0; i < data.length; i++) {
+                                    if (!data[i].isMain) {
+                                        that.tempData = data[i];
+                                        that.addData();
+                                    } else {
+                                        that.data.accAccount = data[i].accAccount;
+                                        that.data.value = data[i].value;
+                                        that.data.description = data[i].description;
+                                        defer.resolve();
+                                    }
+                                }
+                            } else {
+                                defer.reject(data);
+                            }
+                        });
+                return defer.promise;
             }
         };
         return supplierPaymentModel;

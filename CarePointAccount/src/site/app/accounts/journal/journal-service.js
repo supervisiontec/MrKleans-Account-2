@@ -20,6 +20,9 @@
         this.getPermission = function (form) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
         };
+        this.findJournalByNumberAndBranch = function (number) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/journal/find-journal-and-branch/"+number);
+        };
     };
     angular.module("appModule")
             .service("journalService", service);

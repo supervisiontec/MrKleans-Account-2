@@ -8,10 +8,12 @@ package com.mac.care_point.service.grn;
 import com.mac.care_point.service.grn.model.TGrn;
 import com.mac.care_point.service.purchase_order.model.TPurchaseOrder;
 import com.mac.care_point.service.purchase_order.model.TPurchaseOrderDetail;
+import com.mac.care_point.zutil.SecurityUtil;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/care-point/transaction/grn")
 public class GrnController {
 
-    private final Integer branch = 1;
+    private final Integer branch = 2;
     private final String status_approved = "APPROVED";
     private final String status_pending = "PENDING";
 
@@ -76,6 +78,10 @@ public class GrnController {
         grn.setBalanceAmount(grn.getGrandAmount());
 
         return grnService.saveDirectGrn(grn).getNumber();
+    }
+    @RequestMapping(value = "/find-grn-by-number/{number}", method = RequestMethod.GET)
+    public TGrn findGrnByNumber(@PathVariable("number") Integer number ) {
+        return grnService.findGrnByNumber(number, branch);
     }
 
 //    @RequestMapping(value = "/all", method = RequestMethod.GET)

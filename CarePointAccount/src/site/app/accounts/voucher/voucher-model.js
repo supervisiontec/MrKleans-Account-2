@@ -1,6 +1,5 @@
-
 (function () {
-    var factory = function (voucherFactory, voucherService, $q, $timeout, $filter, Notification) {
+    var factory = function (voucherFactory, voucherService, $q, $timeout, $filter) {
         function employeeModel() {
             this.constructor();
         }
@@ -127,6 +126,38 @@
                 this.tempData.branch = this.currentBranch.indexNo;
                 this.data.branch = this.currentBranch.indexNo;
                 this.saveDataList = [];
+            },
+            searchVoucherByNumber: function (number) {
+                var defer = $q.defer();
+                var that = this;
+                voucherService.findVoucherByNumberAndBranch(number)
+                        .success(function (data) {
+                            console.log(data);
+                            if (data.length > 0) {
+//                                for (var i = 0; i < data.length; i++) {
+//                                    that.tempData = data[i];
+//                                    that.addData();
+//                                }
+//                                that.data.accAccount = data[1].accAccount;
+//                                that.data.value = data[1].value;
+//                                that.data.description = data[1].description;
+//                                defer.resolve();
+                                for (var i = 0; i < data.length; i++) {
+                                    if (!data[i].isMain) {
+                                        that.tempData = data[i];
+                                        that.addData();
+                                    } else {
+                                        that.data.accAccount = data[i].accAccount;
+                                        that.data.value = data[i].value;
+                                        that.data.description = data[i].description;
+                                        defer.resolve();
+                                    }
+                                }
+                            } else {
+                                defer.reject();
+                            }
+                        });
+                return defer.promise;
             }
         };
         return employeeModel;

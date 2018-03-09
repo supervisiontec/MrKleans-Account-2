@@ -6,6 +6,7 @@
 package com.mac.care_point.transaction.account_ledger;
 
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +25,7 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
     @Query(value = "select ifnull( max(t_acc_ledger.delete_ref_no)+1,1) as number\n"
             + "from t_acc_ledger", nativeQuery = true)
     public int getDeleteNumber();
+
+    public List<TAccLedger> findByNumberAndBranchAndType(Integer number, Integer branch, String JOURNAL);
 
 }

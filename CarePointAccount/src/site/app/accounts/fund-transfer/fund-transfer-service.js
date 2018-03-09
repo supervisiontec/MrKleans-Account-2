@@ -22,6 +22,9 @@
         this.getPermission = function (form) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
         };
+        this.findFundTransferByNumberAndBranch = function (number) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/fund-transfer/find-fund-transfer-by-number-and-branch/"+number);
+        };
         
     };
     angular.module("appModule")

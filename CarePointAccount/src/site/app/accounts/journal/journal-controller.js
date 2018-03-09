@@ -92,6 +92,17 @@
                         $scope.ui.addData();
                     }
                 };
+                $scope.ui.searchJournalByNumber = function (number) {
+                    var key = event ? event.keyCode || event.which : 13;
+                    if (key === 13) {
+                        $scope.model.searchJournalByNumber(number)
+                                .then(function () {
+                                    
+                                }, function () {
+                                    Notification.error('Invalid number !!!');
+                                });
+                    }
+                };
 
                 $scope.ui.init = function () {
                     $scope.ui.mode = "IDEAL";

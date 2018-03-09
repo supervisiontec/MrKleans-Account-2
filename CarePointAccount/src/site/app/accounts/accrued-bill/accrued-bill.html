@@ -22,7 +22,7 @@
                         <tr>
                             <td>Number :</td>
                             <td>
-                                <input type="text" class="form-control" ng-model="model.data.number" 
+                                <input type="text" class="form-control" ng-keypress="ui.searchByNumber(model.data.number)" ng-model="model.data.number" 
                                        ng-disabled="ui.mode !== 'IDEAL'" />    
                             </td>
                         </tr>

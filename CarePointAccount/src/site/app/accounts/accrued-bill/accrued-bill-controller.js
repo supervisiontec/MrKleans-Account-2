@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("accruedBillController", function ($scope, accruedBillModel, $timeout,$filter, Notification, ConfirmPane) {
+            .controller("accruedBillController", function ($scope, accruedBillModel, $timeout, $filter, Notification, ConfirmPane) {
                 $scope.model = new accruedBillModel();
                 $scope.ui = {};
                 $scope.model.currentBranch = {};
@@ -51,13 +51,13 @@
                         checkSave = false;
                         Notification.error('select an accrued account to save !');
                     }
-                    var transactionDate=$filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
-                    var newDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-                    if (transactionDate>newDate) {
-                        checkSave=false;
+                    var transactionDate = $filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
+                    var newDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+                    if (transactionDate > newDate) {
+                        checkSave = false;
                         Notification.error("transfer date not valid ! ");
                     }
-                    
+
                     if (checkSave) {
                         $scope.model.addData();
                         $scope.ui.new();
@@ -82,14 +82,14 @@
                         checkSave = false;
                         Notification.error('insert description to save !');
                     }
-                     if (!$scope.model.userPermission.add) {
+                    if (!$scope.model.userPermission.add) {
                         checkSave = false;
                         Notification.error('you have no permission ');
                     }
-                    var transactionDate=$filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
-                    var newDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-                    if (transactionDate>newDate) {
-                        checkSave=false;
+                    var transactionDate = $filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
+                    var newDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+                    if (transactionDate > newDate) {
+                        checkSave = false;
                         Notification.error("transfer date not valid ! ");
                     }
 
@@ -126,6 +126,17 @@
                 $scope.ui.focusAdd = function (model) {
                     if (model.which === 13) {
                         $scope.ui.addData();
+                    }
+                };
+                $scope.ui.searchByNumber = function (number) {
+                    var key = event ? event.keyCode || event.which : 13;
+                    if (key === 13) {
+                        $scope.model.searchByNumber(number)
+                                .then(function () {
+
+                                }, function () {
+                                    Notification.error('Invalid number !!!');
+                                });
                     }
                 };
                 $scope.ui.init = function () {

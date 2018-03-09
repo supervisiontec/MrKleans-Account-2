@@ -85,4 +85,6 @@ public interface SupplierPaymentRepository extends JpaRepository<TAccLedger, Int
             + "where t_acc_ledger.type_index_no=:supplier and t_acc_ledger.acc_account=:over", nativeQuery = true)
     public double getOverPaymentAmount(@Param("supplier") Integer supplier, @Param("over") Integer over);
 
+    public List<TAccLedger> findByNumberAndBranchAndType(Integer number, Integer branch, String SUPPLIER_PAYMENT);
+
 }

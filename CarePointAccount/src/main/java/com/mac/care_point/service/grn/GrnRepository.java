@@ -21,4 +21,6 @@ public interface GrnRepository extends JpaRepository<TGrn, Integer> {
 
     public List<TGrn> findByBranchAndStatus(Integer branch, String status_pending);
 
+    public TGrn findByNumberAndBranch(Integer number, Integer branch);
+
 }

@@ -28,6 +28,9 @@
         this.getPermission = function (form) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
         };
+        this.findAccruedBillByNumberAndBranch = function (number) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/accred-bill/find-accrued-bills-by-number-and-branch/"+number);
+        };
         
     };
     angular.module("appModule")

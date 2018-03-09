@@ -419,4 +419,8 @@ public class GrnService {
         return code + "/" + branchCode + "/" + number;
     }
 
+    public TGrn findGrnByNumber(Integer number, Integer branch) {
+        return grnRepository.findByNumberAndBranch(number, branch);
+    }
+
 }

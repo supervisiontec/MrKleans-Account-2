@@ -144,7 +144,7 @@
                         <label class="control-label text-center">CHEQUE NO :</label>
                     </td>
                     <td>
-                        <input type="text" class="form-control" ng-model='model.data.refNumber'/>
+                        <input type="text" class="form-control" ng-model='model.data.refNumber'>
                     </td>
                 </tr>
             </tbody>
@@ -176,7 +176,7 @@
                         <label class="control-label text-center">REF NUMBER :</label>
                     </td>
                     <td>
-                        <input type="text" class="form-control" ng-model='model.data.refNumber'/>
+                        <input type="text" class="form-control" ng-disabled="ui.mode !== 'NEW'" ng-model='model.data.refNumber'/>
                     </td>
                 </tr>
             </tbody>
@@ -211,7 +211,7 @@
                         <tr>
                             <td>
                                 Number :
-                                <input type="text" class="form-control" ng-model="model.data.number" 
+                                <input type="text" class="form-control" ng-model="model.data.number" ng-keypress="ui.searchByNumber(model.data.number)"
                                        ng-disabled="ui.mode !== 'IDEAL'" />    
                             </td>
                             <td>
