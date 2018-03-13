@@ -193,7 +193,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            Expense Account :
+                            Account :
                             <input type="text" class="form-control" ng-model="model.tempData.accAccount" 
                                    uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.accAccountList | filter:$viewValue |filter:{indexNo : '!' + model.data.accAccount} |limitTo:10" 
                                    typeahead-input-formatter="model.accountLable(model.tempData.accAccount)" 

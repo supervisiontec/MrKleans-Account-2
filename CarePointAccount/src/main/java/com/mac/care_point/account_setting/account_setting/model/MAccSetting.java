@@ -38,14 +38,26 @@ public class MAccSetting implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "filter")
+    private String filter;
+
     public MAccSetting() {
     }
 
-    public MAccSetting(Integer indexNo, String name, Integer accAccount, String description) {
+    public MAccSetting(Integer indexNo, String name, Integer accAccount, String description, String filter) {
         this.indexNo = indexNo;
         this.name = name;
         this.accAccount = accAccount;
         this.description = description;
+        this.filter = filter;
+    }
+
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
     }
 
     public String getDescription() {

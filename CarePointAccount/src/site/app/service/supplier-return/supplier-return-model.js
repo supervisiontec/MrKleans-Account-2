@@ -1,11 +1,11 @@
 (function () {
     angular.module("appModule")
-            .factory("directGrnModel", function (GrnService, grnModelFactory, $q, Notification) {
-                function directGrnModel() {
+            .factory("supplierReturnModel", function (supplierReturnService, supplierReturnFactory, $q, Notification) {
+                function supplierReturnModule() {
                     this.constructor();
                 }
 
-                directGrnModel.prototype = {
+                supplierReturnModule.prototype = {
 
                     //model factory data
                     data: {},
@@ -22,21 +22,21 @@
 
                     constructor: function () {
                         var that = this;
-                        that.data = grnModelFactory.newData();
-                        that.tempData = grnModelFactory.tempData();
-                        that.summaryData = grnModelFactory.summaryData();
+                        that.data = supplierReturnFactory.newData();
+                        that.tempData = supplierReturnFactory.tempData();
+                        that.summaryData = supplierReturnFactory.summaryData();
 
-                        GrnService.loadItems()
+                        supplierReturnService.loadItems()
                                 .success(function (data) {
                                     that.items = data;
                                 });
 
-                        GrnService.loadSuppliers()
+                        supplierReturnService.loadSuppliers()
                                 .success(function (data) {
                                     that.suppliers = data;
                                 });
-                                
-                        GrnService.getPermission('Grn Direct')
+
+                        supplierReturnService.getPermission('Supplier Return')
                                 .success(function (data) {
                                     that.userPermission = data;
                                 });
@@ -56,10 +56,9 @@
                     }
                     ,
                     getStockQty: function (item) {
-                        GrnService.getStockQty(item.indexNo)
+                        supplierReturnService.getStockQty(item.indexNo)
                                 .success(function (data) {
                                     this.tempData.stockQty = data;
-                                    console.log(this.tempData.stockQty);
                                 });
                     },
                     supplierLable: function (index) {
@@ -118,7 +117,7 @@
                         }
                         if (saveConfirmation) {
                             this.data.grnItemList.push(this.tempData);
-                            this.tempData = grnModelFactory.tempData();
+                            this.tempData = supplierReturnFactory.tempData();
                             this.summaryCalculator();
                         }
 
@@ -160,7 +159,6 @@
                         this.summaryCalculator();
                     },
                     saveDirectGrn: function () {
-                        console.log(this.data);
                         var defer = $q.defer();
                         var that = this;
 
@@ -189,8 +187,7 @@
                         }
 
                         if (saveConfirmation) {
-                            console.log(this.data);
-                            GrnService.saveDirectGrn(JSON.stringify(this.data))
+                            supplierReturnService.saveDirectGrn(JSON.stringify(this.data))
                                     .success(function (data) {
                                         that.clear();
                                         defer.resolve();
@@ -202,137 +199,14 @@
                         }
                     }
                     , clear: function () {
-                        this.data = grnModelFactory.newData();
-                        this.tempData = grnModelFactory.tempData();
-                        this.summaryData = grnModelFactory.summaryData();
+                        this.data = supplierReturnFactory.newData();
+                        this.tempData = supplierReturnFactory.tempData();
+                        this.summaryData = supplierReturnFactory.summaryData();
 
                     }
-//
-//                    addData: function () {
-//                        var that = this;
-//                        var saveConfirmation = true;
-//
-//                        if (!that.tempData.barcode) {
-//                            saveConfirmation = false;
-//                            optionPane.dangerMessage("Enter Barcode for Find Item !");
-//                        }
-//                        if (!that.tempData.item) {
-//                            saveConfirmation = false;
-//                            optionPane.dangerMessage("Select Item !");
-//                        }
-//                        if (!that.tempData.unitPrice) {
-//                            saveConfirmation = false;
-//                            optionPane.dangerMessage("Enter Cost Price !");
-//                        }
-//                        if (!that.tempData.qty) {
-//                            saveConfirmation = false;
-//                            optionPane.dangerMessage("Enter Quantity !");
-//                        }
-//                        if (saveConfirmation) {
-//                            that.data.grnItemList.unshift(that.tempData);
-//                            this.tempData = grnModelFactory.tempData();
-//                            this.summaryValueCalculator();
-//                            return saveConfirmation;
-//                        }
-//                        return saveConfirmation;
-//                    },
-//                    getItemLabel: function (indexNo) {
-//
-//                        var that = this;
-//                        var label = null;
-//                        angular.forEach(this.items, function (value) {
-//                            if (value.indexNo === indexNo) {
-//                                label = value;
-//                                that.categoryIndex = value.category;
-//                                that.brandIndex = value.brand;
-//                                return;
-//                            }
-//                        });
-//                        return label;
-//                    }
-//                    , summaryValueCalculator: function () {
-//                        var that = this;
-//                        var valueSummary = 0;
-//                        var qtySummary = 0;
-//
-//                        angular.forEach(that.data.grnItemList, function (value) {
-//                            valueSummary += value.unitPrice * value.qty;
-//                            qtySummary += value.qty;
-//
-//                        });
-//                        this.data.summaryQty = qtySummary;
-//                        this.data.amount = valueSummary;
-//                        this.data.netAmount= valueSummary;
-//                        this.data.discount= 0.00;
-//                        this.data.discountRate= 0.00;
-//                    },
-//                    saveGrn: function () {
-//                        var defer = $q.defer();
-//                        var that = this;
-//                        var saveConfirmation = true;
-//
-//                        if (!that.data.supplier) {
-//                            saveConfirmation = false;
-//                            optionPane.dangerMessage("Select Supplier for Save Grn !");
-//                        }
-//                        if (!that.data.date) {
-//                            saveConfirmation = false;
-//                            optionPane.dangerMessage("Select Date for Save Grn !");
-//                        }
-//                        if (!that.data.grnItemList) {
-//                            saveConfirmation = false;
-//                            optionPane.dangerMessage("Add Grn Item for Save Grn !");
-//                        }
-//
-//                        if (saveConfirmation) {
-//                            console.log(this.data);
-//                            GrnService.saveGrn(JSON.stringify(this.data))
-//                                    .success(function (data) {
-//                                        defer.resolve();
-//                                    })
-//                                    .error(function (data) {
-//                                        defer.reject();
-//                                    });
-//                            return defer.promise;
-//                        }
-//
-//                    },
-//                    netValueCalculator: function () {
-//                        var that = this;
-//                        if (this.data.amount) {
-//                            that.data.netAmount = this.data.amount - this.data.discount;
-//                            that.data.discountRate = (this.data.discount * 100) / this.data.amount;
-//                        }
-//                    }
-//                   
-//                    , discountRate: function () {
-//                        var that = this;
-//                        if (this.data.amount) {
-//                            that.data.discount = (this.data.amount * that.data.discountRate) / 100;
-//                            that.data.netAmount = this.data.amount - this.data.discount;
-//                        }
-//                    }
-//                    , edit: function (index) {
-//                        var that = this;
-//                        that.tempData = that.data.grnItemList[index];
-//                        that.data.grnItemList.splice(index, 1);
-//                        this.summaryValueCalculator();
-//                        this.netValueCalculator();
-//                    }
-//                    , delete: function (index) {
-//                        var that = this;
-//                        that.data.grnItemList.splice(index, 1);
-//                        this.summaryValueCalculator();
-//                        this.netValueCalculator();
-//                    }
-//                    , clear: function () {
-//                        var that = this;
-//                        that.data = grnModelFactory.newData();
-//                        that.tempData = grnModelFactory.tempData();
-//                    }
 
 //                   
                 };
-                return directGrnModel;
+                return supplierReturnModule;
             });
 }());

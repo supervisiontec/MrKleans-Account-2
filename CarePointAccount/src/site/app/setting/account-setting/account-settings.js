@@ -18,7 +18,7 @@
                             });
                 };
                 factory.loadAllAccounts = function (callback) {
-                    var url = systemConfig.apiUrl + "/api/care-point/account/master/acc-account";
+                    var url = systemConfig.apiUrl + "/api/care-point/account/master/acc-account/find-accounts-for-setting";
                     $http.get(url)
                             .success(function (data, status, headers) {
                                 callback(data);
@@ -76,7 +76,6 @@
                     angular.forEach($scope.model.accSettingList, function (setting) {
                         setting.tempAccount = setting.accAccount;
                     });
-                    console.log($scope.model.accSettingList);
                 };
                 $scope.ui.save = function () {
                     ConfirmPane.successConfirm("Do you want to save account setting !")

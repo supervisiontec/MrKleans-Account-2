@@ -51,4 +51,11 @@ public interface AccAccountRepository extends JpaRepository<MAccAccount, Integer
             + "left JOIN m_acc_setting on m_acc_setting.acc_account=m_acc_account.index_no\n"
             + "where m_acc_setting.name=:overPaymentIssue", nativeQuery = true)
     public MAccAccount getOverPaymentIssueAccount(@Param("overPaymentIssue") String overPaymentIssue);
+
+    @Query(value = "select m_acc_account.index_no,\n"
+            + "	m_acc_account.acc_code,\n"
+            + "	m_acc_account.name,\n"
+            + "	m_acc_account.acc_main\n"
+            + "from m_acc_account", nativeQuery = true)
+    public List<Object[]> findAccountsForSetting();
 }

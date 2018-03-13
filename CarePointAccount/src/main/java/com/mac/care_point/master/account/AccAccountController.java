@@ -6,6 +6,7 @@
 package com.mac.care_point.master.account;
 
 import com.mac.care_point.master.account.model.MAccAccount;
+import com.mac.care_point.master.account.model.MAccSettingMix;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -49,6 +50,10 @@ public class AccAccountController {
     @RequestMapping(value = "/find-only-account", method = RequestMethod.GET)
     public List<MAccAccount> findAccount() {
         return accAccountService.findByIsAccAccount(true);
+    }
+    @RequestMapping(value = "/find-accounts-for-setting", method = RequestMethod.GET)
+    public List<MAccSettingMix> findAccountForSetting() {
+        return accAccountService.findAccountForSetting();
     }
     @RequestMapping(value = "/find-only-cahs-bank", method = RequestMethod.GET)
     public List<MAccAccount> findCahsBank() {

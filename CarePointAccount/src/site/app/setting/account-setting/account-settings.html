@@ -12,13 +12,11 @@
                             {{setting.description}}
                         </label>
                         <input type="text" class="form-control" ng-model="setting.tempAccount"
-                               uib-typeahead="acc.indexNo as (acc.accCode + ' - ' + acc.name) for acc in model.accAccountList |filter:$viewValue|limitTo:10 | orderBy:'accCode'" 
+                               uib-typeahead="acc.indexNo as (acc.accCode + ' - ' + acc.name) for acc in model.accAccountList | filter:$viewValue | filter:{accMain:setting.filter} | limitTo:10 | orderBy:'accCode'" 
                                typeahead-input-formatter="model.accAccountLabel(setting.tempAccount)" 
                                typeahead-editable="false"
                                ng-disabled="ui.mode !== 'NEW'"
-                               ng-init="ui.setTimeOut()"
-                               />
-
+                               ng-init="ui.setTimeOut()"/>
                     </div>
                 </div>
             </div>

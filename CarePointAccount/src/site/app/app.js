@@ -20,6 +20,7 @@
         "grnApproveModule",
         "directGrnModule",
         "grnModule",
+        "supplierReturnModule",
         //setting
         "accountSettingModule",
         "userPermissionModule",
@@ -31,7 +32,7 @@
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? "http://localhost:8070"
+                        ? "http://localhost:8075"
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 
@@ -144,6 +145,11 @@
                             templateUrl: "app/service/purchase-order/approve/purchase-order-approve.html",
                             controller: "purchaseOrderApproveController"
                         })
+                        .when("/service/supplier-return", {
+                            templateUrl: "app/service/supplier-return/supplier-return.html",
+                            controller: "supplierReturnController"
+                        })
+                        
                         // setting
                         .when("/setting/account-settings", {
                             templateUrl: "app/setting/account-setting/account-settings.html",

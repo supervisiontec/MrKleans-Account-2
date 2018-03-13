@@ -23,7 +23,7 @@
 
                 <div class="user">
                     <div class="name">
-                        <span>LOGIN USER</span>
+                        <span>{{loginUser}}</span>
                     </div>
                 </div>
 
@@ -36,9 +36,9 @@
                                 <li><a href="#/account/home" ng-click="toggleHamburger('Home');">HOME</a></li> 
                             </ul>
                         </li>
-                        
-                        <li ng-show="ui.includeList(['Item Sales','Customer Payment','Purchase Order Request',
-                                    'Purchase Order Approve','Grn Request','Grn Approve','Grn Direct'])"> 
+
+                        <li ng-show="ui.includeList(['Item Sales', 'Customer Payment', 'Purchase Order Request',
+                                            'Purchase Order Approve', 'Grn Request', 'Grn Approve', 'Grn Direct'])"> 
                             <a class="menu-header">SERVICE</a>
                             <ul>
                                 <li ng-show="ui.include('Item Sales')"><a href="#/service/item-sales" ng-click="toggleHamburger('Item Sales');">Item Sales</a></li> 
@@ -48,10 +48,11 @@
                                 <li ng-show="ui.include('Grn Request')"><a href="#/service/grn-request" ng-click="toggleHamburger('Grn Request');">Grn Request</a></li> 
                                 <li ng-show="ui.include('Grn Approve')"><a href="#/service/grn-approve" ng-click="toggleHamburger('Grn Approve');">Grn Approve</a></li> 
                                 <li ng-show="ui.include('Grn Direct')"><a href="#/service/grn-direct" ng-click="toggleHamburger('Grn Direct');">Grn Direct</a></li> 
+                                <li ng-show="true"><a href="#/service/supplier-return" ng-click="toggleHamburger('Supplier Return');">Supplier Return</a></li> 
                             </ul>
                         </li>
-                        <li ng-show="ui.includeList(['Journal','General Voucher','Bank Reconciliation','Fund Transfer',
-                       'Accrued Bill','Supplier Payment','Return Cheque','Trial Balance'])"> 
+                        <li ng-show="ui.includeList(['Journal', 'General Voucher', 'Bank Reconciliation', 'Fund Transfer',
+                                            'Accrued Bill', 'Supplier Payment', 'Return Cheque', 'Trial Balance'])"> 
                             <a class="menu-header">TRANSACTION</a>
                             <ul>
                                 <li ng-show="ui.include('Journal')"><a href="#/transaction/journal" ng-click="toggleHamburger('Journal');">Journal</a></li> 
@@ -70,7 +71,7 @@
                                 <li ng-show="ui.include('Reports')"><a href="#/reports/general/report-viewer" ng-click="toggleHamburger('Reports');">REPORTS</a></li>
                             </ul>
                         </li>
-                        <li ng-show="ui.includeList(['Create Account','Item Registration','Client Registration','Supplier Registration'])"> 
+                        <li ng-show="ui.includeList(['Create Account', 'Item Registration', 'Client Registration', 'Supplier Registration'])"> 
                             <a class="menu-header">REGISTRATION</a>
                             <ul>
                                 <li ng-show="ui.include('Create Account')"><a href="#/master/create-account" ng-click="toggleHamburger('Create Account');">Create Accounts</a></li>
@@ -79,7 +80,7 @@
                                 <li ng-show="ui.include('Supplier Registration')"><a href="#/master/supplier" ng-click="toggleHamburger('Supplier Registration');">Supplier Registration</a></li>
                             </ul>
                         </li>
-                        <li ng-show="ui.includeList(['Account Setting','User Permission'])"> 
+                        <li ng-show="ui.includeList(['Account Setting', 'User Permission'])"> 
                             <a class="menu-header">SETTING</a>
                             <ul>
                                 <li ng-show="ui.include('Account Setting')"><a href="#/setting/account-settings" ng-click="toggleHamburger('Account Setting');">Account Setting</a></li>

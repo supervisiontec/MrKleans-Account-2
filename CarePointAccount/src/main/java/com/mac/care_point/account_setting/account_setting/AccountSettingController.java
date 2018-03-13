@@ -32,7 +32,6 @@ public class AccountSettingController {
     }
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Integer save(@RequestBody List<MAccSetting> settingList) {
-        System.out.println(settingList.size());
         return accountSettingService.save(settingList);
     }
 

@@ -6,6 +6,7 @@
 package com.mac.care_point.master.account;
 
 import com.mac.care_point.master.account.model.MAccAccount;
+import com.mac.care_point.master.account.model.MAccSettingMix;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class AccAccountService {
 
     @Transactional
     public MAccAccount saveNewAccount(MAccAccount accAccount) {
-        
+
         if (accAccount.getIndexNo() != null) {
             return accAccountRepository.save(accAccount);
         } else {
@@ -172,5 +173,19 @@ public class AccAccountService {
         //return number
         int lastCount = count + 1;
         return "." + lastCount;
+    }
+
+    public List<MAccSettingMix> findAccountForSetting() {
+        List<Object[]> list = accAccountRepository.findAccountsForSetting();
+        ArrayList<MAccSettingMix> arrayList = new ArrayList<MAccSettingMix>();
+        for (Object[] object : list) {
+            MAccSettingMix mix = new MAccSettingMix();
+            mix.setIndexNo(Integer.parseInt(object[0].toString()));
+            mix.setName(object[2].toString());
+            mix.setAccCode(object[1].toString());
+            mix.setAccMain(Integer.parseInt(object[3].toString()));
+            arrayList.add(mix);
+        }
+        return arrayList;
     }
 }

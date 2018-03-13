@@ -2,7 +2,7 @@
     var service = function ($http, systemConfig) {
         
         this.loadAccAccounts = function () {
-            return $http.get(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/find-type-accounts");
+            return $http.get(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/find-only-account");
         };
         this.currentBranch = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/branch/current-branch");
