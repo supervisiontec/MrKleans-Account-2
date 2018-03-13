@@ -51,9 +51,8 @@
                 this.data.transactionDate = new Date();
                 this.tempData.branch = this.currentBranch.indexNo;
 
-            }
-
-            , accountLable: function (model) {
+            },
+            accountLable: function (model) {
                 var label;
                 angular.forEach(this.accAccountList, function (value) {
                     if (value.indexNo === model) {
@@ -62,9 +61,8 @@
                     }
                 });
                 return label;
-            }
-
-            , branchLable: function (model) {
+            },
+            branchLable: function (model) {
                 var label;
                 angular.forEach(this.branchList, function (value) {
                     if (value.indexNo === model) {
@@ -107,8 +105,7 @@
                 });
                 this.data.totalDebit = debit;
                 this.data.totalCredit = credit;
-            }
-            ,
+            },
             save: function () {
                 var defer = $q.defer();
                 var that = this;
@@ -127,6 +124,24 @@
                 this.tempData = journalFactory.tempData();
                 this.dataList = [];
                 this.accflowList = [];
+            },
+            searchJournalByNumber: function (number) {
+                var defer = $q.defer();
+                var that = this;
+                that.refresh();
+                journalService.findJournalByNumberAndBranch(number)
+                        .success(function (data) {
+                            if (data.length > 0) {
+                                for (var i = 0; i < data.length; i++) {
+                                    that.tempData = data[i];
+                                    that.add();
+                                }
+                                that.data.description = data[1].description;
+                            } else {
+                                defer.reject(data);
+                            }
+                        });
+                return defer.promise;
             }
         };
         return employeeModel;

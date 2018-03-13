@@ -165,6 +165,39 @@
                 this.tempData.branch = this.currentBranch.indexNo;
                 this.data.branch = this.currentBranch.indexNo;
                 this.saveDataList = [];
+            },
+            searchByNumber: function (number) {
+                var defer = $q.defer();
+                var that = this;
+                accruedBillService.findAccruedBillByNumberAndBranch(number)
+                        .success(function (data) {
+                            if (data.length > 0) {
+//                                for (var i = 0; i < data.length; i++) {
+//                                    that.tempData = data[i];
+//                                    that.addData();
+//                                }
+//                                that.data.description = data[1].description;
+//                                that.data.refNumber = data[1].refNumber;
+//                                that.data.accAccount = data[1].accAccount;
+//                                that.accountLable(that.data.accAccount);
+                                for (var i = 0; i < data.length; i++) {
+                                    if (!data[i].isMain) {
+                                        that.tempData = data[i];
+                                        that.addData();
+                                    } else {
+                                        that.data.description = data[i].description;
+                                        that.data.refNumber = data[i].refNumber;
+                                        that.data.accAccount = data[i].accAccount;
+                                        that.data.typeIndexNo = data[i].typeIndexNo;
+                                        defer.resolve();
+                                    }
+                                }
+
+                            } else {
+                                defer.reject(data);
+                            }
+                        });
+                return defer.promise;
             }
         };
         return accruedBillModel;

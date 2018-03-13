@@ -70,6 +70,14 @@ public class JournalService {
         return code + "/" + branchCode + "/" + number;
     }
 
+    public List<TAccLedger> findJournalByNumberAndBranch(Integer number, Integer branch) {
+        return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.JOURNAL);
+    }
+
+    public List<TAccLedger> findGeneralVoucherByNumberAndBranch(Integer number, Integer branch) {
+        return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.VOUCHER);
+    }
+
    
 
 }

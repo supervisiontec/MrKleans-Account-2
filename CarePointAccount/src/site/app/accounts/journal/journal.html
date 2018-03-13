@@ -10,6 +10,19 @@
                     <tbody>
                         <tr>
                             <td>
+                                <label class="control-label">Number</label>
+                                <input class="form-control" type="text" id="date" ng-model="number" ng-keypress="ui.searchJournalByNumber(number)" ng-disabled="ui.mode !== 'IDEAL'" >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>
                                 <label class="control-label">Date</label>
                                 <input class="form-control" type="date" id="date" ng-model="model.data.transactionDate" ng-disabled="ui.mode !== 'NEW'">
                             </td>

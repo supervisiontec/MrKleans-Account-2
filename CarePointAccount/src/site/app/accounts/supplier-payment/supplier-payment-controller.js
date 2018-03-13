@@ -21,7 +21,7 @@
                     $scope.model.data.transactionDate = new Date();
 //                    $scope.model.tempData.branch = $scope.model.data.branch;
                 };
-                $scope.ui.checkType=function (type) {
+                $scope.ui.checkType = function (type) {
                     $scope.ui.focus('#account');
                     $scope.model.checkType(type);
                 };
@@ -36,7 +36,7 @@
                         checkSave = false;
                         Notification.error('you have no permission ');
                     }
-                   
+
                     if (!$scope.model.data.credit) {
                         checkSave = false;
                         Notification.error('total value 0.00 !');
@@ -49,15 +49,15 @@
                         checkSave = false;
                         Notification.error('insert transaction date to save !');
                     }
-                    if ($scope.model.data.credit<$scope.model.data.billTotal) {
+                    if ($scope.model.data.credit < $scope.model.data.billTotal) {
                         checkSave = false;
                         Notification.error('pay amount not enough to settle bills !');
                     }
-                    if ($scope.model.data.accType==='OVER_PAYMENT' && $scope.model.data.overPay>0) {
+                    if ($scope.model.data.accType === 'OVER_PAYMENT' && $scope.model.data.overPay > 0) {
                         checkSave = false;
                         Notification.error("can't save because there is an overpayment !");
                     }
-                    if ($scope.model.data.credit>$scope.model.data.overAmount && $scope.model.data.accType==='OVER_PAYMENT') {
+                    if ($scope.model.data.credit > $scope.model.data.overAmount && $scope.model.data.accType === 'OVER_PAYMENT') {
                         checkSave = false;
                         Notification.error("overpayment value not enough to save !");
                     }
@@ -83,6 +83,17 @@
                 $scope.ui.focusAdd = function (model) {
                     if (model.which === 13) {
                         $scope.ui.addData();
+                    }
+                };
+                $scope.ui.searchByNumber = function (number) {
+                    var key = event ? event.keyCode || event.which : 13;
+                    if (key === 13) {
+                        $scope.model.searchByNumber(number)
+                                .then(function () {
+
+                                }, function () {
+                                    Notification.error('Invalid number !!!');
+                                });
                     }
                 };
                 $scope.ui.init = function () {

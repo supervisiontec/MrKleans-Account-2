@@ -390,4 +390,8 @@ public class SupplierPaymentSevrice {
         String branchCode = branchModel.getBranchCode();
         return code + "/" + branchCode + "/" + number;
     }
+
+    public List<TAccLedger> findSupplierPaymentByNumberAndBranch(Integer number, Integer branch) {
+        return paymentRepository.findByNumberAndBranchAndType(number, branch, Constant.SUPPLIER_PAYMENT);
+    }
 }

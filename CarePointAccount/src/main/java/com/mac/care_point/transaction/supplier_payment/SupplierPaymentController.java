@@ -7,6 +7,7 @@ package com.mac.care_point.transaction.supplier_payment;
 
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.transaction.supplier_payment.model.SupplierPaymentMix;
+import com.mac.care_point.zutil.SecurityUtil;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -44,6 +45,11 @@ public class SupplierPaymentController {
     public double getOverPaymentAmount(@PathVariable Integer supplier) {
         return paymentSevrice.getOverPaymentAmount(supplier);
 
+    }
+    
+     @RequestMapping(value = "/find-supplier-payments-by-number-and-branch/{number}", method = RequestMethod.GET)
+    public List<TAccLedger> findSupplierPaymentByNumberAndBranch(@PathVariable("number")Integer number) {
+        return paymentSevrice.findSupplierPaymentByNumberAndBranch(number, SecurityUtil.getCurrentUser().getBranch());
     }
 
 }

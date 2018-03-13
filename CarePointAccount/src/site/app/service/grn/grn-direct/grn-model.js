@@ -35,7 +35,7 @@
                                 .success(function (data) {
                                     that.suppliers = data;
                                 });
-                                
+
                         GrnService.getPermission('Grn Direct')
                                 .success(function (data) {
                                     that.userPermission = data;
@@ -200,12 +200,25 @@
                                     });
                             return defer.promise;
                         }
-                    }
-                    , clear: function () {
+                    }, clear: function () {
                         this.data = grnModelFactory.newData();
                         this.tempData = grnModelFactory.tempData();
                         this.summaryData = grnModelFactory.summaryData();
 
+                    },
+                    searchGrnByNumber: function (number) {
+                        var defer = $q.defer();
+                        var that = this;
+                        GrnService.findGrnByNumberAndBranch(number)
+                                .success(function (data) {
+                                    if (data) {
+                                        that.data = data;
+                                        defer.resolve();
+                                    } else {
+                                        defer.reject();
+                                    }
+                                });
+                        return defer.promise;
                     }
 //
 //                    addData: function () {
