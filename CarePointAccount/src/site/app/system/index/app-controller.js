@@ -35,11 +35,10 @@
                 $scope.init = function () {
                     SecurityService.getViewTrue()
                             .success(function (data) {
-                                console.log(data);
-                                $scope.permissionList = data;
+                                $rootScope.permissionList = data;
                             });
                 };
-                
+
 
                 $scope.toggleHamburger = function (value) {
                     $scope.hamburgerOpen = !$scope.hamburgerOpen;
@@ -78,18 +77,19 @@
                         $rootScope.ctrlDown = true;
                     $scope.$apply();
                 });
-                $scope.ui.include = function (name){
-                    return $scope.permissionList.includes(name);
+                $scope.ui.include = function (name) {
+                    return $rootScope.permissionList.includes(name);
                 };
-                $scope.ui.includeList = function (paramList){
-                    var check=false;
-                   angular.forEach(paramList,function (name){
-                      var isView= $scope.permissionList.includes(name);
+                $scope.ui.includeList = function (paramList) {
+                    var check = false;
+                    angular.forEach(paramList, function (name) {
+                        var isView = $rootScope.permissionList.includes(name);
                         if (isView) {
-                            check=true;
+                            check = true;
                         }
-                   });
+                    });
                     return check;
                 };
+                $scope.init();
             });
 }());
