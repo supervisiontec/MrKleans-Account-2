@@ -11,7 +11,7 @@
     <version>2.0</version>
     <packaging>jar</packaging>
 
-    <name>CarePointAccount</name>
+    <name>MrKleans-Account-2</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

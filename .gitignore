@@ -1,9 +1,8 @@
-/CarePointAccount/target/
-/CarePointAccount/node_modules/
-/CarePointAccount/bower_components/
-/CarePointAccount/src/main/resources/static/
-/CarePointAccount/debug.log
-/CarePointAccount/src/main/resources/META-INF/persistence.xml
-/CarePointAccount/upload-image
-/CarePointAccount/.idea
-/CarePointAccount/bower_components/
+/MrKleans-Account-2/target/
+/MrKleans-Account-2/node_modules/
+/MrKleans-Account-2/bower_components/
+/MrKleans-Account-2/src/main/resources/static/
+/MrKleans-Account-2/debug.log
+/MrKleans-Account-2/src/main/resources/META-INF/persistence.xml
+/MrKleans-Account-2/upload-image
+/MrKleans-Account-2/.idea
