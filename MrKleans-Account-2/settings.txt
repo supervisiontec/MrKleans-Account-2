@@ -1,3 +1,0 @@
-#printer properties
-#Wed Aug 23 15:22:32 IST 2017
-default-printer=\\\\Supervision-pc\\SUP220

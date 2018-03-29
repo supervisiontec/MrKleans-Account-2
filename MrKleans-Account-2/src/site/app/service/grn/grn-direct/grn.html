@@ -46,7 +46,7 @@
                         <tr>
                             <td>BARCODE<input class="form-control" id="barcode" placeholder="barcode" ng-model="model.tempData.barcode" ng-keypress="ui.validateBarcode($event)" ng-disabled="ui.mode !== 'NEW'"></td>
                             <td>DESCRIPTION<input class="form-control" id="item" placeholder="description" ng-model="model.tempData.item" 
-                                                  uib-typeahead="item.indexNo as (item.barcode + ' - ' + item.name) for item in model.supplierItems |filter:$viewValue|limitTo:10" 
+                                                  uib-typeahead="item.indexNo as (item.barcode + ' - ' + item.name) for item in model.items |filter:$viewValue|limitTo:10" 
                                                   typeahead-input-formatter="model.itemLable($model)" typeahead-on-select="ui.setItemDetail(model.tempData.item)"
                                                   typeahead-editable="false"  ng-disabled="ui.mode !== 'NEW'"></td>
                             <td>PRICE<input class="form-control" id="price" placeholder="price" ng-model="model.tempData.price" ng-disabled="ui.mode !== 'NEW'"></td>
@@ -144,7 +144,7 @@
                 <tr class="background-dark">
                     <td></td>
                     <td class="text-right"><b>TOTAL :</b></td>
-                    <td><input class="form-control text-right"placeholder="qty" ng-model="model.summaryData.qty" ng-disabled="ui.mode !== 'EDIT'"></td>
+                    <td><input class="form-control text-right" placeholder="qty" ng-model="model.summaryData.qty" ng-disabled="ui.mode !== 'EDIT'"></td>
                     <td><input class="form-control text-right" placeholder="value" ng-model="model.summaryData.value" ng-disabled="ui.mode !== 'EDIT'"></td>
                     <td></td>
                     <td><input class="form-control text-right" placeholder="discount value" ng-model="model.summaryData.discountValue" ng-disabled="ui.mode !== 'EDIT'"></td>
@@ -185,9 +185,7 @@
         </table>
     </div>
 </div>
-
-</div>
 <div class="fab-container">
-    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL' || ui.mode === 'SELECTED'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW' || ui.mode === 'EDIT'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
 </div>

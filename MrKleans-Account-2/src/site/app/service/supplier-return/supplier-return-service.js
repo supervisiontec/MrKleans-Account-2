@@ -50,6 +50,19 @@
         this.listParameters = function (report) {
             return $http.post(systemConfig.apiUrl + "/api/v1/report/report-viewer/report-parameters", JSON.stringify(report));
         };
+        this.findGrnByNumberAndBranch = function (number) {
+            console.log(number);
+            console.log(number);
+            console.log(number);
+            console.log(number);
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/grn/find-grn-return-by-number/" + number);
+        };
+
+        //supplier return
+//      save supplier return
+        this.saveSupplierReturn = function (data) {
+            return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/grn/save-supplier-return", data);
+        };
 
         this.reportData = function (reportName) {
             return $http.get(systemConfig.apiUrl + "/api/v1/report/report-viewer/invoice-report-data/" + reportName);

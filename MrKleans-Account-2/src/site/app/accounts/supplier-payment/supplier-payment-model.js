@@ -41,7 +41,6 @@
                             that.userPermission = data;
                         });
 
-
                 this.loadAccAccount();
             },
             loadAccAccount: function () {
@@ -120,10 +119,10 @@
                 angular.forEach(that.billList, function (bill) {
                     var balance = bill.credit - bill.debit;
                     if (balance < bill.pay) {
-                        Notification.error("Can't set over amount for this bill !");
-                        bill.pay = 0.00;
+//                        Notification.error("Can't set over amount for this bill !");
+//                        bill.pay = 0.00;
                     }
-                    that.data.billTotal += bill.pay;
+                    that.data.billTotal += parseFloat(bill.pay);
                 });
                 that.data.overPay = (that.data.credit - that.data.billTotal) > 0 ? (that.data.credit - that.data.billTotal) : 0.00;
                 this.checkOverValueAvailable();
@@ -131,20 +130,28 @@
             },
             clearTypeChange: function () {
                 var that = this;
-//                that.data.credit = 0.00;
                 that.data.refNumber = '';
                 that.data.chequeDate = null;
                 that.data.accAccount = null;
-//                that.data.value = 0.00;
 
+            },
+            checkTypeSub: function (type) {
+                var that = this;
+                that.data.accTypeSub = type;
+                this.clearTypeChange();
+                that.typeAccAccountList = [];
+
+                if (type === 'ACCOUNT') {
+                    that.typeAccAccountList = that.accAccountList;
+                }
             },
             checkType: function (type) {
                 var that = this;
                 that.data.accType = type;
                 this.clearTypeChange();
+                that.typeAccAccountList = [];
 
                 if (type === 'CASH') {
-                    that.typeAccAccountList = [];
                     angular.forEach(that.accAccountList, function (account) {
                         if (account.accType === type) {
                             that.typeAccAccountList.push(account);
@@ -152,7 +159,6 @@
                     });
                 }
                 if (type === 'BANK') {
-                    that.typeAccAccountList = [];
                     angular.forEach(that.accAccountList, function (account) {
                         if (account.accType === type) {
                             that.typeAccAccountList.push(account);
@@ -160,7 +166,6 @@
                     });
                 }
                 if (type === 'ONLINE') {
-                    that.typeAccAccountList = [];
                     angular.forEach(that.accAccountList, function (account) {
                         if (account.accType === 'BANK') {
                             that.typeAccAccountList.push(account);
@@ -168,7 +173,6 @@
                     });
                 }
                 if (type === 'OVER_PAYMENT') {
-                    that.typeAccAccountList = [];
                     supplierPaymentService.getOverPaymentIssueAccount()
                             .success(function (data) {
                                 if (data) {
@@ -219,7 +223,6 @@
 
                 this.data.chequeDate = $filter('date')(this.data.chequeDate, 'yyyy-MM-dd');
                 data.data = this.data;
-
                 console.log(data);
 
                 var defer = $q.defer();
@@ -240,14 +243,6 @@
                 supplierPaymentService.findSupplierPaymentByNumberAndBranch(number)
                         .success(function (data) {
                             if (data.length > 0) {
-//                                for (var i = 0; i < data.length; i++) {
-//                                    that.tempData = data[i];
-//                                    that.addData();
-//                                }
-//                                that.data.description = data[1].description;
-//                                that.data.refNumber = data[1].refNumber;
-//                                that.data.accAccount = data[1].accAccount;
-//                                that.accountLable(that.data.accAccount);
                                 for (var i = 0; i < data.length; i++) {
                                     if (!data[i].isMain) {
                                         that.tempData = data[i];

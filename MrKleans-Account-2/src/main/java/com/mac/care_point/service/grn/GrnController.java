@@ -5,6 +5,7 @@
  */
 package com.mac.care_point.service.grn;
 
+import com.mac.care_point.common.Constant;
 import com.mac.care_point.service.grn.model.TGrn;
 import com.mac.care_point.service.purchase_order.model.TPurchaseOrder;
 import com.mac.care_point.service.purchase_order.model.TPurchaseOrderDetail;
@@ -79,26 +80,23 @@ public class GrnController {
 
         return grnService.saveDirectGrn(grn).getNumber();
     }
+    @RequestMapping(value = "/save-supplier-return", method = RequestMethod.POST)
+    public Integer saveSupplierReturn(@RequestBody TGrn grn) {
+        grn.setStatus(status_approved);
+        grn.setType(Constant.SUPPLIER_RETURN);
+        grn.setBranch(SecurityUtil.getCurrentUser().getBranch());
+        grn.setBalanceAmount(grn.getGrandAmount());
+        
+
+        return grnService.saveSupplierReturn(grn).getNumber();
+    }
     @RequestMapping(value = "/find-grn-by-number/{number}", method = RequestMethod.GET)
     public TGrn findGrnByNumber(@PathVariable("number") Integer number ) {
-        return grnService.findGrnByNumber(number, branch);
+        return grnService.findGrnByNumber(number, SecurityUtil.getCurrentUser().getBranch(),Constant.SYSTEM_INTEGRATION_GRN,Constant.GRN);
+    }
+    @RequestMapping(value = "/find-grn-return-by-number/{number}", method = RequestMethod.GET)
+    public TGrn findGrnReturnByNumber(@PathVariable("number") Integer number ) {
+        return grnService.findGrnReturnByNumber(number, SecurityUtil.getCurrentUser().getBranch(),Constant.SUPPLIER_RETURN);
     }
 
-//    @RequestMapping(value = "/all", method = RequestMethod.GET)
-//    public List<TGrn> getAllGrn() {
-//        return grnService.getAllGrn();
-//    }
-//    @RequestMapping(value = "/grn-payment-history-by-supplier/{supplier}", method = RequestMethod.GET)
-//    public List<Object[]> getSupplierGrnPaymentHistory(@PathVariable Integer supplier) {
-//        System.out.println("Controller");
-//        return grnService.getSupplierGrnPaymentHistory(supplier);
-//    }
-//    
-//    @RequestMapping(value = "/save-grn", method = RequestMethod.POST)
-//    public Integer saveGrn(@RequestBody TGrn grn) {
-//         
-//        grn.setBranch(branch);
-//        TGrn saveGrn= grnService.saveGrn(grn);
-//        return saveGrn.getIndexNo();
-//    }
 }

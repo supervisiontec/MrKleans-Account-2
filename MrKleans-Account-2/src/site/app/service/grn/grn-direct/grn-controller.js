@@ -7,6 +7,7 @@
 
                 $scope.ui.new = function () {
                     $scope.ui.mode = 'NEW';
+                    $scope.model.clear();
                     //set current date
                     $scope.ui.focus('#date');
                     $scope.model.data.date = $filter('date')(new Date(), 'yyyy-MM-dd');
@@ -127,9 +128,9 @@
                     var key = event ? event.keyCode || event.which : 13;
                     if (key === 13) {
                         $scope.model.searchGrnByNumber(number)
-                                .then(function () {
-
-                                }, function () {
+                                .then(function (data) {
+                                    Notification.info(data.number+" Can be Finded "+data.type);
+                                }, function (data) {
                                     Notification.error('Invalid number !!!');
                                 });
                     }

@@ -22,7 +22,8 @@
                         "chequeDate": null,
                         "bankReconciliation": false,
                         "reconcileAccount":null,
-                        "reconcileGroup":0
+                        "reconcileGroup":0,
+                        "accTypeSub":null
 
                     };
                     return data;

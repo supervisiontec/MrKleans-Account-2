@@ -65,19 +65,19 @@ public class GrnService {
 
     @Autowired
     private PurchaseOrderDetailRepository purchaseOrderDetailRepository;
-    
+
     @Autowired
     private AccountSettingRepository accountSettingRepository;
-    
+
     @Autowired
     private JournalRepository journalRepository;
-    
+
     @Autowired
     private SupplierRepository supplierRepository;
-    
+
     @Autowired
     private AccAccountService accAccountService;
-    
+
     @Autowired
     private BranchRepository branchRepository;
 
@@ -177,18 +177,17 @@ public class GrnService {
         supplierLedger.setSupplier(grn.getSupplier());
 
         supplierLedgerRepository.save(supplierLedger);
-        
+
         // account link
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.GRN);
         int deleteNumber = journalRepository.getDeleteNumber();
-        String searchCode=getSearchCode(Constant.CODE_GRN,SecurityUtil.getCurrentUser().getBranch(),number);
-        
-        
-        MSupplier selectSupplier=supplierRepository.findOne(grn.getSupplier());
-        Integer supplierAccount=selectSupplier.getAccAccount();
-        if (selectSupplier.getAccAccount()==null) {
+        String searchCode = getSearchCode(Constant.CODE_GRN, SecurityUtil.getCurrentUser().getBranch(), number);
+
+        MSupplier selectSupplier = supplierRepository.findOne(grn.getSupplier());
+        Integer supplierAccount = selectSupplier.getAccAccount();
+        if (selectSupplier.getAccAccount() == null) {
             //create supplier
-            MAccSetting supplierSubAccountOf=accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
+            MAccSetting supplierSubAccountOf = accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
             MAccAccount account = new MAccAccount();
             account.setAccCode(null);
             account.setAccMain(null);
@@ -201,8 +200,8 @@ public class GrnService {
             account.setSubAccountCount(0);
             account.setSubAccountOf(supplierSubAccountOf.getAccAccount());
             account.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-            
-            supplierAccount=accAccountService.saveNewAccount(account).getIndexNo();
+
+            supplierAccount = accAccountService.saveNewAccount(account).getIndexNo();
             selectSupplier.setAccAccount(supplierAccount);
             supplierRepository.save(selectSupplier);
         }
@@ -230,14 +229,13 @@ public class GrnService {
         tAccLedger.setType(Constant.GRN);
         tAccLedger.setTypeIndexNo(selectSupplier.getIndexNo());
         tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-        
+
         TAccLedger detail = journalRepository.save(tAccLedger);
         detail.setReconcileGroup(detail.getIndexNo());
         journalRepository.save(tAccLedger);
-        
-        
+
         TAccLedger tAccLedger2 = new TAccLedger();
-        MAccSetting inventoryAccount=accountSettingRepository.findByName(Constant.INVENTORY);
+        MAccSetting inventoryAccount = accountSettingRepository.findByName(Constant.INVENTORY);
         tAccLedger2.setAccAccount(inventoryAccount.getAccAccount());
         tAccLedger2.setBankReconciliation(false);
         tAccLedger2.setBranch(SecurityUtil.getCurrentUser().getBranch());
@@ -261,9 +259,9 @@ public class GrnService {
         tAccLedger2.setType(Constant.GRN);
         tAccLedger2.setTypeIndexNo(selectSupplier.getIndexNo());
         tAccLedger2.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-        
+
         journalRepository.save(tAccLedger2);
-        
+
         return saveObject;
     }
 
@@ -322,18 +320,17 @@ public class GrnService {
         supplierLedger.setSupplier(grn.getSupplier());
 
         supplierLedgerRepository.save(supplierLedger);
-        
+
         // account link
-        MAccSetting inventoryAccount=accountSettingRepository.findByName(Constant.INVENTORY);
-        MAccSetting supplierSubAccountOf=accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
+        MAccSetting inventoryAccount = accountSettingRepository.findByName(Constant.INVENTORY);
+        MAccSetting supplierSubAccountOf = accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.DIRECT_GRN);
         int deleteNumber = journalRepository.getDeleteNumber();
-        String searchCode=getSearchCode(Constant.CODE_DIRECT_GRN,SecurityUtil.getCurrentUser().getBranch(),number);
-        
-        
-        MSupplier selectSupplier=supplierRepository.findOne(grn.getSupplier());
-        Integer supplierAccount=selectSupplier.getAccAccount();
-        if (selectSupplier.getAccAccount()==null) {
+        String searchCode = getSearchCode(Constant.CODE_DIRECT_GRN, SecurityUtil.getCurrentUser().getBranch(), number);
+
+        MSupplier selectSupplier = supplierRepository.findOne(grn.getSupplier());
+        Integer supplierAccount = selectSupplier.getAccAccount();
+        if (selectSupplier.getAccAccount() == null) {
             //create supplier
             MAccAccount account = new MAccAccount();
             account.setAccCode(null);
@@ -347,8 +344,8 @@ public class GrnService {
             account.setSubAccountCount(0);
             account.setSubAccountOf(supplierSubAccountOf.getAccAccount());
             account.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-            
-            supplierAccount=accAccountService.saveNewAccount(account).getIndexNo();
+
+            supplierAccount = accAccountService.saveNewAccount(account).getIndexNo();
             selectSupplier.setAccAccount(supplierAccount);
             supplierRepository.save(selectSupplier);
         }
@@ -376,12 +373,11 @@ public class GrnService {
         tAccLedger.setType(Constant.DIRECT_GRN);
         tAccLedger.setTypeIndexNo(selectSupplier.getIndexNo());
         tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-        
+
         TAccLedger detail = journalRepository.save(tAccLedger);
         detail.setReconcileGroup(detail.getIndexNo());
         journalRepository.save(tAccLedger);
-        
-        
+
         TAccLedger tAccLedger2 = new TAccLedger();
         tAccLedger2.setAccAccount(inventoryAccount.getAccAccount());
         tAccLedger2.setBankReconciliation(false);
@@ -406,21 +402,226 @@ public class GrnService {
         tAccLedger2.setType(Constant.DIRECT_GRN);
         tAccLedger2.setTypeIndexNo(selectSupplier.getIndexNo());
         tAccLedger2.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-        
+
         journalRepository.save(tAccLedger2);
-        
-        
+
+        return saveObject;
+    }
+
+    TGrn saveSupplierReturn(TGrn grn) {
+        List<TStockLedger> leadgerList = new ArrayList<>();
+        for (TGrnItem grnItem : grn.getGrnItemList()) {
+            grnItem.setGrn(grn);
+//          stock ledger start
+            TStockLedger ledger = new TStockLedger();
+            ledger.setBranch(grn.getBranch());
+            ledger.setDate(grn.getDate());
+            ledger.setBranch(grn.getBranch());
+            ledger.setForm(Constant.FORM_SUPPLIER_RETURN);
+            ledger.setOutQty(grnItem.getQty());
+            ledger.setAvaragePriceOut(grnItem.getPrice());
+            ledger.setAvaragePriceIn(new BigDecimal(0));
+            ledger.setItem(grnItem.getItem());
+            ledger.setInQty(new BigDecimal(0));
+            ledger.setType(Constant.SUPPLIER_RETURN);
+            //store start
+            List<MStore> storeList = storeRepository.findByBranchAndType(grn.getBranch(), Constant.MAIN_STOCK);
+            MStore store = new MStore();
+            if (storeList.isEmpty()) {
+                //default store save
+                store.setName(Constant.MAIN_STOCK);
+                store.setType(Constant.MAIN_STOCK);
+                store.setBranch(grn.getBranch());
+                MStore lastNumber = storeRepository.findFirst1ByOrderByNumberDesc();
+
+                store.setNumber(lastNumber.getNumber() + 1);
+                store = storeRepository.save(store);
+            } else {
+                store = storeList.get(0);
+            }
+            ledger.setStore(store.getIndexNo());
+            //store end
+            leadgerList.add(ledger);
+//          stock ledger end
+        }
+        Integer nextReturnNo = grnRepository.getNextReturnNo(SecurityUtil.getCurrentUser().getBranch());
+        grn.setNumber(nextReturnNo);
+        TGrn saveObject = grnRepository.save(grn);
+        for (TStockLedger stockLedger : leadgerList) {
+            stockLedger.setFormIndexNo(saveObject.getIndexNo());
+            stockLedgerRepository.save(stockLedger);
+        }
+
+        TSupplierLedger supplierLedger = new TSupplierLedger();
+        supplierLedger.setBranch(grn.getBranch());
+        supplierLedger.setDebitAmount(grn.getBalanceAmount());
+        supplierLedger.setDate(grn.getDate());
+        supplierLedger.setCreditAmount(new BigDecimal(0));
+        supplierLedger.setFormName(Constant.FORM_SUPPLIER_RETURN);
+        supplierLedger.setGrn(saveObject.getIndexNo());
+        supplierLedger.setIsDelete(false);
+        supplierLedger.setPayment(null);
+        supplierLedger.setRefNumber(saveObject.getIndexNo());
+        supplierLedger.setReturn1(saveObject.getIndexNo());
+        supplierLedger.setSupplier(grn.getSupplier());
+
+        supplierLedgerRepository.save(supplierLedger);
+
+        // account link
+        MAccSetting supplierReturnAccount = accountSettingRepository.findByName(Constant.SUPPLIER_RETURN_ACCOUNT);
+        if (supplierReturnAccount.getAccAccount() <= 0) {
+            throw new RuntimeException("Supplier Return Account Setting not found !");
+        }
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.SUPPLIER_RETURN);
+        int deleteNumber = journalRepository.getDeleteNumber();
+        String searchCode = getSearchCode(Constant.CODE_SUPPLIER_RETURN, SecurityUtil.getCurrentUser().getBranch(), number);
+
+        MSupplier selectSupplier = supplierRepository.findOne(grn.getSupplier());
+        Integer supplierAccount = selectSupplier.getAccAccount();
+        if (supplierAccount <= 0) {
+            throw new RuntimeException("Supplier Account Not found !");
+        }
+        TAccLedger tAccLedger = new TAccLedger();
+        tAccLedger.setAccAccount(supplierAccount);
+        tAccLedger.setBankReconciliation(false);
+        tAccLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+        tAccLedger.setChequeDate(null);
+        tAccLedger.setDebit(grn.getGrandAmount());
+        tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+        tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        tAccLedger.setCredit(new BigDecimal(0));
+        tAccLedger.setDeleteRefNo(deleteNumber);
+        tAccLedger.setDescription("Supplier Return direct");
+        tAccLedger.setFormName(Constant.FORM_SUPPLIER_RETURN);
+        tAccLedger.setIsCheque(false);
+        tAccLedger.setIsMain(false);
+        tAccLedger.setNumber(number);
+        tAccLedger.setReconcileAccount(null);
+        tAccLedger.setReconcileGroup(null);
+        tAccLedger.setRefNumber(grn.getRefNumber());
+        tAccLedger.setSearchCode(searchCode);
+        tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+        tAccLedger.setTransactionDate(new SimpleDateFormat("yyyy-MM-dd").format(grn.getDate()));
+        tAccLedger.setType(Constant.SUPPLIER_RETURN);
+        tAccLedger.setTypeIndexNo(saveObject.getIndexNo());
+        tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+
+        TAccLedger detail = journalRepository.save(tAccLedger);
+        detail.setReconcileGroup(detail.getIndexNo());
+        journalRepository.save(detail);
+
+        TAccLedger tAccLedger2 = new TAccLedger();
+        tAccLedger2.setAccAccount(supplierReturnAccount.getAccAccount());
+        tAccLedger2.setBankReconciliation(false);
+        tAccLedger2.setBranch(SecurityUtil.getCurrentUser().getBranch());
+        tAccLedger2.setChequeDate(null);
+        tAccLedger2.setCredit(grn.getGrandAmount());
+        tAccLedger2.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+        tAccLedger2.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        tAccLedger2.setDebit(new BigDecimal(0));
+        tAccLedger2.setDeleteRefNo(deleteNumber);
+        tAccLedger2.setDescription("Supplier Return direct");
+        tAccLedger2.setFormName(Constant.FORM_SUPPLIER_RETURN);
+        tAccLedger2.setIsCheque(false);
+        tAccLedger2.setIsMain(false);
+        tAccLedger2.setNumber(number);
+        tAccLedger2.setReconcileAccount(null);
+        tAccLedger2.setReconcileGroup(null);
+        tAccLedger2.setRefNumber(grn.getRefNumber());
+        tAccLedger2.setSearchCode(searchCode);
+        tAccLedger2.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+        tAccLedger2.setTransactionDate(new SimpleDateFormat("yyyy-MM-dd").format(grn.getDate()));
+        tAccLedger2.setType(Constant.SUPPLIER_RETURN);
+        tAccLedger2.setTypeIndexNo(saveObject.getIndexNo());
+        tAccLedger2.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+
+        journalRepository.save(tAccLedger2);
+
+        if (grn.getVatValue().doubleValue() > 0) {
+            // save vat return
+            MAccSetting vatAccount = accountSettingRepository.findByName(Constant.VAT_ACCOUNT_OUT);
+            if (supplierReturnAccount.getAccAccount() <= 0) {
+                throw new RuntimeException("Supplier Return Account Setting not found !");
+            }
+            TAccLedger tAccLedgerVat = new TAccLedger();
+            tAccLedgerVat.setAccAccount(vatAccount.getAccAccount());
+            tAccLedgerVat.setBankReconciliation(false);
+            tAccLedgerVat.setBranch(SecurityUtil.getCurrentUser().getBranch());
+            tAccLedgerVat.setChequeDate(null);
+            tAccLedgerVat.setCredit(grn.getVatValue());
+            tAccLedgerVat.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+            tAccLedgerVat.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            tAccLedgerVat.setDebit(new BigDecimal(0));
+            tAccLedgerVat.setDeleteRefNo(deleteNumber);
+            tAccLedgerVat.setDescription("Supplier Return Vat");
+            tAccLedgerVat.setFormName(Constant.FORM_SUPPLIER_RETURN);
+            tAccLedgerVat.setIsCheque(false);
+            tAccLedgerVat.setIsMain(false);
+            tAccLedgerVat.setNumber(number);
+            tAccLedgerVat.setReconcileAccount(null);
+            tAccLedgerVat.setReconcileGroup(null);
+            tAccLedgerVat.setRefNumber(grn.getRefNumber());
+            tAccLedgerVat.setSearchCode(searchCode);
+            tAccLedgerVat.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+            tAccLedgerVat.setTransactionDate(new SimpleDateFormat("yyyy-MM-dd").format(grn.getDate()));
+            tAccLedgerVat.setType(Constant.SUPPLIER_RETURN);
+            tAccLedgerVat.setTypeIndexNo(null);
+            tAccLedgerVat.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+
+            journalRepository.save(tAccLedgerVat);
+        }
+        if (grn.getNbtValue().doubleValue() > 0) {
+            // save Nbt return
+            MAccSetting nbtAccount = accountSettingRepository.findByName(Constant.NBT_ACCOUNT_OUT);
+            if (supplierReturnAccount.getAccAccount() <= 0) {
+                throw new RuntimeException("Supplier Return Account Setting not found !");
+            }
+            TAccLedger tAccLedgerNbt = new TAccLedger();
+            tAccLedgerNbt.setAccAccount(nbtAccount.getAccAccount());
+            tAccLedgerNbt.setBankReconciliation(false);
+            tAccLedgerNbt.setBranch(SecurityUtil.getCurrentUser().getBranch());
+            tAccLedgerNbt.setChequeDate(null);
+            tAccLedgerNbt.setCredit(grn.getNbtValue());
+            tAccLedgerNbt.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+            tAccLedgerNbt.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            tAccLedgerNbt.setDebit(new BigDecimal(0));
+            tAccLedgerNbt.setDeleteRefNo(deleteNumber);
+            tAccLedgerNbt.setDescription("Supplier Return Vat");
+            tAccLedgerNbt.setFormName(Constant.FORM_SUPPLIER_RETURN);
+            tAccLedgerNbt.setIsCheque(false);
+            tAccLedgerNbt.setIsMain(false);
+            tAccLedgerNbt.setNumber(number);
+            tAccLedgerNbt.setReconcileAccount(null);
+            tAccLedgerNbt.setReconcileGroup(null);
+            tAccLedgerNbt.setRefNumber(grn.getRefNumber());
+            tAccLedgerNbt.setSearchCode(searchCode);
+            tAccLedgerNbt.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+            tAccLedgerNbt.setTransactionDate(new SimpleDateFormat("yyyy-MM-dd").format(grn.getDate()));
+            tAccLedgerNbt.setType(Constant.SUPPLIER_RETURN);
+            tAccLedgerNbt.setTypeIndexNo(null);
+            tAccLedgerNbt.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+
+            journalRepository.save(tAccLedgerNbt);
+        }
+
         return saveObject;
     }
 
     private String getSearchCode(String code, Integer branch, int number) {
-         MBranch branchModel = branchRepository.findOne(branch);
+        MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
         return code + "/" + branchCode + "/" + number;
     }
 
-    public TGrn findGrnByNumber(Integer number, Integer branch) {
-        return grnRepository.findByNumberAndBranch(number, branch);
+    public TGrn findGrnByNumber(Integer number, Integer branch, String type, String type2) {
+        return grnRepository.findByNumberAndBranchAndTypeOrType(number, branch, type, type);
+    }
+
+    TGrn findGrnReturnByNumber(Integer number, Integer branch, String type) {
+        System.out.println(number);
+        System.out.println(branch);
+        System.out.println(type);
+        return grnRepository.findByNumberAndBranchAndType(number, branch, type);
     }
 
 }

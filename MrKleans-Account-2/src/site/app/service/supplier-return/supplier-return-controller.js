@@ -7,6 +7,7 @@
 
                 $scope.ui.new = function () {
                     $scope.ui.mode = 'NEW';
+                    $scope.model.clear();
                     //set current date
                     $scope.ui.focus('#date');
                     $scope.model.data.date = $filter('date')(new Date(), 'yyyy-MM-dd');
@@ -97,26 +98,36 @@
                         angular.element(document.querySelectorAll(id))[0].focus();
                     }, 10);
                 };
-                $scope.ui.save = function () {
+                $scope.ui.saveReturn = function () {
                     var check = true;
                     if (!$scope.model.userPermission.add) {
                         check = false;
                         Notification.error('you have no permission !');
                     }
                     if (check) {
-                        ConfirmPane.primaryConfirm("Do you want to Save Direct GRN !")
+                        ConfirmPane.primaryConfirm("Do you want to Save Supplier Return !")
                                 .confirm(function () {
-                                    $scope.model.saveDirectGrn()
+                                    $scope.model.saveSupplierReturn()
                                             .then(function () {
                                                 $scope.ui.mode = "IDEAL";
-                                                Notification.success("Direct GRN Save Success !");
+                                                Notification.success("Supplier Return Save Success !");
                                                 $scope.chxVat = false;
                                                 $scope.chxNbt = false;
                                             });
                                 })
                                 .discard(function () {
-                                    Notification.error("Direct GRN Save Fail !");
-                                    console.log('fail');
+                                    Notification.error("Supplier Return Save Fail !");
+                                });
+                    }
+                };
+                $scope.ui.searchGrnByNumber = function (number) {
+                    var key = event ? event.keyCode || event.which : 13;
+                    if (key === 13) {
+                        $scope.model.searchGrnByNumber(number)
+                                .then(function (data) {
+                                    Notification.info(data.number+" Can be Finded "+data.type);
+                                }, function (data) {
+                                    Notification.error('Invalid number !!!');
                                 });
                     }
                 };

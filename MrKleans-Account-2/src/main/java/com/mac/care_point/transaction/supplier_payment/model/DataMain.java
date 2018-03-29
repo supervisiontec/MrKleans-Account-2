@@ -41,13 +41,14 @@ public class DataMain implements Serializable {
     private Integer reconcileGroup;
     private boolean isMain;
     private String accType;
+    private String accTypeSub;
     private BigDecimal billTotal;
     private String searchCode;
 
     public DataMain() {
     }
 
-    public DataMain(Integer indexNo, String transactionDate, Integer number, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, String accType, BigDecimal billTotal, String searchCode) {
+    public DataMain(Integer indexNo, String transactionDate, Integer number, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, String accType, String accTypeSub, BigDecimal billTotal, String searchCode) {
         this.indexNo = indexNo;
         this.transactionDate = transactionDate;
         this.number = number;
@@ -71,8 +72,17 @@ public class DataMain implements Serializable {
         this.reconcileGroup = reconcileGroup;
         this.isMain = isMain;
         this.accType = accType;
+        this.accTypeSub = accTypeSub;
         this.billTotal = billTotal;
         this.searchCode = searchCode;
+    }
+
+    public String getAccTypeSub() {
+        return accTypeSub;
+    }
+
+    public void setAccTypeSub(String accTypeSub) {
+        this.accTypeSub = accTypeSub;
     }
 
     public String getSearchCode() {

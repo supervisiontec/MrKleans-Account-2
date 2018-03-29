@@ -25,10 +25,13 @@
                     $scope.ui.focus('#account');
                     $scope.model.checkType(type);
                 };
+                $scope.ui.checkTypeSub = function (type) {
+                    $scope.model.checkTypeSub(type);
+                };
 
                 $scope.ui.save = function () {
                     var checkSave = true;
-                    if (!$scope.model.data.accAccount) {
+                    if (!$scope.model.data.accAccount && $scope.model.data.accTypeSub !== "RETURN") {
                         checkSave = false;
                         Notification.error('select an account to save !');
                     }
@@ -37,9 +40,13 @@
                         Notification.error('you have no permission ');
                     }
 
-                    if (!$scope.model.data.credit) {
+                    if (!$scope.model.data.credit && $scope.model.data.accTypeSub !== "RETURN") {
                         checkSave = false;
                         Notification.error('total value 0.00 !');
+                    }
+                    if (!$scope.model.data.accType) {
+                        checkSave = false;
+                        Notification.error('Select Payment Type !');
                     }
                     if (!$scope.model.data.description) {
                         checkSave = false;

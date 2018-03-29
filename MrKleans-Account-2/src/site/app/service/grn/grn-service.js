@@ -19,8 +19,6 @@
         this.saveGrnReceive = function (data) {
             return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/grn/save-grn-recieve", data);
         };
-
-
 //        approve
 //        load pending grn list
         this.loadPendingGrnList = function () {
@@ -57,6 +55,7 @@
         this.findGrnByNumberAndBranch = function (number) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/grn/find-grn-by-number/" + number);
         };
+
         this.getReportUrl = function (report, params, reportValues) {
             var url = systemConfig.apiUrl + "/api/v1/report/report-viewer/report";
 

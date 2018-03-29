@@ -158,7 +158,7 @@
                         this.data.grnItemList.splice(indexNo, 1);
                         this.summaryCalculator();
                     },
-                    saveDirectGrn: function () {
+                    saveSupplierReturn: function () {
                         var defer = $q.defer();
                         var that = this;
 
@@ -187,7 +187,8 @@
                         }
 
                         if (saveConfirmation) {
-                            supplierReturnService.saveDirectGrn(JSON.stringify(this.data))
+                            console.log(this.data);
+                            supplierReturnService.saveSupplierReturn(JSON.stringify(this.data))
                                     .success(function (data) {
                                         that.clear();
                                         defer.resolve();
@@ -204,7 +205,23 @@
                         this.summaryData = supplierReturnFactory.summaryData();
 
                     }
-
+                    ,
+                    searchGrnByNumber: function (number) {
+                        var defer = $q.defer();
+                        var that = this;
+                        supplierReturnService.findGrnByNumberAndBranch(number)
+                                .success(function (data) {
+                                    if (data) {
+                                        that.clear();
+                                        that.data = data;
+                                        defer.resolve(data);
+                                    } else {
+                                        that.clear();
+                                        defer.reject(data);
+                                    }
+                                });
+                        return defer.promise;
+                    }
 //                   
                 };
                 return supplierReturnModule;

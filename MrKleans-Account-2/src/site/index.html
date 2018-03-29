@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Super Vision</title>
+        <title>SuperVisionTechnology</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="img/cash.png">
@@ -18,7 +18,7 @@
             <div>
                 <div class="brand">
 
-                    <div class="brand-text">SUPER VISION</div>
+                    <div class="brand-text">SUPERVISION</div>
                 </div>
 
                 <div class="user">
@@ -38,7 +38,7 @@
                         </li>
 
                         <li ng-show="ui.includeList(['Item Sales', 'Customer Payment', 'Purchase Order Request',
-                                            'Purchase Order Approve', 'Grn Request', 'Grn Approve', 'Grn Direct'])"> 
+                                            'Purchase Order Approve', 'Grn Request', 'Grn Approve', 'Grn Direct','Supplier Return'])"> 
                             <a class="menu-header">SERVICE</a>
                             <ul>
                                 <li ng-show="ui.include('Item Sales')"><a href="#/service/item-sales" ng-click="toggleHamburger('Item Sales');">Item Sales</a></li> 
@@ -48,7 +48,7 @@
                                 <li ng-show="ui.include('Grn Request')"><a href="#/service/grn-request" ng-click="toggleHamburger('Grn Request');">Grn Request</a></li> 
                                 <li ng-show="ui.include('Grn Approve')"><a href="#/service/grn-approve" ng-click="toggleHamburger('Grn Approve');">Grn Approve</a></li> 
                                 <li ng-show="ui.include('Grn Direct')"><a href="#/service/grn-direct" ng-click="toggleHamburger('Grn Direct');">Grn Direct</a></li> 
-                                <li ng-show="false"><a href="#/service/supplier-return" ng-click="toggleHamburger('Supplier Return');">Supplier Return</a></li> 
+                                <li ng-show="ui.include('Supplier Return')"><a href="#/service/supplier-return" ng-click="toggleHamburger('Supplier Return');">Supplier Return</a></li> 
                             </ul>
                         </li>
                         <li ng-show="ui.includeList(['Journal', 'General Voucher', 'Bank Reconciliation', 'Fund Transfer',
@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-xs-3">
                     <span class="text-primary">
-                        SUPER VISION
+                        SUPERVISION
                     </span>
                     <span class="text-default">
                         |

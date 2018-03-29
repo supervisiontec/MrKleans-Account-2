@@ -37,10 +37,9 @@
         <div class="col-xs-12 background-light nopadding">
             <div class="row col-xs-12 nopadding">
                 <table class="table-rounded control-table square-table">
-                    <col style="width: 22%"/>
-                    <col style="width: 22%"/>
-                    <col style="width: 25%"/>
-                    <col style="width: 31%"/>
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
+                    <col style="width: 33.3%"/>
                     <tbody>
                         <tr>
                             <td>
@@ -61,11 +60,51 @@
                                        ng-click="ui.checkType('ONLINE')"
                                        ng-disabled="ui.mode !== 'NEW'"/>
                             </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding">
+                <table class="table-rounded control-table square-table">
+                    <col style="width: 50%"/>
+                    <col style="width: 50%"/>
+                    <tbody>
+                        <tr>
                             <td>
-                                OVER PMT
+                                OVER PAYMENT
                                 <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeOverPayment" 
                                        ng-click="ui.checkType('OVER_PAYMENT')"
                                        ng-disabled="ui.mode !== 'NEW' || !model.data.overAmount"/>
+                            </td>
+                            <td>
+                                SETTLEMENT
+                                <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeSettlement" 
+                                       ng-click="ui.checkType('SETTLEMENT')"
+                                       ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" ng-show="model.data.accType === 'SETTLEMENT'">
+                <table class="table-rounded control-table square-table">
+                    <col style="width: 50%"/>
+                    <col style="width: 50%"/>
+                    <tbody>
+                        <tr>
+                            <td>
+                                WITH ACCOUNT
+                                <input type="radio" name='type1' style="margin-left: 10px" ng-model="model.typeAccount" 
+                                       ng-click="ui.checkTypeSub('ACCOUNT')"
+                                       ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                WITH RETURN
+                                <input type="radio" name='type1' style="margin-left: 10px" ng-model="model.typeReturn" 
+                                       ng-click="ui.checkTypeSub('RETURN')"
+                                       ng-disabled="ui.mode !== 'NEW'"/>
                             </td>
 
                         </tr>
@@ -91,14 +130,14 @@
                                    typeahead-input-formatter="model.accountLable(model.data.accAccount)" 
                                    typeahead-on-select="model.getValue(model.data.accAccount)"
                                    typeahead-editable="false"
-                                   ng-disabled="ui.mode !== 'NEW' || model.data.accType==='OVER_PAYMENT'"
+                                   ng-disabled="ui.mode !== 'NEW' || model.data.accType === 'OVER_PAYMENT' || model.data.accTypeSub === 'RETURN'"
                                    id="account"
                                    />
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <table class="table-rounded control-table" style="padding: 3px;" ng-show="model.data.accType!=='OVER_PAYMENT'">
+            <table class="table-rounded control-table" style="padding: 3px;" ng-show="model.data.accType !== 'OVER_PAYMENT'">
                 <colgroup>
                     <col style="width: 40%">
                     <col style="width: 60%">
@@ -127,13 +166,13 @@
                         <label class="control-label text-center">PAY TOTAL :</label>
                     </td>
                     <td>
-                        <input type="text" smart-input="decimal" class="form-control text-right" ng-model='model.data.credit' 
-                               ng-disabled="ui.mode !== 'NEW'" ng-change="model.changePayAmount()"/>
+                        <input type="text" class="form-control text-right" ng-model='model.data.credit' 
+                               ng-disabled="ui.mode !== 'NEW' || model.data.accTypeSub === 'RETURN'" ng-change="model.changePayAmount()"/>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <table class="table-rounded control-table" ng-show="model.data.accType==='BANK'">
+        <table class="table-rounded control-table" ng-show="model.data.accType === 'BANK'">
             <colgroup>
                 <col style="width: 40%">
                 <col style="width: 60%">
@@ -149,7 +188,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="table-rounded control-table" ng-show="model.data.accType==='BANK'">
+        <table class="table-rounded control-table" ng-show="model.data.accType === 'BANK'">
             <colgroup>
                 <col style="width: 40%">
                 <col style="width: 60%">
@@ -165,7 +204,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="table-rounded control-table" ng-show="model.data.accType!=='BANK'">
+        <table class="table-rounded control-table" ng-show="model.data.accType !== 'BANK'">
             <colgroup>
                 <col style="width: 40%">
                 <col style="width: 60%">
@@ -241,19 +280,21 @@
             <table class="table-rounded control-table">
                 <colgroup>
                     <col style="width: 14%"/>
-                    <col style="width: 20%"/>
+                    <col style="width: 14%"/>
+                    <col style="width: 14%"/>
                     <col style="width: 13%"/>
                     <col style="width: 14%"/>
                     <col style="width: 14%"/>
-                    <col style="width: 25%"/>
+                    <col style="width: 17%"/>
                 </colgroup>
                 <tbody>
                     <tr>
+                        <td><label>Search Code</label></td>
                         <td><label>Ref No</label></td>
-                        <td><label>Transaction Date</label></td>
-                        <td><label>Bill Amount</label></td>
-                        <td><label>Paid Amount</label></td>
-                        <td><label>Balance</label></td>
+                        <td><label>Tra.Date</label></td>
+                        <td><label class="pull-right">Bill Amount</label></td>
+                        <td><label class="pull-right">Paid Amount</label></td>
+                        <td><label class="pull-right">Balance</label></td>
                         <td><label>Pay Amount</label></td>
 
                     </tr>
@@ -262,19 +303,21 @@
             <div class="smart-scroll-y" style="height: calc(100vh - 285px)" ng-show="model.billList.length">
                 <table class="table-rounded control-table table-hover">
                     <col style="width: 14%"/>
-                    <col style="width: 20%"/>
+                    <col style="width: 14%"/>
+                    <col style="width: 14%"/>
                     <col style="width: 13%"/>
                     <col style="width: 14%"/>
                     <col style="width: 14%"/>
-                    <col style="width: 25%"/>
+                    <col style="width: 17%"/>
                     <tbody>
-                        <tr ng-repeat="bill in model.billList | orderBy:'transactionDate'">
+                        <tr ng-repeat="bill in model.billList| orderBy:'transactionDate'">
+                            <td><label class="label label-default">{{bill.searchCode}}</label></td>
                             <td><label>{{bill.refNumber===null?'- - -':bill.refNumber}}</label></td>
                             <td><label>{{bill.transactionDate}}</label></td>
-                            <td><label>{{bill.credit | number:2}}</label></td>
-                            <td><label>{{bill.debit | number:2}}</label></td>
-                            <td><label>{{(bill.credit - bill.debit)| number:2}}</label></td>
-                            <td><input smart-input="decimal" class="form-control text-right" ng-model="bill.pay" ng-change="model.changePayAmount()" ng-focus="model.setBalanceAmountToPay(bill);"> </td>
+                            <td><label class="pull-right">{{bill.credit| number:2}}</label></td>
+                            <td><label class="pull-right">{{bill.debit| number:2}}</label></td>
+                            <td><label class="pull-right">{{(bill.credit - bill.debit)| number:2}}</label></td>
+                            <td><input class="form-control text-right" ng-model="bill.pay" ng-change="model.changePayAmount()" ng-focus="model.setBalanceAmountToPay(bill);"> </td>
                         </tr>
                     </tbody>
                 </table>
@@ -290,21 +333,18 @@
                 <tbody>
                     <tr>
                         <td><label>Over Pay Amount</label></td>
-                        <td><input class="form-control text-right" ng-model="model.data.overPay | number:2"
+                        <td><input class="form-control text-right" ng-model="model.data.overPay"
                                    ng-disabled="true" > 
                         </td>
                         <td><label>Pay Amount</label></td>
-                        <td><input class="form-control text-right" ng-model="model.data.billTotal |number:2"
+                        <td><input class="form-control text-right" ng-model="model.data.billTotal"
                                    ng-disabled="true" > 
                         </td>
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
-
-
 </div>
 
 <div class="fab-container">

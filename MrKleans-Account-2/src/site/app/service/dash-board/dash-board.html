@@ -1,8 +1,36 @@
 <div class="index-content-header"></div>
 
 <div class="index-content-body" style="height: calc(100vh - 52px)">
-    <br>
-    <label>SUPER VISION ACCOUNT MANAGEMENT SYSTEM</label>
-    <br>
-    dash board goes here
+    <div class="col-sm-4">
+        <div class=" panel panel-primary">
+            <div class="panel-heading "> Information Chart 01</div>
+            <div class="panel-body">
+                <canvas id="doughnut" class="chart chart-doughnut"
+                        chart-data="model.dashBoardMainData" chart-labels="model.dashBoardMainLable">
+                </canvas> 
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class=" panel panel-primary">
+            <div class="panel-heading "> Information Chart 02</div>
+            <div class="panel-body">
+                <canvas id="line" class="chart chart-line" chart-data="datas"
+                        chart-labels="label" chart-series="series" chart-options="options"
+                        chart-dataset-override="datasetOverride" chart-click="onClick">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class=" panel panel-primary">
+            <div class="panel-heading "> Information Chart 03</div>
+            <div class="panel-body">
+                <canvas id="bar" class="chart chart-bar"
+                        chart-data="data1" chart-labels="label1"> chart-series="series1"
+                </canvas>
+            </div>
+        </div>
+    </div>
+
 </div>

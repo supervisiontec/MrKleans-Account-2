@@ -38,8 +38,9 @@ public class JournalService {
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.JOURNAL);
         int deleteNumber = journalRepository.getDeleteNumber();
         String searchCode=getSearchCode(Constant.CODE_JOURNAL,SecurityUtil.getCurrentUser().getBranch(),number);
-        
+        String transactionDate=null;
         for (TAccLedger tAccLedger : list) {
+            transactionDate=tAccLedger.getTransactionDate();
             tAccLedger.setNumber(number);
             tAccLedger.setSearchCode(searchCode);
             tAccLedger.setDeleteRefNo(deleteNumber);
@@ -49,6 +50,7 @@ public class JournalService {
             tAccLedger.setFormName(Constant.FORM_JOURNAL);
             tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
             tAccLedger.setType(Constant.JOURNAL);
+            tAccLedger.setTransactionDate(transactionDate);
             tAccLedger.setReconcileAccount(null);
             tAccLedger.setBankReconciliation(false);
             tAccLedger.setIsMain(Boolean.FALSE);
@@ -61,7 +63,7 @@ public class JournalService {
         if (count == list.size()) {
             return count;
         }
-        return 0;
+        return -1;
     }
 
     private String getSearchCode(String code, Integer branch, int number) {
