@@ -30,7 +30,11 @@ public class PaymentVoucherController {
 
     @RequestMapping(value = "/get-client-balance/{client}", method = RequestMethod.GET)
     public Double loadclientBalance(@PathVariable Integer client) {
-        return paymentVoucherService.getClientBalance(client);
+        
+        Double clientBalance = paymentVoucherService.getClientBalance(client);
+        System.out.println("clientBalance "+clientBalance);
+        System.out.println("client "+client);
+        return clientBalance;
     }
 
     @RequestMapping(value = "/get-client-over-payment/{client}", method = RequestMethod.GET)

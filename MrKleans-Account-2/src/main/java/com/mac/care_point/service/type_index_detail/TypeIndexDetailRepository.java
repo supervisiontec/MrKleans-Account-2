@@ -14,6 +14,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TypeIndexDetailRepository extends JpaRepository<TTypeIndexDetail, Integer>{
 
-    public int findByTypeAndAccountRefId(String INVOICE, Integer invoice);
+    public TTypeIndexDetail findByTypeAndAccountRefId(String INVOICE, Integer invoice);
     
 }

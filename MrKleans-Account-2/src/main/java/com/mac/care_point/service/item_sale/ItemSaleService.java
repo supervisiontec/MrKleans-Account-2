@@ -15,7 +15,6 @@ import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.master.card_reader.CardReaderRepository;
 import com.mac.care_point.master.card_reader.model.MCardReader;
-import com.mac.care_point.master.client.ClientRepository;
 import com.mac.care_point.master.client.model.Client;
 import com.mac.care_point.service.invoice.InvoiceRepository;
 import com.mac.care_point.service.item_sale.model.ItemSaleModel;
@@ -43,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import com.mac.care_point.master.client.CustomerRepository;
 
 /**
  *
@@ -83,7 +83,7 @@ public class ItemSaleService {
     private JournalRepository journalRepository;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private CustomerRepository clientRepository;
 
     @Autowired
     private AccAccountService accAccountService;

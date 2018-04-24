@@ -107,8 +107,6 @@
 
                 //<-----------------http funtiion------------------->
                 $scope.http.saveSupplier = function () {
-                    $scope.model.supplier.branch = 1;
-
                     var detail = $scope.model.supplier;
 
                     var detailJSON = JSON.stringify(detail);

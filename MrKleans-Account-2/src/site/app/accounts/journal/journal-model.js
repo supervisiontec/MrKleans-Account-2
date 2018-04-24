@@ -44,11 +44,9 @@
                 journalService.setAccFlow(acc)
                         .success(function (data) {
                             that.accflowList = data;
-                            console.log(data);
                         });
             },
-            new : function () {
-                this.data.transactionDate = new Date();
+            setBranch: function () {
                 this.tempData.branch = this.currentBranch.indexNo;
 
             },
@@ -77,6 +75,7 @@
             },
             add: function () {
                 var saveData = {};
+                var that = this;
                 saveData.indexNo = null;
                 saveData.transactionDate = $filter('date')(new Date(this.data.transactionDate), 'yyyy-MM-dd');
                 saveData.currentDate = null;
@@ -95,6 +94,9 @@
                 this.dataList.unshift(saveData);
                 this.tempData = journalFactory.tempData();
                 this.totalCalculated();
+                that.setBranch();
+                that.accflowList=[];
+
             },
             totalCalculated: function () {
                 var debit = 0.00;
@@ -137,6 +139,8 @@
                                     that.add();
                                 }
                                 that.data.description = data[1].description;
+                                console.log(new Date(data[1].transactionDate));
+                                that.data.transactionDate = new Date(data[1].transactionDate);
                             } else {
                                 defer.reject(data);
                             }

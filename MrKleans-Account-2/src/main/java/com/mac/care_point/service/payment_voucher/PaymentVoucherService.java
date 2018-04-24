@@ -5,11 +5,14 @@
  */
 package com.mac.care_point.service.payment_voucher;
 
+import com.mac.care_point.account_setting.acc_code_setting.AccCodeSettingRepository;
+import com.mac.care_point.account_setting.acc_code_setting.model.AccCodeSetting;
+import com.mac.care_point.account_setting.account_setting.AccountSettingRepository;
+import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import com.mac.care_point.common.Constant;
-import com.mac.care_point.master.account.model.MAccAccount;
 import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
-import com.mac.care_point.master.client.ClientRepository;
+import com.mac.care_point.master.client.model.Client;
 import com.mac.care_point.service.item_sale.model.TCustomerLedger;
 import com.mac.care_point.service.item_sale.model.TPayment;
 import com.mac.care_point.service.item_sale.model.TPaymentInformation;
@@ -20,6 +23,7 @@ import com.mac.care_point.service.payment_voucher.model.BalancePaymentModel;
 import com.mac.care_point.service.payment_voucher.model.InvoiceCustomModel;
 import com.mac.care_point.service.payment_voucher.model.PaymentVoucherModel;
 import com.mac.care_point.service.type_index_detail.TypeIndexDetailRepository;
+import com.mac.care_point.service.type_index_detail.model.TTypeIndexDetail;
 import com.mac.care_point.transaction.account_ledger.JournalRepository;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.zutil.SecurityUtil;
@@ -27,12 +31,12 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import com.mac.care_point.master.client.CustomerRepository;
 
 /**
  *
@@ -61,10 +65,13 @@ public class PaymentVoucherService {
     private BranchRepository branchRepository;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private CustomerRepository clientRepository;
 
     @Autowired
     private TypeIndexDetailRepository typeIndexDetailRepository;
+
+    @Autowired
+    private AccountSettingRepository accountSettingRepository;
 
     public Object getClientVehicles(Integer client) {
         return paymentVoucherRepository.getClientVehicles(client);
@@ -90,23 +97,7 @@ public class PaymentVoucherService {
 
     @Transactional
     public Integer savePaymentVoucher(PaymentVoucherModel voucherModel) {
-
-        TPayment savePayment = paymentRepository.save(voucherModel.getPayment());
-        for (TPaymentInformation paymentInformation : voucherModel.getPaymentInformationList()) {
-            paymentInformation.setFormName(Constant.FORM_ADVANCE);
-            paymentInformation.setPayment(savePayment.getIndexNo());
-            paymentInformationRepostory.save(paymentInformation);
-        }
-        voucherModel.getCustomerLedger().setCreditAmount(savePayment.getTotalAmount());
-        voucherModel.getCustomerLedger().setInvoice(null);
-        voucherModel.getCustomerLedger().setPayment(savePayment.getIndexNo());
-        voucherModel.getCustomerLedger().setType(Constant.ADVANCE);
-        voucherModel.getCustomerLedger().setFormName(Constant.FORM_ADVANCE);
-        voucherModel.getCustomerLedger().setRefNumber(savePayment.getIndexNo());
-        TCustomerLedger save = clientLegerRepository.save(voucherModel.getCustomerLedger());
-
-        saveCustomerPaymentToAccountSystem(voucherModel);
-        return save.getIndexNo();
+        return saveCustomerPaymentToAccountSystem(voucherModel);
     }
 
     @Transactional
@@ -228,35 +219,76 @@ public class PaymentVoucherService {
         return paymentVoucherRepository.getFIFOList(client);
     }
 
-    private void saveCustomerPaymentToAccountSystem(PaymentVoucherModel voucherModel) {
-        saveClientAccount(voucherModel);
-        savePaymentDetails(voucherModel);
-    }
-
-    private void saveClientAccount(PaymentVoucherModel voucherModel) {
-        int number = accountLedgerRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.SUPPLIER_PAYMENT);
+    private Integer saveCustomerPaymentToAccountSystem(PaymentVoucherModel voucherModel) {
+        int number = accountLedgerRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.CUSTOMER_PAYMENT);
         int deleteNumber = accountLedgerRepository.getDeleteNumber();
-        int clientAccAccount = clientRepository.findByAccAccount(voucherModel.getCustomerLedger().getClient());
-        int reconcileGroup = typeIndexDetailRepository.findByTypeAndAccountRefId(Constant.INVOICE, voucherModel.getCustomerLedger().getInvoice());
-        String searchCode = getSearchCode(Constant.CODE_SUPPLIER_PAYMENT, SecurityUtil.getCurrentUser().getBranch(), number);
+        Integer client = clientRepository.findByAccAccountFromClientIndex(voucherModel.getCustomerLedger().getClient());
+        TTypeIndexDetail typeIndex = typeIndexDetailRepository.findByTypeAndAccountRefId(Constant.INVOICE, voucherModel.getCustomerLedger().getInvoice());
+        MAccSetting setting = null;
+        String searchCode = null;
+        for (TPaymentInformation paymentInformation : voucherModel.getPaymentInformationList()) {
+
+            if ("CASH".equals(paymentInformation.getType())) {
+                setting = accountSettingRepository.findByName("over_payment_received");
+                if (setting.getName() == null) {
+                    throw new RuntimeException("Cant find cash account setting !");
+                }
+//                item_sales_cash_in
+            } else if ("CHEQUE".equals(paymentInformation.getType())) {
+                setting = accountSettingRepository.findByName("cheque_in_hand");
+                if (setting.getName() == null) {
+                    throw new RuntimeException("Cant find check in hand account setting !");
+                }
+//            cheque_in_hand
+            } else if ("CARD".equals(paymentInformation.getType())) {
+                throw new RuntimeException("Card Payment not support");
+            }
+            searchCode = getSearchCode(Constant.CODE_PAYMENT_VOUCHER, SecurityUtil.getCurrentUser().getBranch(), number);
+            TAccLedger accountLedger = new TAccLedger();
+            accountLedger.setAccAccount(setting.getAccAccount());
+            accountLedger.setBankReconciliation(false);
+            accountLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+            accountLedger.setChequeDate(null);
+            accountLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            accountLedger.setDebit(paymentInformation.getAmount());
+            accountLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+            accountLedger.setCredit(new BigDecimal(0));
+            accountLedger.setDeleteRefNo(deleteNumber);
+            accountLedger.setDescription("Customer Payment");
+            accountLedger.setFormName(Constant.FORM_CUSTOMER_PAYMENT);
+            accountLedger.setIsCheque(false);
+            accountLedger.setIsMain(false);
+            accountLedger.setNumber(number);
+            accountLedger.setReconcileAccount(0);
+            accountLedger.setReconcileGroup(typeIndex == null ? 0 : typeIndex.getAccountIndex());
+            accountLedger.setRefNumber(voucherModel.getCustomerLedger().getPayment() + "");
+            accountLedger.setSearchCode(searchCode);
+            accountLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+            accountLedger.setTransactionDate(new SimpleDateFormat("yyyy-MM-dd").format(voucherModel.getCustomerLedger().getDate()));
+            accountLedger.setType(Constant.CUSTOMER_PAYMENT);
+            accountLedger.setTypeIndexNo(voucherModel.getCustomerLedger().getPayment());
+            accountLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+            accountLedgerRepository.save(accountLedger);
+
+        }
 
         TAccLedger accountLedger = new TAccLedger();
-        accountLedger.setAccAccount(clientAccAccount);
+        accountLedger.setAccAccount(client);
         accountLedger.setBankReconciliation(false);
         accountLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
         accountLedger.setChequeDate(null);
         accountLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        accountLedger.setCredit(voucherModel.getCustomerLedger().getCreditAmount());
+        accountLedger.setCredit(voucherModel.getPayment().getTotalAmount());
         accountLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
         accountLedger.setDebit(new BigDecimal(0));
         accountLedger.setDeleteRefNo(deleteNumber);
-        accountLedger.setDescription("Customer Payment Balance Payment");
+        accountLedger.setDescription("Customer Payment");
         accountLedger.setFormName(Constant.FORM_CUSTOMER_PAYMENT);
         accountLedger.setIsCheque(false);
         accountLedger.setIsMain(true);
         accountLedger.setNumber(number);
         accountLedger.setReconcileAccount(null);
-        accountLedger.setReconcileGroup(reconcileGroup);
+        accountLedger.setReconcileGroup(typeIndex == null ? 0 : typeIndex.getAccountIndex());
         accountLedger.setRefNumber(voucherModel.getCustomerLedger().getPayment() + "");
         accountLedger.setSearchCode(searchCode);
         accountLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
@@ -264,20 +296,14 @@ public class PaymentVoucherService {
         accountLedger.setType(Constant.CUSTOMER_PAYMENT);
         accountLedger.setTypeIndexNo(voucherModel.getCustomerLedger().getPayment());
         accountLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-
-//        accountLedgerRepository.save(accountLedger);
-//        HashMap<Integer,String> map = new HashMap<>();
-//        map.put(1, searchCode)
-
+       return accountLedgerRepository.save(accountLedger).getIndexNo();
+        
+       
     }
 
-    private void savePaymentDetails(PaymentVoucherModel voucherModel) {
-
-    }
-
-    private String getSearchCode(String code, Integer branch, int number) {
+    private String getSearchCode(String code, Integer branch, Integer number) {
         MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
-        return code + "/" + branchCode + "/" + number;
+        return code + "/" + branchCode + "/" +number;
     }
 }

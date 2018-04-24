@@ -16,10 +16,8 @@
                 $scope.ui.new = function () {
                     $scope.ui.mode = "NEW";
                     $scope.ui.focus('#account');
-                    $scope.model.tempData.transactionDate = new Date();
-                    $scope.model.data.transactionDate = new Date();
                     $scope.model.tempData.branch = $scope.model.data.branch;
-//                    $scope.model.data.branch = $scope.model.data.branch;
+                    $scope.model.tempData.transactionDate = new Date();
                 };
                 $scope.ui.addData = function () {
                     var checkSave = true;
@@ -31,7 +29,6 @@
                         checkSave = false;
                         Notification.error('Select a branch to add !');
                     }
-
                     if (!$scope.model.data.transactionDate) {
                         checkSave = false;
                         Notification.error('insert a Date to add !');
@@ -88,7 +85,6 @@
                                 .then(function (data) {
                                     Notification.success('Payment voucher save Sucess');
                                     $scope.ui.mode = "IDEAL";
-                                    $scope.model.data = {};
                                     $scope.model.saveDataList = [];
                                 });
                     }
@@ -108,7 +104,6 @@
                     $scope.ui.focus('#account');
                     $scope.model.setClear();
 
-                    console.log($scope.model.selectAccType);
                 };
                 $scope.ui.focusAdd = function (model) {
                     if (model.which === 13) {
@@ -118,10 +113,9 @@
                 $scope.ui.searchVoucherByNumber = function (number) {
                     var key = event ? event.keyCode || event.which : 13;
                     if (key === 13) {
-                        console.log('adata');
                         $scope.model.searchVoucherByNumber(number)
                                 .then(function () {
-                                    
+
                                 }, function () {
                                     Notification.error('Invalid number !!!');
                                 });

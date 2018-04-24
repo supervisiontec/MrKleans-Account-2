@@ -39,7 +39,16 @@ public class SupplierService {
     private AccAccountService accAccountService;
 
     MSupplier saveSupplier(MSupplier supplier) {
-        MAccSetting supplierSubAccountOf = accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
+        MAccSetting supplierSubAccountOf=null;
+        if ("NORMAL".equals(supplier.getType())) {
+            throw new RuntimeException("Can't Create Normal Supplier Because Supplier will Create by Integration System !");
+        }
+        else if ("ACCRUED".equals(supplier.getType())) {
+            supplierSubAccountOf = accountSettingRepository.findByName(Constant.NON_CREDIT_SUPPLIER_ACCOUNT);
+        }
+        if (supplierSubAccountOf==null) {
+            throw new RuntimeException("Supplier Sub Account of Setting is Empty.. !");
+        }
         if (supplier.getAccAccount() == null) {
             //create supplier
             MAccAccount account = new MAccAccount();
@@ -50,17 +59,15 @@ public class SupplierService {
             account.setDescription("supplier account");
             account.setIsAccAccount(true);
             account.setLevel(null);
-            account.setName(supplier.getName()+ " - (" + supplier.getContactNo() + ")");
+            account.setName(supplier.getName());
             account.setSubAccountCount(0);
             account.setSubAccountOf(supplierSubAccountOf.getAccAccount());
             account.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 
             Integer supplierAccAccount = accAccountService.saveNewAccount(account).getIndexNo();
             supplier.setAccAccount(supplierAccAccount);
-            return supplierRepository.save(supplier);
-        } else {
-            return supplierRepository.save(supplier);
-        }
+        } 
+        return supplierRepository.save(supplier);
     }
 
 }

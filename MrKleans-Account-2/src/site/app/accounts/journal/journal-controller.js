@@ -4,7 +4,6 @@
                 $scope.model = new journalModel();
                 $scope.ui = {};
 
-
                 //focus
                 $scope.ui.focus = function (id) {
                     $timeout(function () {
@@ -15,7 +14,9 @@
                 $scope.ui.new = function () {
                     $scope.ui.mode = "NEW";
                     $scope.ui.focus('#date');
-                    $scope.model.new();
+                    $scope.model.refresh();
+                    $scope.model.data.transactionDate = new Date();
+                    $scope.model.setBranch();
                 };
 
                 //save
@@ -46,7 +47,7 @@
                                 .confirm(function () {
                                     $scope.model.save()
                                             .then(function (data) {
-                                                Notification.success(data + ' data records save success !');
+                                                Notification.success(' journal entery save success.. ! code is ' + data);
                                                 $scope.ui.mode = "IDEAL";
                                             });
 
@@ -97,11 +98,25 @@
                     if (key === 13) {
                         $scope.model.searchJournalByNumber(number)
                                 .then(function () {
-                                    
+                                    Notification.success('Find a journal entery ');
                                 }, function () {
                                     Notification.error('Invalid number !!!');
                                 });
                     }
+                };
+                $scope.ui.delete = function (index) {
+                    $scope.model.dataList.splice(index, 1);
+                    $scope.model.totalCalculated();
+                };
+                $scope.ui.edit = function (index, data) {
+                    $scope.model.dataList.splice(index, 1);
+                    $scope.model.tempData.accAccount = data.accAccount;
+                    $scope.model.tempData.debit = data.debit;
+                    $scope.model.tempData.credit = data.credit;
+                    $scope.model.tempData.branch = data.branch;
+                    $scope.model.totalCalculated();
+                    $scope.model.setMainAccount(data.accAccount);
+
                 };
 
                 $scope.ui.init = function () {

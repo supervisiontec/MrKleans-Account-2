@@ -1,5 +1,5 @@
 (function () {
-    var factory = function (voucherFactory, voucherService, $q, $timeout, $filter) {
+    var factory = function (voucherFactory, voucherService, $q, $timeout, Notification, $filter) {
         function employeeModel() {
             this.constructor();
         }
@@ -88,7 +88,6 @@
             totalCalculation: function () {
                 var value = 0.00;
                 angular.forEach(this.saveDataList, function (data) {
-                    console.log(data);
                     value += parseFloat(data.debit);
                     return;
                 });
@@ -104,15 +103,15 @@
                 if (this.selectAccType.name === 'BANK') {
                     data.voucher.bankReconciliation = true;
                 }
-
-                console.log(data);
-
                 var defer = $q.defer();
                 voucherService.saveVoucher(JSON.stringify(data))
                         .success(function (data) {
                             defer.resolve(data);
+                            that.data = voucherFactory.Data();
+                            that.tempData = voucherFactory.tempData();
                         })
                         .error(function (data) {
+                            Notification.error(data.message);
                             defer.reject(data);
                         });
                 return defer.promise;
@@ -121,8 +120,8 @@
 
                 this.tempData = voucherFactory.tempData();
                 this.data = voucherFactory.Data();
-                this.tempData.transactionDate = new Date();
-                this.data.transactionDate = new Date();
+                this.tempData.transactionDate = null;
+                this.data.transactionDate = null;
                 this.tempData.branch = this.currentBranch.indexNo;
                 this.data.branch = this.currentBranch.indexNo;
                 this.saveDataList = [];
@@ -132,16 +131,7 @@
                 var that = this;
                 voucherService.findVoucherByNumberAndBranch(number)
                         .success(function (data) {
-                            console.log(data);
                             if (data.length > 0) {
-//                                for (var i = 0; i < data.length; i++) {
-//                                    that.tempData = data[i];
-//                                    that.addData();
-//                                }
-//                                that.data.accAccount = data[1].accAccount;
-//                                that.data.value = data[1].value;
-//                                that.data.description = data[1].description;
-//                                defer.resolve();
                                 for (var i = 0; i < data.length; i++) {
                                     if (!data[i].isMain) {
                                         that.tempData = data[i];

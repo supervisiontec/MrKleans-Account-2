@@ -58,4 +58,9 @@ public interface AccAccountRepository extends JpaRepository<MAccAccount, Integer
             + "	m_acc_account.acc_main\n"
             + "from m_acc_account", nativeQuery = true)
     public List<Object[]> findAccountsForSetting();
+
+    @Query(value = "select m_acc_account.*\n"
+            + "from m_acc_account\n"
+            + "where LENGTH(acc_code)<=12 and m_acc_account.sub_account_of=1587", nativeQuery = true)
+    public List<MAccAccount> getList();
 }

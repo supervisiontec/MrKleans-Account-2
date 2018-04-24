@@ -18,7 +18,7 @@
         };
         this.saveVoucher = function (voucher) {
             return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/voucher/save", voucher);
-        };
+        };  
         this.delete = function (indexNo) {
             return $http.delete(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/delete-account/"+ indexNo);
         };

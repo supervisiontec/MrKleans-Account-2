@@ -5,10 +5,11 @@
  */
 package com.mac.care_point.transaction.supplier_payment;
 
+import com.mac.care_point.account_setting.acc_code_setting.AccCodeSettingRepository;
+import com.mac.care_point.account_setting.acc_code_setting.model.AccCodeSetting;
 import com.mac.care_point.account_setting.account_setting.AccountSettingRepository;
 import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import com.mac.care_point.common.Constant;
-import com.mac.care_point.common.SearchCodeGenarator;
 import com.mac.care_point.master.account.AccAccountRepository;
 import com.mac.care_point.master.account.model.MAccAccount;
 import com.mac.care_point.master.branch.BranchRepository;
@@ -52,6 +53,9 @@ public class SupplierPaymentSevrice {
     @Autowired
     private BranchRepository branchRepository;
 
+    @Autowired
+    private AccCodeSettingRepository accCodeSettingRepository;
+
     public List<TAccLedger> getPayableBills(Integer account) {
         return paymentRepository.getPayableBills(account);
     }
@@ -60,6 +64,11 @@ public class SupplierPaymentSevrice {
     public Integer saveSupplierPayment(SupplierPaymentMix mix) {
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.SUPPLIER_PAYMENT);
         int deleteNumber = journalRepository.getDeleteNumber();
+        AccCodeSetting accCodeSetting = accCodeSettingRepository.findByAccount(mix.getData().getAccAccount());
+        if (accCodeSetting == null) {
+            throw new RuntimeException("Accout Code Setting not Found for this Account !");
+        }
+        String code = getSearchCode(Constant.CODE_PAY, SecurityUtil.getCurrentUser().getBranch(), accCodeSetting);
         String searchCode = getSearchCode(Constant.CODE_SUPPLIER_PAYMENT, SecurityUtil.getCurrentUser().getBranch(), number);
         BigDecimal overPayment = new BigDecimal(0);
         overPayment = (BigDecimal) subtract(mix.getData().getCredit(), mix.getData().getBillTotal());
@@ -80,7 +89,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setFormName(mix.getData().getFormName());
             tAccLedger.setIsMain(true);
             tAccLedger.setIsCheque(true);
-            tAccLedger.setSearchCode(searchCode);
+            tAccLedger.setSearchCode(code);
             tAccLedger.setNumber(number);
             tAccLedger.setReconcileAccount(mix.getData().getAccAccount());//
             tAccLedger.setReconcileGroup(0);//
@@ -110,7 +119,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
-                    tAccLedger1.setSearchCode(searchCode);
+                    tAccLedger1.setSearchCode(code);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(null);//
                     tAccLedger1.setReconcileGroup(sub.getReconcileGroup());//
@@ -125,7 +134,7 @@ public class SupplierPaymentSevrice {
 
                 }
             }
-
+            updateCodeSetting(accCodeSetting);
         }
         if ("CASH".equals(mix.getData().getAccType())) {
             TAccLedger tAccLedger = new TAccLedger();
@@ -141,7 +150,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setDescription(mix.getData().getDescription());
             tAccLedger.setFormName(mix.getData().getFormName());
             tAccLedger.setIsMain(true);
-            tAccLedger.setSearchCode(searchCode);
+            tAccLedger.setSearchCode(code);
             tAccLedger.setNumber(number);
             tAccLedger.setReconcileAccount(null);//
             tAccLedger.setReconcileGroup(0);//
@@ -170,7 +179,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
-                    tAccLedger1.setSearchCode(searchCode);
+                    tAccLedger1.setSearchCode(code);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(null);//
                     tAccLedger1.setReconcileGroup(sub.getReconcileGroup());//
@@ -185,7 +194,7 @@ public class SupplierPaymentSevrice {
 
                 }
             }
-
+            updateCodeSetting(accCodeSetting);
         }
         if ("ONLINE".equals(mix.getData().getAccType())) {
             TAccLedger tAccLedger = new TAccLedger();
@@ -202,7 +211,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setFormName(mix.getData().getFormName());
             tAccLedger.setIsMain(true);
             tAccLedger.setNumber(number);
-            tAccLedger.setSearchCode(searchCode);
+            tAccLedger.setSearchCode(code);
             tAccLedger.setReconcileAccount(0);//
             tAccLedger.setReconcileGroup(0);//
             tAccLedger.setRefNumber(mix.getData().getRefNumber());
@@ -231,7 +240,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
-                    tAccLedger1.setSearchCode(searchCode);
+                    tAccLedger1.setSearchCode(code);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(null);//
                     tAccLedger1.setReconcileGroup(sub.getReconcileGroup());//
@@ -246,6 +255,7 @@ public class SupplierPaymentSevrice {
 
                 }
             }
+            updateCodeSetting(accCodeSetting);
         }
         MAccSetting overPaymentIssue = accountSettingRepository.findByName(Constant.OVER_PAYMENT_ISSUED);
         if (overPaymentIssue.getIndexNo() <= 0) {
@@ -491,5 +501,21 @@ public class SupplierPaymentSevrice {
 
     public List<TAccLedger> findSupplierPaymentByNumberAndBranch(Integer number, Integer branch) {
         return paymentRepository.findByNumberAndBranchAndType(number, branch, Constant.SUPPLIER_PAYMENT);
+    }
+
+    private String getSearchCode(String code, Integer branch, AccCodeSetting accCodeSetting) {
+        MBranch branchModel = branchRepository.findOne(branch);
+        String branchCode = branchModel.getBranchCode();
+        return code + "/" + branchCode + "/" + accCodeSetting.getCode() + "/" + (accCodeSetting.getMaxNo() + 1);
+    }
+
+    private Integer updateCodeSetting(AccCodeSetting accCodeSetting) {
+        accCodeSetting.setMaxNo(accCodeSetting.getMaxNo() + 1);
+        AccCodeSetting save1 = accCodeSettingRepository.save(accCodeSetting);
+        if (save1.getIndexNo() > 0) {
+            return save1.getIndexNo();
+        } else {
+            throw new RuntimeException("Voucher Save Fail !");
+        }
     }
 }

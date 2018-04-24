@@ -30,7 +30,13 @@ gulp.task('build-html', function () {
 
 gulp.task('build-js', function () {
     //app
-    gulp.src('src/site/**/*.js')
+//    gulp.src('src/site/**/*.js')
+//            .pipe(debug())
+//            .pipe(concat('app.min.js'))
+//            .pipe(ngAnnotate())
+//            .pipe(uglify())
+//            .pipe(gulp.dest('src/main/resources/static/js'));
+    gulp.src('src/site/app/**/*.js')
             .pipe(debug())
             .pipe(concat('app.min.js'))
             .pipe(ngAnnotate())

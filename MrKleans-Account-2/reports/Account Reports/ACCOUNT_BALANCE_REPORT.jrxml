@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2018-02-13T17:30:47 -->
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ACCOUNT_BALANCE_REPORT" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70716592-cc19-4845-89b8-c85754de1607">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="AccountDatabaseAdapter.xml"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="457"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="536"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="account"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="196"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="793"/>
 	<parameter name="BRANCH" class="java.lang.Integer"/>
 	<parameter name="FROM_DATE" class="java.util.Date"/>
 	<parameter name="ACC_MAIN_NAME" class="java.lang.String"/>
@@ -18,8 +17,8 @@
 	m_acc_account.name as acc_account,
 	m_acc_main.name as acc_type,
 	m_acc_main.increment,
-	if(sum(t_acc_ledger.debit) -sum(t_acc_ledger.credit)<0,(sum(t_acc_ledger.debit) -sum(t_acc_ledger.credit))*-1,
-	sum(t_acc_ledger.debit) -sum(t_acc_ledger.credit)) as balance,
+	if(m_acc_main.increment='DEBIT',(sum(t_acc_ledger.debit) -sum(t_acc_ledger.credit)),
+	sum(t_acc_ledger.credit) -sum(t_acc_ledger.debit)) as balance,
 	m_branch.name as branch_name
 from t_acc_ledger
 left JOIN m_acc_account on m_acc_account.index_no=t_acc_ledger.acc_account
@@ -33,13 +32,33 @@ and ( $P{ACC_ACCOUNT}  is null or m_acc_account.index_no= $P{ACC_ACCOUNT} )
 GROUP by t_acc_ledger.acc_account
 order by m_acc_main.increment,m_acc_account.acc_code]]>
 	</queryString>
-	<field name="acc_code" class="java.lang.String"/>
-	<field name="index_no" class="java.lang.Integer"/>
-	<field name="acc_account" class="java.lang.String"/>
-	<field name="acc_type" class="java.lang.String"/>
-	<field name="increment" class="java.lang.String"/>
-	<field name="balance" class="java.math.BigDecimal"/>
-	<field name="branch_name" class="java.lang.String"/>
+	<field name="acc_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="acc_code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_acc_account"/>
+	</field>
+	<field name="index_no" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="index_no"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_acc_account"/>
+	</field>
+	<field name="acc_account" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="acc_account"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_acc_account"/>
+	</field>
+	<field name="acc_type" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="acc_type"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_acc_main"/>
+	</field>
+	<field name="increment" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="increment"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_acc_main"/>
+	</field>
+	<field name="balance" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="balance"/>
+	</field>
+	<field name="branch_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="branch_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_branch"/>
+	</field>
 	<variable name="debit_total" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
 	</variable>

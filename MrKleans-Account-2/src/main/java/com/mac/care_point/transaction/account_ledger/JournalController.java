@@ -40,4 +40,5 @@ public class JournalController {
     public List<TAccLedger> findGeneralVoucherByNumberAndBranch(@PathVariable("number")Integer number) {
         return journalService.findGeneralVoucherByNumberAndBranch(number, SecurityUtil.getCurrentUser().getBranch());
     }
+    
 }

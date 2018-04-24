@@ -9,9 +9,11 @@
         "supplierModule",
         "vehicleModule",
         "itemModule",
+        "costCenterModule",
+        "costDepartmentModule",
         // service
-        "app",
         "dashBoardModule",
+        "budgetModule",
         //transaction
         "itemSalesModule",
         "paymentVoucherModule",
@@ -24,7 +26,8 @@
         //setting
         "accountSettingModule",
         "userPermissionModule",
-        "ngFileSaver"
+        "ngFileSaver",
+        "accCodeSettingModule"
     ]);
 
     //constants
@@ -32,7 +35,7 @@
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? "http://localhost:8075"
+                        ? "http://localhost:8070"
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 
@@ -70,15 +73,21 @@
                             templateUrl: "app/master/client/client.html",
                             controller: "clientController"
                         })
-                        
                         .when("/master/supplier", {
                             templateUrl: "app/master/supplier/supplier.html",
                             controller: "supplierController"
                         })
-                        
                         .when("/master/item", {
                             templateUrl: "app/master/item/item.html",
                             controller: "itemController"
+                        })
+                        .when("/master/cost-center", {
+                            templateUrl: "app/master/cost-center/cost-center.html",
+                            controller: "costCenterController"
+                        })
+                        .when("/master/cost-department", {
+                            templateUrl: "app/master/cost-department/cost-department.html",
+                            controller: "costDepartmentController"
                         })
                         
                         //transaction
@@ -122,7 +131,7 @@
                             controller: "itemSalesController"
                         })
                         .when("/service/customer-payment", {
-                            templateUrl: "app/service/payment-voucher/payment-voucher.html",
+                            templateUrl: "app/service/customer-payment/customer-payment.html",
                             controller: "customerPaymentVoucherController"
                         })
                         .when("/service/grn-request", {
@@ -149,6 +158,10 @@
                             templateUrl: "app/service/supplier-return/supplier-return.html",
                             controller: "supplierReturnController"
                         })
+                        .when("/master/budget", {
+                            templateUrl: "app/master/budget/budget.html",
+                            controller: "budgetController"
+                        })
                         
                         // setting
                         .when("/setting/account-settings", {
@@ -158,6 +171,10 @@
                         .when("/setting/user-permission", {
                             templateUrl: "app/setting/user-permission/user-permission.html",
                             controller: "userPermissionController"
+                        })
+                        .when("/setting/acc-code-setting", {
+                            templateUrl: "app/setting/account-code-setting/account-code-setting.html",
+                            controller: "accCodeSettingController"
                         })
                         
                         //otherwise

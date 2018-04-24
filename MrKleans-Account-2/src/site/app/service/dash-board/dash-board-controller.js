@@ -15,7 +15,7 @@
                 $scope.label = ["Jan", "February", "March", "April", "May", "June", "July"];
                 $scope.series = ['Income', 'Expense'];
                 $scope.datas = [
-                    [65, 59, 80, 81, 56, 55, 40],
+                    [65, 65, 65, 65, 65, 65, 65],
                     [28, 48, 40, 19, 86, 27, 90]
                 ];
                 $scope.onClick = function (points, evt) {

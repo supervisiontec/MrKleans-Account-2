@@ -63,6 +63,12 @@
             <artifactId>jasperreports-fonts</artifactId>
             <version>6.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.2.RELEASE</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <properties>

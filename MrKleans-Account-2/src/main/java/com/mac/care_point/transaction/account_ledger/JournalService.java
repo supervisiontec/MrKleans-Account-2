@@ -63,7 +63,7 @@ public class JournalService {
         if (count == list.size()) {
             return count;
         }
-        return -1;
+        return null;
     }
 
     private String getSearchCode(String code, Integer branch, int number) {
@@ -80,6 +80,5 @@ public class JournalService {
         return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.VOUCHER);
     }
 
-   
 
 }

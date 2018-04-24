@@ -80,4 +80,8 @@ public class AccAccountController {
     public BigDecimal findAccountValuewithBranch(@PathVariable Integer index) {
         return accAccountService.findAccountValue(index);
     }
+    @RequestMapping(value = "/change", method = RequestMethod.GET)
+    public List<MAccAccount> change() {
+        return accAccountService.change();
+    }
 }

@@ -5,10 +5,11 @@
  */
 package com.mac.care_point.transaction.voucher;
 
+import com.mac.care_point.account_setting.acc_code_setting.AccCodeSettingRepository;
+import com.mac.care_point.account_setting.acc_code_setting.model.AccCodeSetting;
 import com.mac.care_point.account_setting.account_setting.AccountSettingRepository;
 import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import com.mac.care_point.common.Constant;
-import com.mac.care_point.common.SearchCodeGenarator;
 import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.transaction.account_ledger.JournalRepository;
@@ -32,19 +33,26 @@ public class VoucherService {
 
     @Autowired
     private JournalRepository journalRepository;
-  
+
     @Autowired
     private AccountSettingRepository accountSettingRepository;
-   
+
     @Autowired
     private BranchRepository branchRepository;
 
+    @Autowired
+    private AccCodeSettingRepository accCodeSettingRepository;
+
     public Integer saveVoucher(VoucherMix voucherMix) {
 
+        AccCodeSetting accCodeSetting = accCodeSettingRepository.findByAccount(voucherMix.getVoucher().getAccAccount());
+        if (accCodeSetting == null) {
+            throw new RuntimeException("Accout Code Setting not Found for this Account !");
+        }
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.VOUCHER);
         int deleteNumber = journalRepository.getDeleteNumber();
         MAccSetting unrealisticChequeAccount = accountSettingRepository.findByName(Constant.UNREALIZED_ISSUED);
-        String searchCode = getSearchCode(Constant.CODE_PAYMENT_VOUCHER, SecurityUtil.getCurrentUser().getBranch(), number);
+        String searchCode = getSearchCode(Constant.CODE_PAY, SecurityUtil.getCurrentUser().getBranch(), accCodeSetting);
 
         voucherMix.getVoucher().setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
         voucherMix.getVoucher().setNumber(number);
@@ -63,7 +71,6 @@ public class VoucherService {
             save.setIsCheque(true);
             save.setAccAccount(unrealisticChequeAccount.getAccAccount());
             journalRepository.save(save);
-
         }
         for (TAccLedger tAccLedger : voucherMix.getVoucherList()) {
             tAccLedger.setNumber(number);
@@ -78,13 +85,19 @@ public class VoucherService {
             tAccLedger.setIsCheque(false);
             journalRepository.save(tAccLedger);
         }
-
-        return 1;
+        accCodeSetting.setMaxNo(accCodeSetting.getMaxNo() + 1);
+        AccCodeSetting save1 = accCodeSettingRepository.save(accCodeSetting);
+        if (save1.getIndexNo() > 0) {
+            return save1.getIndexNo();
+        } else {
+            throw new RuntimeException("Voucher Save Fail !");
+        }
     }
-     private String getSearchCode(String code, Integer branch, int number) {
-         MBranch branchModel = branchRepository.findOne(branch);
+
+    private String getSearchCode(String code, Integer branch, AccCodeSetting accCodeSetting) {
+        MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
-        return code + "/" + branchCode + "/" + number;
+        return code + "/" + branchCode + "/" + accCodeSetting.getCode() + "/" + (accCodeSetting.getMaxNo() + 1);
     }
 
 }

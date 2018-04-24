@@ -20,6 +20,7 @@ public interface Constant {
     public static final String PURCHASE = "stock_item_sub_account_of";
     public static final String SUPPLIER_RETURN_ACCOUNT = "supplier_return_account";
     public static final String SUPPLIER_SUB_ACCOUNT_OF = "supplier_sub_account_of";
+    public static final String NON_CREDIT_SUPPLIER_ACCOUNT = "non_credit_supplier_sub_account_of";
     public static final String ITEM_SALES = "item_sales";
     public static final String CUSTOMER_SUB_ACCOUNT_OF = "customer_sub_account_of";
     public static final String ITEM_DISCOUNT_OUT = "item_discount_out";
@@ -68,6 +69,7 @@ public interface Constant {
     public static final String CODE_FUND_TRANSFER = "FNDTRA";
     public static final String CODE_CHEQUE_RETURN = "CHQRTN";
     public static final String CODE_PAYMENT_VOUCHER = "PAYVUC";
+    public static final String CODE_PAY = "PAY";
     public static final String CODE_DIRECT_GRN = "DGRN";
     public static final String CODE_GRN = "GRN";
     public static final String CODE_ITEM_SALES = "ITMSAL";

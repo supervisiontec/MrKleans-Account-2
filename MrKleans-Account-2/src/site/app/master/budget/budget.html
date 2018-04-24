@@ -1,0 +1,79 @@
+<div class="index-content-header">
+</div>
+
+<div class="index-content-body "  ng-keydown="ui.keyPressFunction($event)">
+
+    <div class="col-xs-4 background-dark">
+        <div class="row" style="display: flex; flex-flow: column; height: calc(100vh - 52px);">
+            <div class="col-xs-12" style="flex: 0 0 auto; height: 95px; padding-right: 22px;">
+                <table class="table-rounded control-table">
+                    <col style="width: 35%"/>
+                    <col style="width: 65%"/>
+                    <tbody>
+
+                        <tr>
+                            <td><label>Financial Year :</label></td>
+                            <td><input class="form-control" ng-model="model.budget.financialYear" 
+                                           uib-typeahead="data.indexNo as (data.name) for data in model.financialYearList | filter:$viewValue | limitTo:10" 
+                                           typeahead-input-formatter="model.financialYearLable($model);" 
+                                           typeahead-on-select="onChange()"
+                                           ng-disabled="ui.mode !== 'NEW'"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Month :</label></td>
+                            <td><input type="month" class="form-control" ng-model="model.budget.budgetMonth" 
+                                       ng-disabled="ui.mode !== 'NEW'"
+                                       ng-change="onChange()"
+                                       ></td>
+                            
+                        </tr>
+                        <tr>
+                            <td><label>Cost Department</label></td>
+                            <td><input class="form-control" ng-model="model.budget.costDepartment" 
+                                           uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostDepartmentList | filter:$viewValue | limitTo:10" 
+                                           typeahead-input-formatter="model.activeCostDepartmentLable($model);" 
+                                           typeahead-on-select="onChange($model)"
+                                           ng-disabled="ui.mode !== 'NEW'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-8 background-light">
+        <div class="row" style="display: flex; flex-flow: column;">
+            <div class="col-xs-12">
+                <div class="row col-xs-5">
+                    <input type="text" class="search-input" ng-model="model.search.name" placeholder="search">
+                </div>
+                <table class="table-rounded">
+                    <col style="width: 100%">
+                    <thead class="background-dark">
+                        <tr class="select-primary-row-table-header">
+                            <th> <label>Cost Center List</label> </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="smart-scroll-y" style="height: calc(100vh - 150px);">
+                    <table class="table-rounded">
+                        <col style="width: 20%">
+                        <col style="width: 60%">
+                        <col style="width: 20%">
+                        <tbody>
+                            <tr ng-repeat="data in model.activeCostCenterList | filter:model.search.name">
+                                <td><label class="label label-default">{{data.indexNo|fixedLength:5}}</label></td>
+                                <td>{{data.name}}</td>
+                                <td><input class="form-control text-right" smart-input="decimal" smart-input="decimal" ng-model="data.budget"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="fab-container">
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+</div>

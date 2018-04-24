@@ -13,8 +13,8 @@
 
 //                $scope.model.currentReport.parameterValues.FROM_DATE = new Date();
 //                $scope.model.currentReport.parameterValues.TO_DATE = new Date();
-//                $scope.model.currentReport.parameterValues.FROM_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
-//                $scope.model.currentReport.parameterValues.TO_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
+                $scope.model.currentReport.parameterValues.FROM_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
+                $scope.model.currentReport.parameterValues.TO_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
 
                 $scope.ui.selectReportGroup = function (reportGroup) {
                     $scope.model.currentReportGroup = reportGroup;
@@ -52,8 +52,6 @@
                 };
 
                 $scope.ui.isParameterAvailable = function (param) {
-                    console.log($scope.model.currentReport.parameters);
-                    console.log(param);
                     if (typeof $scope.model.currentReport.parameters === 'undefined') {
                         return false;
                     }

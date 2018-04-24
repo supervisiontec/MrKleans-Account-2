@@ -54,6 +54,7 @@
                             'voucher',
                             'reconciliation',
                             'supplier_payment',
+                            'customer_payment',
                             'cheque_return',
                             'transfer',
                             'journal',

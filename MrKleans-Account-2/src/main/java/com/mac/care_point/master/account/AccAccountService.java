@@ -10,7 +10,6 @@ import com.mac.care_point.master.account.model.MAccSettingMix;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -187,5 +186,18 @@ public class AccAccountService {
             arrayList.add(mix);
         }
         return arrayList;
+    }
+
+    public List<MAccAccount> change() {
+        List<MAccAccount> list=accAccountRepository.getList();
+        List<MAccAccount> list2=new ArrayList<>();
+        for (MAccAccount mAccAccount : list) {
+            String[] split = mAccAccount.getAccCode().split(Pattern.quote("."));
+            mAccAccount.setAccCode(split[0]+"."+split[1]+"."+split[2]+".0"+split[3]);
+            System.out.println(mAccAccount.getAccCode());
+            list2.add(mAccAccount);
+        }
+        accAccountRepository.save(list2);
+        return list2;
     }
 }

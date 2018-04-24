@@ -2,7 +2,7 @@
   "name": "mrkleans-account-2",
   "version": "1.0.0",
   "description": "account management system",
-  "author": "Kasun Chamara <chamara.kaza@gmail.com>"
+  "author": "Kasun Chamara <chamara.kaza@gmail.com>",
   "devDependencies": {
     "bower-npm-resolver": "^0.8.1",
     "browser-sync": "^2.16.0",

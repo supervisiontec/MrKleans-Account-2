@@ -38,7 +38,7 @@
                         </li>
 
                         <li ng-show="ui.includeList(['Item Sales', 'Customer Payment', 'Purchase Order Request',
-                                            'Purchase Order Approve', 'Grn Request', 'Grn Approve', 'Grn Direct','Supplier Return'])"> 
+                                            'Purchase Order Approve', 'Grn Request', 'Grn Approve', 'Grn Direct', 'Supplier Return'])"> 
                             <a class="menu-header">SERVICE</a>
                             <ul>
                                 <li ng-show="ui.include('Item Sales')"><a href="#/service/item-sales" ng-click="toggleHamburger('Item Sales');">Item Sales</a></li> 
@@ -71,20 +71,25 @@
                                 <li ng-show="ui.include('Reports')"><a href="#/reports/general/report-viewer" ng-click="toggleHamburger('Reports');">REPORTS</a></li>
                             </ul>
                         </li>
-                        <li ng-show="ui.includeList(['Create Account', 'Item Registration', 'Client Registration', 'Supplier Registration'])"> 
+                        <li ng-show="ui.includeList(['Create Account', 'Item Registration', 'Client Registration',
+                                            'Supplier Registration', 'Cost Center','Cost Department','Budget'])"> 
                             <a class="menu-header">REGISTRATION</a>
                             <ul>
                                 <li ng-show="ui.include('Create Account')"><a href="#/master/create-account" ng-click="toggleHamburger('Create Account');">Create Accounts</a></li>
                                 <li ng-show="ui.include('Item Registration')"><a href="#/master/item" ng-click="toggleHamburger('Item Registration');">Item Registration</a></li>
                                 <li ng-show="ui.include('Client Registration')"><a href="#/master/client" ng-click="toggleHamburger('Client Registration');">Client Registration</a></li>
                                 <li ng-show="ui.include('Supplier Registration')"><a href="#/master/supplier" ng-click="toggleHamburger('Supplier Registration');">Supplier Registration</a></li>
+                                <li ng-show="ui.include('Cost Center')"><a href="#/master/cost-center" ng-click="toggleHamburger('Cost Center');">Cost Center</a></li>
+                                <li ng-show="ui.include('Cost Department')"><a href="#/master/cost-department" ng-click="toggleHamburger('Cost Department');">Cost Department</a></li>
+                                <li ng-show="ui.include('Budget')"><a href="#/master/budget" ng-click="toggleHamburger('Budget');">Budget</a></li> 
                             </ul>
                         </li>
-                        <li ng-show="ui.includeList(['Account Setting', 'User Permission'])"> 
+                        <li ng-show="ui.includeList(['Account Setting', 'User Permission', 'Code Setting'])"> 
                             <a class="menu-header">SETTING</a>
                             <ul>
                                 <li ng-show="ui.include('Account Setting')"><a href="#/setting/account-settings" ng-click="toggleHamburger('Account Setting');">Account Setting</a></li>
                                 <li ng-show="ui.include('User Permission')"><a href="#/setting/user-permission" ng-click="toggleHamburger('User Permission');">User Permission</a></li>
+                                <li ng-show="ui.include('Code Setting')"><a href="#/setting/acc-code-setting" ng-click="toggleHamburger('Code Setting');">Code Setting</a></li>
                             </ul>
                         </li>
                     </ul>
