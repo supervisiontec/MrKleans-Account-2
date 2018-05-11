@@ -23,7 +23,10 @@
                         "bankReconciliation": false,
                         "reconcileAccount":null,
                         "reconcileGroup":0,
-                        "accTypeSub":null
+                        "accTypeSub":null,
+                        "financialYear": null,
+                        "costDepartment": "",
+                        "costCenter": ""
 
                     };
                     return data;

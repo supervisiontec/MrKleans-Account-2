@@ -14,6 +14,8 @@
             branchList: [],
             saveDataList: [],
             accTypeList: [],
+            activeCostDepartmentList: [],
+            activeCostCenterList: [],
             //constructor
             constructor: function () {
                 var that = this;
@@ -38,6 +40,14 @@
                         .success(function (data) {
                             console.log(data);
                             that.userPermission = data;
+                        });
+                voucherService.activeCostDepartmentList()
+                        .success(function (data) {
+                            that.activeCostDepartmentList = data;
+                        });
+                voucherService.activeCostCenterList()
+                        .success(function (data) {
+                            that.activeCostCenterList = data;
                         });
                 this.loadAccAccount();
             },
@@ -71,6 +81,26 @@
                 angular.forEach(this.accAccountList, function (value) {
                     if (value.indexNo === model) {
                         label = value.accCode + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostDepartmentLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostDepartmentList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostCenterLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostCenterList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
                         return;
                     }
                 });

@@ -134,7 +134,7 @@ tbody tr .btn-danger{
 
 /*animation*/
 tr.ng-enter{
-   // animation: 0.5s bounceIn;
+    // animation: 0.5s bounceIn;
 }
 tr.ng-leave{
     //animation: 0.5s bounceOut;
@@ -172,3 +172,11 @@ tbody tr input{
     background-color:#5093E1 !important;
     color:white;
 }
+
+//model specific size,
+
+
+.modal-dialog-1200 {
+    width: 1200px;
+    margin-left: -150px
+} 

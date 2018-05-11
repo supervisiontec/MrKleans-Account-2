@@ -8,6 +8,12 @@
         this.loadBranch = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/branch");
         };
+        this.activeCostCenterList = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/cost-center/get-active-list");
+        };
+        this.activeCostDepartmentList = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/cost-department/get-active-list");
+        };
         this.currentBranch = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/branch/current-branch");
         };

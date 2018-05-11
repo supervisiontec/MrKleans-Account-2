@@ -64,11 +64,15 @@ public class SupplierPaymentSevrice {
     public Integer saveSupplierPayment(SupplierPaymentMix mix) {
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.SUPPLIER_PAYMENT);
         int deleteNumber = journalRepository.getDeleteNumber();
+        String code;
         AccCodeSetting accCodeSetting = accCodeSettingRepository.findByAccount(mix.getData().getAccAccount());
-        if (accCodeSetting == null) {
+        if (accCodeSetting == null && !"SETTLEMENT".equals(mix.getData().getAccType()) ) {
             throw new RuntimeException("Accout Code Setting not Found for this Account !");
+        }else if(accCodeSetting == null ){
+            code=getSearchCode2(Constant.CODE_SETTLEMENT,SecurityUtil.getCurrentUser().getBranch(),number);
+        }else{
+            code = getSearchCode(Constant.CODE_PAY, SecurityUtil.getCurrentUser().getBranch(), accCodeSetting);
         }
-        String code = getSearchCode(Constant.CODE_PAY, SecurityUtil.getCurrentUser().getBranch(), accCodeSetting);
         String searchCode = getSearchCode(Constant.CODE_SUPPLIER_PAYMENT, SecurityUtil.getCurrentUser().getBranch(), number);
         BigDecimal overPayment = new BigDecimal(0);
         overPayment = (BigDecimal) subtract(mix.getData().getCredit(), mix.getData().getBillTotal());
@@ -416,6 +420,9 @@ public class SupplierPaymentSevrice {
                 tAccLedger1.setType(mix.getData().getType());
                 tAccLedger1.setTypeIndexNo(null);
                 tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+                tAccLedger1.setCostDepartment(mix.getData().getCostDepartment());
+                tAccLedger1.setCostCenter(mix.getData().getCostCenter());
+                tAccLedger1.setFinancialYear(mix.getData().getFinancialYear());
 
                 TAccLedger save = paymentRepository.save(tAccLedger1);
                 if (save.getIndexNo() <= 0) {
@@ -451,7 +458,6 @@ public class SupplierPaymentSevrice {
                     }
                 }
             }
-
         }
         //over payment save
         if (overPayment.doubleValue() > 0) {
@@ -517,5 +523,11 @@ public class SupplierPaymentSevrice {
         } else {
             throw new RuntimeException("Voucher Save Fail !");
         }
+    }
+
+    private String getSearchCode2(String code, Integer branch, int number) {
+         MBranch branchModel = branchRepository.findOne(branch);
+        String branchCode = branchModel.getBranchCode();
+        return code + "/" + branchCode + "/" + number;
     }
 }

@@ -5,7 +5,11 @@
  */
 package com.mac.care_point.security;
 
+import com.mac.care_point.master.backup.BackupService;
+import com.mac.care_point.master.backup_detail.BackupDetailService;
+import com.mac.care_point.master.backup_detail.model.MBackupDetail;
 import com.mac.care_point.security.model.MUser;
+import com.mac.care_point.zutil.Backup;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.security.Principal;
 import java.util.HashMap;
@@ -34,8 +38,18 @@ public class SESecurityController {
     @Autowired 
     private MUserService userService;
     
+    @Autowired 
+    private BackupService backupService;
+   
+    @Autowired 
+    private BackupDetailService backupDetailService;
+    
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public Principal login(Principal principal) {
+        String lastBackupDate = backupService.getLastBackupDate();
+        MBackupDetail backupDetail = backupDetailService.findAll();
+        Backup.startBackup(lastBackupDate,backupDetail);
+        backupService.updateNewDate();
         return principal;
     }
 

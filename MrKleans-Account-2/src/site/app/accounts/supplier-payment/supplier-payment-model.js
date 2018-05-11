@@ -15,6 +15,8 @@
             accTypeList: [],
             accflowList: [],
             billList: [],
+            activeCostCenterList: [],
+            activeCostDepartmentList: [],
             accType: null,
             userPermission: {},
             //constructor
@@ -37,8 +39,15 @@
                         });
                 supplierPaymentService.getPermission('Item Registration')
                         .success(function (data) {
-                            console.log(data);
                             that.userPermission = data;
+                        });
+                supplierPaymentService.activeCostDepartmentList()
+                        .success(function (data) {
+                            that.activeCostDepartmentList = data;
+                        });
+                supplierPaymentService.activeCostCenterList()
+                        .success(function (data) {
+                            that.activeCostCenterList = data;
                         });
 
                 this.loadAccAccount();
@@ -213,6 +222,26 @@
                 });
                 return label;
             },
+            activeCostDepartmentLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostDepartmentList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostCenterLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostCenterList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
 
             save: function () {
 
@@ -223,7 +252,6 @@
 
                 this.data.chequeDate = $filter('date')(this.data.chequeDate, 'yyyy-MM-dd');
                 data.data = this.data;
-                console.log(data);
 
                 var defer = $q.defer();
                 supplierPaymentService.saveSupplierPayment(JSON.stringify(data))

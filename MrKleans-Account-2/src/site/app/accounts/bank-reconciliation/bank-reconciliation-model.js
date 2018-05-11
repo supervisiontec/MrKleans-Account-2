@@ -17,6 +17,8 @@
             saveDataList: [],
             popupDataList: [],
             accTypeList: [],
+            activeCostCenterList: [],
+            activeCostDepartmentList: [],
             totBalance: 0.00,
             //constructor
             constructor: function () {
@@ -37,6 +39,14 @@
                         .success(function (data) {
                             console.log(data);
                             that.userPermission = data;
+                        });
+                bankReconciliationService.activeCostDepartmentList()
+                        .success(function (data) {
+                            that.activeCostDepartmentList = data;
+                        });
+                bankReconciliationService.activeCostCenterList()
+                        .success(function (data) {
+                            that.activeCostCenterList = data;
                         });
                 this.loadAccAccount();
             },
@@ -163,7 +173,26 @@
                 });
                 return label;
             },
-
+            activeCostDepartmentLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostDepartmentList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostCenterLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostCenterList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
             save: function () {
                 var defer = $q.defer();
                 var that = this;

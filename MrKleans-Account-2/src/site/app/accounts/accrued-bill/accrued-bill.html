@@ -147,29 +147,29 @@
                         <col style="width: 30%"/>
                         <col style="width: 70%"/>
                         <tbody>
-                            <tr ng-repeat="acc in model.accflowList | orderBy:'accCode'">
+                            <tr ng-repeat="acc in model.accflowList| orderBy:'accCode'">
                                 <td>
                                     <label class="label label-default"> {{acc.accCode}}</label>
                                 </td>
-                                <td ng-if="acc.level==1" style="padding-left: 0px">
+                                <td ng-if="acc.level == 1" style="padding-left: 0px">
                                     {{acc.name}}
                                 </td>
-                                <td ng-if="acc.level==2" style="padding-left: 5px">
+                                <td ng-if="acc.level == 2" style="padding-left: 5px">
                                     {{acc.name}}
                                 </td>
-                                <td ng-if="acc.level==3" style="padding-left: 10px">
+                                <td ng-if="acc.level == 3" style="padding-left: 10px">
                                     {{acc.name}}
                                 </td>
-                                <td ng-if="acc.level==4" style="padding-left: 15px">
+                                <td ng-if="acc.level == 4" style="padding-left: 15px">
                                     {{acc.name}}
                                 </td>
-                                <td ng-if="acc.level==5" style="padding-left: 20px">
+                                <td ng-if="acc.level == 5" style="padding-left: 20px">
                                     {{acc.name}}
                                 </td>
-                                <td ng-if="acc.level==6" style="padding-left: 25px">
+                                <td ng-if="acc.level == 6" style="padding-left: 25px">
                                     {{acc.name}}
                                 </td>
-                                <td ng-if="acc.level==7" style="padding-left: 30px">
+                                <td ng-if="acc.level == 7" style="padding-left: 30px">
                                     {{acc.name}}
                                 </td>
                             </tr>
@@ -187,8 +187,10 @@
             <table class="table-rounded control-table square-table">
                 <col style="width: 20%"/>
                 <col style="width: 17%"/>
-                <col style="width: 29%"/>
+                <col style="width: 20%"/>
                 <col style="width: 17%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
                 <col style="width: 7%"/>
                 <tbody>
                     <tr>
@@ -207,13 +209,26 @@
                             <input type="text" class="form-control" ng-model="model.tempData.branch" 
                                    uib-typeahead="branch.indexNo as (branch.branchCode + ' - ' + branch.name) for branch in model.branchList |filter:$viewValue|limitTo:10" 
                                    typeahead-input-formatter="model.branchLable(model.tempData.branch)" 
-                                   typeahead-on-select=""
                                    typeahead-editable="false"
                                    ng-disabled="ui.mode !== 'NEW'" />
                         </td>
                         <td>
                             Description:
                             <input class="form-control" ng-model="model.tempData.description" ng-disabled="ui.mode !== 'NEW'">
+                        </td>
+                        <td>
+                            Cost Dep. :
+                            <input type="text" class="form-control" ng-model="model.tempData.costDepartment" 
+                                   uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostDepartmentList | filter:$viewValue | limitTo:10" 
+                                   typeahead-input-formatter="model.activeCostDepartmentLable($model);" 
+                                   ng-disabled="ui.mode !== 'NEW'">
+                        </td>
+                        <td>
+                            Cost Center :
+                            <input class="form-control" ng-model="model.tempData.costCenter" 
+                                   uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostCenterList | filter:$viewValue | limitTo:10" 
+                                   typeahead-input-formatter="model.activeCostCenterLable($model);" 
+                                   ng-disabled="ui.mode !== 'NEW'">
                         </td>
                         <td>
                             Amount:
@@ -233,8 +248,10 @@
 
         <table class="table-rounded " >
             <col style="width: 25%"/>
-            <col style="width: 25%"/>
-            <col style="width: 30%"/>
+            <col style="width: 10%"/>
+            <col style="width: 20%"/>
+            <col style="width: 15%"/>
+            <col style="width: 15%"/>
             <col style="width: 10%"/>
             <col style="width: 10%"/>
 
@@ -243,6 +260,8 @@
                     <th>Account</th>
                     <th>Branch</th>
                     <th>Description</th>
+                    <th>Cost Dep.</th>
+                    <th>Cost Center</th>
                     <th class="text-right">Amount</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -251,8 +270,10 @@
         <div class="smart-scroll-y" style="height: calc(100vh - 245px);">
             <table class="table-rounded">
                 <col style="width: 25%"/>
-                <col style="width: 25%"/>
-                <col style="width: 30%"/>
+                <col style="width: 10%"/>
+                <col style="width: 20%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
                 <col style="width: 10%"/>
                 <col style="width: 10%"/>
                 <tbody>
@@ -260,9 +281,11 @@
                         <td>{{model.accountLable(data.accAccount)}}</td>
                         <td>{{model.branchLable(data.branch)}}</td>
                         <td>{{data.description}}</td>
+                        <td>{{data.costDepartment===""?"- - -":model.activeCostDepartmentLable(data.costDepartment)}}</td>
+                        <td>{{data.costCenter===""?"- - -":model.activeCostCenterLable(data.costCenter)}}</td>
                         <td class="text-right">{{data.debit}}</td>
                         <td>
-                            <a class="btn btn-default" ng-click="ui.edit($index,data)"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a class="btn btn-default" ng-click="ui.edit($index, data)"><span class="glyphicon glyphicon-edit"></span></a>
                             <a class="btn btn-danger" ng-click="ui.delete($index)"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>

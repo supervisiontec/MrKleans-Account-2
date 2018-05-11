@@ -100,10 +100,12 @@
     <div class="col-xs-9 background-light">
         <div class="row col-xs-12 nopadding">
             <table class="table-rounded control-table square-table">
-                <col style="width: 34%"/>
-                <col style="width: 17%"/>
-                <col style="width: 17%"/>
-                <col style="width: 17%"/>
+                <col style="width: 20%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
                 <col style="width: 5%"/>
                 <tbody>
                     <tr>
@@ -121,9 +123,22 @@
                             <input type="text" class="form-control" ng-model="model.tempData.branch" 
                                    uib-typeahead="branch.indexNo as (branch.branchCode + ' - ' + branch.name) for branch in model.branchList |filter:$viewValue|limitTo:10" 
                                    typeahead-input-formatter="model.branchLable(model.tempData.branch)" 
-                                   typeahead-on-select=""
                                    typeahead-editable="false"
                                    ng-disabled="ui.mode !== 'NEW'" />
+                        </td>
+                        <td>
+                            <label class="control-label">Cost Dep.</label>
+                            <input class="form-control" ng-model="model.tempData.costDepartment" 
+                                   uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostDepartmentList | filter:$viewValue | limitTo:10" 
+                                   typeahead-input-formatter="model.activeCostDepartmentLable($model);" 
+                                   ng-disabled="ui.mode !== 'NEW'">
+                        </td>
+                        <td>
+                            <label class="control-label">Cost Center</label>
+                            <input class="form-control" ng-model="model.tempData.costCenter" 
+                                   uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostCenterList | filter:$viewValue | limitTo:10" 
+                                   typeahead-input-formatter="model.activeCostCenterLable($model);" 
+                                   ng-disabled="ui.mode !== 'NEW'">
                         </td>
                         <td>
                             <label class="control-label">Debit</label>
@@ -145,16 +160,20 @@
     </div>
     <div class="col-xs-9" ng-show="model.dataList.length">
         <table class="table-rounded " >
-            <col style="width: 30%"/>
             <col style="width: 20%"/>
-            <col style="width: 20%"/>
-            <col style="width: 20%"/>
-            <col style="width: 10%"/>
+            <col style="width: 11%"/>
+            <col style="width: 15%"/>
+            <col style="width: 15%"/>
+            <col style="width: 15%"/>
+            <col style="width: 15%"/>
+            <col style="width: 9%"/>
 
             <thead class="background-dark">
                 <tr>
                     <th>Account Name</th>
                     <th>Branch</th>
+                    <th>Cost Dep.</th>
+                    <th>Cost Center</th>
                     <th class="text-right">Debit</th>
                     <th class="text-right">Credit</th>
                     <th></th>
@@ -163,15 +182,19 @@
         </table>
         <div class="smart-scroll-y" style="height: calc(100vh - 225px);">
             <table class="background-light table-rounded table-hover">
-                <col style="width: 30%"/>
                 <col style="width: 20%"/>
-                <col style="width: 20%"/>
-                <col style="width: 20%"/>
-                <col style="width: 10%"/>
+                <col style="width: 11%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
+                <col style="width: 9%"/>
                 <tbody>
                     <tr ng-repeat='data in model.dataList'>
                         <td class="over-flow-hidden">{{model.accountLable(data.accAccount)}}</td>
                         <td>{{model.branchLable(data.branch)}}</td>
+                        <td>{{data.costDepartment===""?"- - -":model.activeCostDepartmentLable(data.costDepartment)}}</td>
+                        <td>{{data.costCenter===""?"- - -":model.activeCostCenterLable(data.costCenter)}}</td>
                         <td class="text-right">{{data.debit}}</td>
                         <td class="text-right">{{data.credit}}</td>
                         <td>

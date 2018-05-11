@@ -109,11 +109,20 @@ public class TAccLedger implements Serializable {
    
     @Column(name = "is_cheque")
     private boolean isCheque;
+    
+    @Column(name = "financial_year")
+    private Integer financialYear;
+    
+    @Column(name = "cost_department")
+    private Integer costDepartment;
+    
+    @Column(name = "cost_center")
+    private Integer costCenter;
 
     public TAccLedger() {
     }
 
-    public TAccLedger(Integer indexNo, String transactionDate, Integer number, String searchCode, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, boolean isCheque) {
+    public TAccLedger(Integer indexNo, String transactionDate, Integer number, String searchCode, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, boolean isCheque, Integer financialYear, Integer costDepartment, Integer costCenter) {
         this.indexNo = indexNo;
         this.transactionDate = transactionDate;
         this.number = number;
@@ -138,7 +147,35 @@ public class TAccLedger implements Serializable {
         this.reconcileGroup = reconcileGroup;
         this.isMain = isMain;
         this.isCheque = isCheque;
+        this.financialYear = financialYear;
+        this.costDepartment = costDepartment;
+        this.costCenter = costCenter;
     }
+
+    public Integer getFinancialYear() {
+        return financialYear;
+    }
+
+    public void setFinancialYear(Integer financialYear) {
+        this.financialYear = financialYear;
+    }
+
+    public Integer getCostDepartment() {
+        return costDepartment;
+    }
+
+    public void setCostDepartment(Integer costDepartment) {
+        this.costDepartment = costDepartment;
+    }
+
+    public Integer getCostCenter() {
+        return costCenter;
+    }
+
+    public void setCostCenter(Integer costCenter) {
+        this.costCenter = costCenter;
+    }
+
 
     public String getSearchCode() {
         return searchCode;

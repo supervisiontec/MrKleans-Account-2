@@ -37,6 +37,12 @@
         this.getPermission = function (form) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);
         };
+         this.activeCostCenterList = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/cost-center/get-active-list");
+        };
+        this.activeCostDepartmentList = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/cost-department/get-active-list");
+        };
         
     };
     angular.module("appModule")

@@ -17,12 +17,13 @@
             saveDataList: [],
             accTypeList: [],
             accflowList: [],
+            activeCostDepartmentList: [],
+            activeCostCenterList: [],
             //constructor
             constructor: function () {
                 var that = this;
                 that.data = accruedBillFactory.Data();
                 that.tempData = accruedBillFactory.tempData();
-
 
                 accruedBillService.loadBranch()
                         .success(function (data) {
@@ -43,8 +44,15 @@
                         });
                 accruedBillService.getPermission('Accrued Bill')
                         .success(function (data) {
-                            console.log(data);
                             that.userPermission = data;
+                        });
+                accruedBillService.activeCostDepartmentList()
+                        .success(function (data) {
+                            that.activeCostDepartmentList = data;
+                        });
+                accruedBillService.activeCostCenterList()
+                        .success(function (data) {
+                            that.activeCostCenterList = data;
                         });
                 this.loadAccAccount();
             },
@@ -65,12 +73,9 @@
                     }
                 });
                 that.data.accAccount = accAccount;
-                console.log(accAccount);
                 if (accAccount !== null) {
-                    accruedBillService.loadAccBalance(accAccount)
-                            .success(function (data) {
-                                that.data.value = data;
-                            });
+                    loadAccValue(accAccount);
+                    
                     that.setAccountFlow(accAccount);
 
                 } else {
@@ -84,6 +89,13 @@
                             that.accflowList = data;
                             console.log(data);
                         });
+            },
+            loadAccValue: function (accAccount) {
+                var that = this;
+                accruedBillService.loadAccBalance(accAccount)
+                            .success(function (data) {
+                                that.data.value = data;
+                            });
             },
 
             branchLable: function (model) {
@@ -111,6 +123,26 @@
                 angular.forEach(this.accAccountList, function (value) {
                     if (value.indexNo === model) {
                         label = value.accCode + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostDepartmentLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostDepartmentList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostCenterLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostCenterList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
                         return;
                     }
                 });
@@ -172,14 +204,6 @@
                 accruedBillService.findAccruedBillByNumberAndBranch(number)
                         .success(function (data) {
                             if (data.length > 0) {
-//                                for (var i = 0; i < data.length; i++) {
-//                                    that.tempData = data[i];
-//                                    that.addData();
-//                                }
-//                                that.data.description = data[1].description;
-//                                that.data.refNumber = data[1].refNumber;
-//                                that.data.accAccount = data[1].accAccount;
-//                                that.accountLable(that.data.accAccount);
                                 for (var i = 0; i < data.length; i++) {
                                     if (!data[i].isMain) {
                                         that.tempData = data[i];
@@ -189,6 +213,8 @@
                                         that.data.refNumber = data[i].refNumber;
                                         that.data.accAccount = data[i].accAccount;
                                         that.data.typeIndexNo = data[i].typeIndexNo;
+                                        that.data.transactionDate = new Date(data[i].transactionDate);
+                                        that.loadAccValue(that.data.accAccount);
                                         defer.resolve();
                                     }
                                 }

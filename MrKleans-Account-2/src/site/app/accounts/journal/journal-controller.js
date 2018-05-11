@@ -114,6 +114,8 @@
                     $scope.model.tempData.debit = data.debit;
                     $scope.model.tempData.credit = data.credit;
                     $scope.model.tempData.branch = data.branch;
+                    $scope.model.tempData.costCenter = data.costCenter;
+                    $scope.model.tempData.costDepartment = data.costDepartment;
                     $scope.model.totalCalculated();
                     $scope.model.setMainAccount(data.accAccount);
 

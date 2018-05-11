@@ -22,7 +22,10 @@
                         "chequeDate": null,
                         "bankReconciliation": false,
                         "reconcileAccount":null,
-                        "reconcileGroup":0
+                        "reconcileGroup":0,
+                        "financialYear": null,
+                        "costDepartment": "",
+                        "costCenter": ""
 
                     };
                     return data;
@@ -47,7 +50,10 @@
                         "chequeDate": null,
                         "bankReconciliation": false,
                         "reconcileAccount":null,
-                        "reconcileGroup":0
+                        "reconcileGroup":0,
+                        "financialYear": null,
+                        "costDepartment": "",
+                        "costCenter": ""
                     };
                     return data;
                 };

@@ -27,6 +27,16 @@
                                 callback(data);
                             });
                 };
+                factory.createBackup = function (callback) {
+                    var url = systemConfig.apiUrl + "/api/backup";
+                    $http.get(url)
+                            .success(function (data, status, headers) {
+                                callback(data);
+                            })
+                            .error(function (data, status, headers) {
+                                callback(data);
+                            });
+                };
                 factory.save = function (details, callback, errorCallback) {
                     var url = systemConfig.apiUrl + "/api/care-point/account/account-setting/save";
 
@@ -61,6 +71,7 @@
 
                 //current ui mode IDEAL, SELECTED
                 $scope.ui.mode = null;
+                $scope.ui.tabMode = 'SETTING1';
 
 
                 //focus
@@ -107,6 +118,17 @@
                             }),
                             function (data) {
                                 Notification.error(data.message);
+                            };
+                };
+                
+                $scope.ui.createBackup = function () {
+                    accountSettingFactory.createBackup(
+                            function (data) {
+                                Notification.success("Backup Created successfully !");
+                            }),
+                            function (data) {
+                                Notification.error("Backup fail")
+
                             };
                 };
 

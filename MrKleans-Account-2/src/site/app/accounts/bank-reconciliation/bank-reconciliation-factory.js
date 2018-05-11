@@ -49,7 +49,9 @@
                         "chequeDate": null,
                         "deleteRefNo":0,
                         "reconcileAccount":null,
-                        "reconcileGroup":0
+                        "reconcileGroup":0,
+                        "costDepartment":"",
+                        "costCenter":""
                         
 
                     };

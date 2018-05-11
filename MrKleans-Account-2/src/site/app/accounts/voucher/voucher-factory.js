@@ -21,9 +21,12 @@
                         "description": '',
                         "chequeDate": null,
                         "bankReconciliation": false,
-                        "reconcileAccount":null,
-                        "isMain":false,
-                        "isCheque":false
+                        "reconcileAccount": null,
+                        "isMain": false,
+                        "isCheque": false,
+                        "financialYear": null,
+                        "costDepartment": "",
+                        "costCenter": ""
 
                     };
                     return data;
@@ -47,9 +50,12 @@
                         "description": '',
                         "chequeDate": null,
                         "bankReconciliation": false,
-                        "reconcileAccount":null,
-                        "isMain":false,
-                        "isCheque":false
+                        "reconcileAccount": null,
+                        "isMain": false,
+                        "isCheque": false,
+                        "financialYear": null,
+                        "costDepartment": "",
+                        "costCenter": ""
                     };
                     return data;
                 };

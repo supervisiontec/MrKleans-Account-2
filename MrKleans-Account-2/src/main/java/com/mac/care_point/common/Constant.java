@@ -70,6 +70,7 @@ public interface Constant {
     public static final String CODE_CHEQUE_RETURN = "CHQRTN";
     public static final String CODE_PAYMENT_VOUCHER = "PAYVUC";
     public static final String CODE_PAY = "PAY";
+    public static final String CODE_SETTLEMENT = "STM";
     public static final String CODE_DIRECT_GRN = "DGRN";
     public static final String CODE_GRN = "GRN";
     public static final String CODE_ITEM_SALES = "ITMSAL";

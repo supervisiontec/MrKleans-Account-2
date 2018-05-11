@@ -20,7 +20,10 @@
                         "typeIndexNo": null,
                         "description": null,
                         "bankReconciliation": false,
-                        "reconcileAccount":null
+                        "reconcileAccount": null,
+                        "financialYear": null,
+                        "costDepartment": "",
+                        "costCenter": ""
                     };
                     return data;
                 };
@@ -33,7 +36,9 @@
                         "credit": 0.00,
                         "cop": false,
                         "description": null,
-                        "date": null
+                        "date": null,
+                        "costDepartment": null,
+                        "costCenter": null
                     };
                     return data;
                 };

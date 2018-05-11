@@ -34,6 +34,12 @@
         this.findSupplierPaymentByNumberAndBranch = function (number) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/supplier-payment/find-supplier-payments-by-number-and-branch/"+number);
         };
+         this.activeCostCenterList = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/cost-center/get-active-list");
+        };
+        this.activeCostDepartmentList = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/cost-department/get-active-list");
+        };
     };
     angular.module("appModule")
             .service("supplierPaymentService", service);

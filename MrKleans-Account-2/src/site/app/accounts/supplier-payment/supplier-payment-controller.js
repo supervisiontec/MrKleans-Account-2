@@ -80,9 +80,12 @@
                         ConfirmPane.primaryConfirm("DO YOU WANT TO SAVE SUPPLIER PAYMENT !")
                                 .confirm(function () {
                                     $scope.model.save()
-                                            .then(function (data) {
+                                            .then(function () {
                                                 Notification.success('supplier payment save Success !');
                                                 $scope.ui.mode = "IDEAL";
+                                            })
+                                            .then(function (data) {
+                                                Notification.error(data.message);
                                             });
                                 });
                     }

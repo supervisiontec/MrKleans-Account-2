@@ -44,11 +44,14 @@ public class DataMain implements Serializable {
     private String accTypeSub;
     private BigDecimal billTotal;
     private String searchCode;
+    private Integer financialYear;
+    private Integer costDepartment;
+    private Integer costCenter;
 
     public DataMain() {
     }
 
-    public DataMain(Integer indexNo, String transactionDate, Integer number, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, String accType, String accTypeSub, BigDecimal billTotal, String searchCode) {
+    public DataMain(Integer indexNo, String transactionDate, Integer number, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, String accType, String accTypeSub, BigDecimal billTotal, String searchCode, Integer financialYear, Integer costDepartment, Integer costCenter) {
         this.indexNo = indexNo;
         this.transactionDate = transactionDate;
         this.number = number;
@@ -75,7 +78,36 @@ public class DataMain implements Serializable {
         this.accTypeSub = accTypeSub;
         this.billTotal = billTotal;
         this.searchCode = searchCode;
+        this.financialYear = financialYear;
+        this.costDepartment = costDepartment;
+        this.costCenter = costCenter;
     }
+
+    public Integer getFinancialYear() {
+        return financialYear;
+    }
+
+    public void setFinancialYear(Integer financialYear) {
+        this.financialYear = financialYear;
+    }
+
+    public Integer getCostDepartment() {
+        return costDepartment;
+    }
+
+    public void setCostDepartment(Integer costDepartment) {
+        this.costDepartment = costDepartment;
+    }
+
+    public Integer getCostCenter() {
+        return costCenter;
+    }
+
+    public void setCostCenter(Integer costCenter) {
+        this.costCenter = costCenter;
+    }
+
+    
 
     public String getAccTypeSub() {
         return accTypeSub;

@@ -84,16 +84,9 @@
                     </tbody>
                 </table>
             </div>
-            <div ng-show="model.loderView" style="margin-top: -5px">
-                <div class="col-sm-3 nopadding" style="height: calc(100vh - 157px);" >
-                    
-                </div>
-                <div class="col-sm-6 nopadding" style="height: calc(100vh - 157px);" >
+            <div ng-show="model.loderView " style="margin-top: -5px">
+                <div class="col-sm-12 nopadding" style="height: calc(100vh - 43px);" >
                     <img src="/img/loader1.gif" width="100%" height="100%" alt="loader1"/>
-                    
-                </div>
-                <div class="col-sm-3 nopadding" style="height: calc(100vh - 157px);" >
-                    
                 </div>
             </div>
             
@@ -117,7 +110,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="placeholder col-md-12 nopadding" ng-hide="model.accMainList.length" style="height: calc(100vh - 160px); padding: 0px 10px 10px 10px;">
+            <div class="placeholder col-md-12 nopadding" ng-hide="model.accMainList.length || model.loderView" style="height: calc(100vh - 160px); padding: 0px 10px 10px 10px;">
                 <h1>TRIAL BALANCE ACCOUNT IS EMPTY:(</h1>
             </div>
         </div>

@@ -38,7 +38,7 @@ public class MBudget implements Serializable {
     @Column(name = "cost_department")
     private Integer costDepartment;
 
-    @Column(name = "costCenter")
+    @Column(name = "cost_center")
     private Integer costCenter;
 
     @Column(name = "branch")

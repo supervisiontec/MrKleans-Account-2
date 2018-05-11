@@ -34,6 +34,14 @@
                         .success(function (data) {
                             that.currentBranch = data;
                         });
+                journalService.activeCostDepartmentList()
+                        .success(function (data) {
+                            that.activeCostDepartmentList = data;
+                        });
+                journalService.activeCostCenterList()
+                        .success(function (data) {
+                            that.activeCostCenterList = data;
+                        });
                 journalService.getPermission('Journal')
                         .success(function (data) {
                             that.userPermission = data;
@@ -55,6 +63,26 @@
                 angular.forEach(this.accAccountList, function (value) {
                     if (value.indexNo === model) {
                         label = value.accCode + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostDepartmentLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostDepartmentList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
+                        return;
+                    }
+                });
+                return label;
+            },
+            activeCostCenterLable: function (model) {
+                var label;
+                angular.forEach(this.activeCostCenterList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.indexNo + ' - ' + value.name;
                         return;
                     }
                 });
@@ -91,11 +119,14 @@
                 saveData.type = null;
                 saveData.typeIndexNo = null;
                 saveData.description = this.data.description;
+                saveData.costDepartment = this.tempData.costDepartment;
+                saveData.costCenter = this.tempData.costCenter;
+                
                 this.dataList.unshift(saveData);
                 this.tempData = journalFactory.tempData();
                 this.totalCalculated();
                 that.setBranch();
-                that.accflowList=[];
+                that.accflowList = [];
 
             },
             totalCalculated: function () {
