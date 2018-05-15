@@ -69,4 +69,8 @@ public class MUserService implements UserDetailsService {
         return mUserRepository.findAll();
     }
 
+    public List<MUser> findAllUserNames() {
+        return mUserRepository.findAllUserNames();
+    }
+
 }

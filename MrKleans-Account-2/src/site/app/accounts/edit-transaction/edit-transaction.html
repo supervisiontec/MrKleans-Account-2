@@ -1,0 +1,278 @@
+<div class="index-content-header"></div>
+
+<div class="index-content-body ">
+    <uib-tabset active="model.tabActive">
+        <uib-tab heading="SELECTION" index="0" select="ui.toggleType('SELECTION');">
+
+
+            <div class="col-xs-3 background-dark">
+                <table class="table-rounded control-table">
+                    <colgroup>
+                        <col style="width: 100%">
+                    </colgroup>
+                    <tbody>
+                        <tr class="select-primary-row-table-header">
+                            <td><label class="control-label text-center">EDIT TRANSACTION</label></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-rounded control-table">
+                    <colgroup>
+                        <col style="width: 50%">
+                        <col style="width: 50%">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label>Form Date :</label>
+                                <input class="form-control" type="date" ng-model="param.fromDate" ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                <label>To Date :</label>
+                                <input class="form-control" type="date" ng-model="param.toDate" ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Financial Year :</label>
+                                <input class="form-control" type="text" ng-model="param.financialYear" 
+                                       uib-typeahead="data.indexNo as (data.name) for data in model.financialYearList |filter:$viewValue|limitTo:10" 
+                                       typeahead-input-formatter="model.financialYearLable($model)" 
+                                       typeahead-editable="false"
+                                       ng-disabled="ui.mode !== 'NEW'" />
+                            </td>
+                            <td>
+                                <label>Branch :</label>
+                                <input class="form-control" type="text" ng-model="param.branch" 
+                                       uib-typeahead="branch.indexNo as (branch.branchCode + ' - ' + branch.name) for branch in model.branchList |filter:$viewValue|limitTo:10" 
+                                       typeahead-input-formatter="model.branchLable($model)" 
+                                       typeahead-editable="false"
+                                       ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row col-xs-12 nopadding smart-scroll-y" style="flex: 0 0 auto;height: calc(100vh - 300px)">
+                    <table class="table-rounded control-table" ng-class="ui.mode === 'NEW' ? '' : 'table-disabled'" >
+                        <col style="width: 80%"/>
+                        <col style="width: 20%"/>
+                        <tbody> 
+                            <tr ng-repeat="ledgerType in model.ledgerTypeList" ng-click="ui.selectLedgerType(ledgerType.name)" ng-class="model.selectLedgerType === ledgerType.name ? 'select-default-row-table-header' : ''">
+                                <td>
+                                    <b>{{ledgerType.name}}</b>
+                                </td>
+                                <td>
+                                    <a class="btn btn-success">
+                                        <span class="glyphicon glyphicon-arrow-right"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-xs-9 background-light" ng-show="model.accLedgerTypeDataList.length">
+
+                <table class="table-rounded " >
+                    <col style="width: 8%"/>
+                    <col style="width: 15%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 9%"/>
+                    <col style="width: 9%"/>
+                    <col style="width: 24%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 5%"/>
+
+                    <thead class="background-dark">
+                        <tr>
+                            <th>Number</th>
+                            <th>Search Code</th>
+                            <th>Tra. Date</th>
+                            <th>curr. Date</th>
+                            <th>Time</th>
+                            <th>Branch</th>
+                            <th>Form Name</th>
+                            <th>User</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="smart-scroll-y" style="height: calc(100vh - 140px);">
+                    <table class="table-rounded">
+                        <col style="width: 8%"/>
+                        <col style="width: 15%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 9%"/>
+                        <col style="width: 9%"/>
+                        <col style="width: 24%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 5%"/>
+                        <tbody>
+                            <tr class="background-dark" ng-repeat="data in model.accLedgerTypeDataList">
+                                <td>{{data.number}}</td>
+                                <td>{{data.searchCode}}</td>
+                                <td>{{data.transactionDate|date:'yyyy-MM-dd'}}</td>
+                                <td>{{data.currentDate|date:'yyyy-MM-dd'}}</td>
+                                <td>{{data.time}}</td>
+                                <td>{{model.branchLable(data.branch)}}</td>
+                                <td>{{data.formName}}</td>
+                                <td>{{model.userLable(data.user)}}</td>
+                                <td>
+                                    <a class="btn btn-primary" ng-click="ui.edit(data.deleteRefNo)"><span class="glyphicon glyphicon-edit"></span></a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="placeholder col-md-9" ng-hide="model.accLedgerTypeDataList.length" style="height: calc(100vh - 110px); padding: 0px 10px 10px 10px;">
+                <h1>SELECT A TYPE AND FILTERS TO VIEW DETAILS OR DETAIL WAS EMPTY :(</h1>
+            </div>
+        </uib-tab>
+        <uib-tab heading="EDITOR" index="1" select="ui.toggleType('EDITOR');">
+            <div class="background-light">
+                <div class="row col-xs-12 nopadding">
+                    <table class="table-rounded control-table">
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <tbody>
+                            <tr>
+                                <td>NUMBER :<input class="form-control" ng-model="model.tempData.number" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.searchGrnByNumber(model.data.number)"></td>
+                                <td>CODE :<input class="form-control" ng-model="model.tempData.searchCode" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>TRA. DATE : <input class="form-control" ng-model="model.tempData.transactionDate" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>BRANCH :<input class="form-control" ng-model="model.tempData.branch" 
+                                                   uib-typeahead="branch.indexNo as (branch.branchCode + ' - ' + branch.name) for branch in model.branchList |filter:$viewValue|limitTo:10" 
+                                                   typeahead-input-formatter="model.branchLable($model)" 
+                                                   typeahead-editable="false"
+                                                   ng-disabled="ui.mode !== 'NEW'">
+                                <td>ACCOUNT :<input class="form-control" ng-model="model.tempData.accAccount" 
+                                                    uib-typeahead="acc.indexNo as (acc.accCode + ' - ' + acc.name) for acc in model.accountList |filter:$viewValue|limitTo:10" 
+                                                    typeahead-input-formatter="model.accountLable($model)" 
+                                                    typeahead-editable="false" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>FORM NAME :<input class="form-control" ng-model="model.tempData.formName" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>DESCRIPTION :<input class="form-control" ng-model="model.tempData.description" ng-disabled="ui.mode !== 'NEW'"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row col-xs-12 nopadding">
+                    <table class="table-rounded control-table square-table">
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 15%"/>
+                        <col style="width: 15%"/>
+                        <col style="width: 7%"/>
+                        <tbody>
+                            <tr>
+                                <td>CHEQUE DATE :<input class="form-control" ng-model="model.tempData.chequeDate" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>REF NO :<input class="form-control" ng-model="model.tempData.refNumber" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>FINANCIAL YEAR :<input class="form-control" ng-model="model.tempData.financialYear" 
+                                                           uib-typeahead="data.indexNo as (data.name) for data in model.financialYearList |filter:$viewValue|limitTo:10" 
+                                                           typeahead-input-formatter="model.financialYearLable($model)" 
+                                                           typeahead-editable="false"
+                                                           ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>COST DEPARTMENT :<input class="form-control" ng-model="model.tempData.costDepartment" 
+                                                            uib-typeahead="cost.indexNo as (cost.name) for cost in model.costDepartmentList |filter:$viewValue|limitTo:10" 
+                                                            typeahead-input-formatter="model.costDepartmentLable($model)" 
+                                                            typeahead-editable="false"
+                                                            ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>COST CENTER :<input class="form-control" ng-model="model.tempData.costCenter" 
+                                                        uib-typeahead="cost.indexNo as (cost.name) for cost in model.costCenterList |filter:$viewValue|limitTo:10" 
+                                                        typeahead-input-formatter="model.costCenterLable($model)" 
+                                                        typeahead-editable="false"
+                                                        ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>DEBIT :<input class="form-control text-right" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>CREDIT :<input class="form-control text-right" ng-model="model.tempData.credit" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>
+                                    <a class="btn btn-primary" style="margin-top: 28px" ng-click="ui.addData()">
+                                        <span class="glyphicon glyphicon-plus">
+                                        </span>
+                                    </a> 
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-12 background-light" ng-show="model.deleteRefDetailList.length">
+
+                <table class="table-rounded " >
+                    <col style="width: 7%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 15%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 20%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 7%"/>
+
+                    <thead class="background-dark">
+                        <tr>
+                            <th>Number</th>
+                            <th>Code</th>
+                            <th>Account</th>
+                            <th>Reference No</th>
+                            <th>description</th>
+                            <th class="text-right">Debit</th>
+                            <th class="text-right">Credit</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="smart-scroll-y" style="height: calc(100vh - 306px);">
+                    <table class="table-rounded">
+                        <col style="width: 7%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 15%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 7%"/>
+                        <tbody>
+                            <tr class="background-dark" ng-repeat="data in model.deleteRefDetailList">
+                                <td>{{data.number}}</td>
+                                <td>{{data.searchCode}}</td>
+                                <td>{{model.accountLable(data.accAccount)}}</td>
+                                <td>{{data.refNumber===null?'- - -':data.refNumber}}</td>
+                                <td class="over-flow-hidden">{{data.description===null?'- - -':data.description}}</td>
+                                <td class="text-right">{{data.debit}}</td>
+                                <td class="text-right">{{data.credit}}</td>
+                                <td>
+                                    <a class="btn btn-default" ng-click="ui.setEdit($index, data)"><span class="glyphicon glyphicon-edit"></span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="placeholder col-md-12" ng-hide="model.deleteRefDetailList.length" style="height: calc(100vh - 110px); padding: 0px 10px 10px 10px;">
+                <h1>SELECT A TYPE TO VIEW DETAILS OR DETAIL WAS EMPTY :(</h1>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+
+</div>
+
+<div class="fab-container">
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL' && model.tabActive === 0" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW' && model.tabActive === 1" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+</div>
+
+
+

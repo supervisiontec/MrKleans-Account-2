@@ -49,27 +49,17 @@
                                 .success(function (data) {
                                     that.itemList = data;
                                 });
+                        ReportViewerService.getAccLedgerTypeList()
+                                .success(function (data) {
+                                    that.ledgerTypeList = data;
+                                });
                         
-                        this.ledgerTypeList = [
-                            'voucher',
-                            'reconciliation',
-                            'supplier_payment',
-                            'customer_payment',
-                            'cheque_return',
-                            'transfer',
-                            'journal',
-                            'accrued',
-                            'SYSTEM_INTEGRATION_GRN',
-                            'SYSTEM_INTEGRATION_INVOICE',
-                            'SYSTEM_INTEGRATION_PAYMENT'
-                        ];
                         this.itemTypeList = [
                             'STOCK',
                             'NON_STOCK',
                             'SERVICE'
                         ];
                     }
-                    
                     
                     , accountLable: function (id) {
                         var lable = '';
@@ -143,8 +133,15 @@
                         });
                         return lable;
                     }
-                    , ledgerTypeLable: function (type) {
-                        return type;
+                    , ledgerTypeLable: function (name) {
+                         var lable = '';
+                        angular.forEach(this.ledgerTypeList, function (tedgerType) {
+                            if (tedgerType.name === name) {
+                                lable = tedgerType.indexNo + " - " + tedgerType.name;
+                                return;
+                            }
+                        });
+                        return lable;
                     }
                     , itemTypeLable: function (type) {
                         return type;

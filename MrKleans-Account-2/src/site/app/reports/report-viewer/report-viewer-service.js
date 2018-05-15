@@ -66,5 +66,9 @@
                 this.getItemList = function () {
                     return $http.get(systemConfig.apiUrl + "/api/care-point/master/item");
                 };
+                
+                this.getAccLedgerTypeList = function () {
+                    return $http.get(systemConfig.apiUrl + "/api/care-point/master/acc-ledger-type/find-active");
+                };
             });
 }());

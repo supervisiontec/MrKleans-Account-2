@@ -96,7 +96,7 @@
                                         <td><label class="control-label">LEDGER TYPE</label></td>
                                         <td>
                                             <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.LEDGER_TYPE" 
-                                                   uib-typeahead="type as (type) for type in newModel.ledgerTypeList |filter:$viewValue |limitTo:10" 
+                                                   uib-typeahead="type.name as (type.indexNo+' - '+type.name) for type in newModel.ledgerTypeList |filter:$viewValue |limitTo:10" 
                                                    typeahead-input-formatter="newModel.ledgerTypeLable(model.currentReport.parameterValues.LEDGER_TYPE)" >
                                         </td>
                                     </tr>

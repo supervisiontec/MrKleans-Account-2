@@ -29,7 +29,7 @@ public class JournalService {
 
     @Autowired
     private JournalRepository journalRepository;
-   
+
     @Autowired
     private BranchRepository branchRepository;
 
@@ -37,10 +37,10 @@ public class JournalService {
         int count = 0;
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.JOURNAL);
         int deleteNumber = journalRepository.getDeleteNumber();
-        String searchCode=getSearchCode(Constant.CODE_JOURNAL,SecurityUtil.getCurrentUser().getBranch(),number);
-        String transactionDate=null;
+        String searchCode = getSearchCode(Constant.CODE_JOURNAL, SecurityUtil.getCurrentUser().getBranch(), number);
+        String transactionDate = null;
         for (TAccLedger tAccLedger : list) {
-            transactionDate=tAccLedger.getTransactionDate();
+            transactionDate = tAccLedger.getTransactionDate();
             tAccLedger.setNumber(number);
             tAccLedger.setSearchCode(searchCode);
             tAccLedger.setDeleteRefNo(deleteNumber);
@@ -67,7 +67,7 @@ public class JournalService {
     }
 
     private String getSearchCode(String code, Integer branch, int number) {
-         MBranch branchModel = branchRepository.findOne(branch);
+        MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
         return code + "/" + branchCode + "/" + number;
     }
@@ -80,5 +80,18 @@ public class JournalService {
         return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.VOUCHER);
     }
 
+    public List<TAccLedger> getLedgerTypeDataList(String name, String fromDate, String toDate, String branch, String year) {
+        return journalRepository.getLedgerTypeDataList(name, fromDate, toDate, branch, year);
+//        return journalRepository.getLedgerTypeDataList(name, null,null,null,null);
+    }
+
+    public Integer saveEditEnteries(List<TAccLedger> list) {
+        List<TAccLedger> save = journalRepository.save(list);
+        return save.size();
+    }
+
+    public List<TAccLedger> getdeleteRefDetails(Integer number) {
+        return journalRepository.findByDeleteRefNo(number);
+    }
 
 }

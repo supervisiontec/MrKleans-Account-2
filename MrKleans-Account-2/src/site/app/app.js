@@ -123,6 +123,10 @@
                             templateUrl: "app/accounts/journal/journal.html",
                             controller: "journalController"
                         })
+                        .when("/transaction/edit-transaction", {
+                            templateUrl: "app/accounts/edit-transaction/edit-transaction.html",
+                            controller: "editTransactionController"
+                        })
                         
                         // services
                         

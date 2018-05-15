@@ -158,6 +158,10 @@ tr.ng-leave{
     background-color: $primary-color !important;
     color: $light-font-color !important;
 }
+.select-default-row-table-header{
+    background-color: $default-color !important;
+    color: $light-font-color !important;
+}
 
 .select-success-row{
     color: $light-font-color;
@@ -179,4 +183,4 @@ tbody tr input{
 .modal-dialog-1200 {
     width: 1200px;
     margin-left: -150px
-} 
+}

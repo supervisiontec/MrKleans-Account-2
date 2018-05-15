@@ -41,6 +41,7 @@ public interface ReturnChequeRepository extends JpaRepository<TAccLedger, Intege
             + "      t_acc_ledger.is_main,\n"
             + "      t_acc_ledger.is_cheque,\n"
             + "      t_acc_ledger.search_code\n"
+            + "      t_acc_ledger.is_edit\n"
             + "from t_acc_ledger\n"
             + "where t_acc_ledger.acc_account=:account and t_acc_ledger.is_cheque=1\n"
             + "group by t_acc_ledger.reconcile_group\n"

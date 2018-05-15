@@ -5,6 +5,7 @@
  */
 package com.mac.care_point.transaction.account_ledger;
 
+import com.mac.care_point.transaction.account_ledger.model.ParamModel;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.util.List;
@@ -39,6 +40,23 @@ public class JournalController {
     @RequestMapping(value = "/find-general-voucher-number-and-branch/{number}", method = RequestMethod.GET)
     public List<TAccLedger> findGeneralVoucherByNumberAndBranch(@PathVariable("number")Integer number) {
         return journalService.findGeneralVoucherByNumberAndBranch(number, SecurityUtil.getCurrentUser().getBranch());
+    }
+    @RequestMapping(value = "/get-ledger-type-data-list", method = RequestMethod.POST)
+    public List<TAccLedger> getLedgerTypeDataList(@RequestBody ParamModel paramModel) {
+        System.out.println(paramModel.getName());
+        System.out.println(paramModel.getFromDate());
+        System.out.println(paramModel.getToDate());
+        System.out.println(paramModel.getBranch());
+        System.out.println(paramModel.getFinancialYear());
+        return journalService.getLedgerTypeDataList(paramModel.getName(),paramModel.getFromDate(),paramModel.getToDate(),paramModel.getBranch(),paramModel.getFinancialYear());
+    }
+    @RequestMapping(value = "/get-delete-ref-details/{number}", method = RequestMethod.GET)
+    public List<TAccLedger> getdeleteRefDetails(@PathVariable("number")Integer number) {
+        return journalService.getdeleteRefDetails(number);
+    }
+    @RequestMapping(value = "/save-edit-enteries", method = RequestMethod.POST)
+    public Integer saveEditEnteries(@RequestBody List<TAccLedger> list) {
+        return journalService.saveEditEnteries(list);
     }
     
 }

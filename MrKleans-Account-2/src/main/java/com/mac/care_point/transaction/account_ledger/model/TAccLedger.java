@@ -118,11 +118,14 @@ public class TAccLedger implements Serializable {
     
     @Column(name = "cost_center")
     private Integer costCenter;
+   
+    @Column(name = "is_edit")
+    private Integer isEdit;
 
     public TAccLedger() {
     }
 
-    public TAccLedger(Integer indexNo, String transactionDate, Integer number, String searchCode, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, boolean isCheque, Integer financialYear, Integer costDepartment, Integer costCenter) {
+    public TAccLedger(Integer indexNo, String transactionDate, Integer number, String searchCode, String currentDate, String time, int branch, int currentBranch, int user, BigDecimal debit, BigDecimal credit, String formName, String refNumber, String type, Integer typeIndexNo, Integer deleteRefNo, String description, Integer accAccount, String chequeDate, Boolean bankReconciliation, Integer reconcileAccount, Integer reconcileGroup, boolean isMain, boolean isCheque, Integer financialYear, Integer costDepartment, Integer costCenter, Integer isEdit) {
         this.indexNo = indexNo;
         this.transactionDate = transactionDate;
         this.number = number;
@@ -150,6 +153,15 @@ public class TAccLedger implements Serializable {
         this.financialYear = financialYear;
         this.costDepartment = costDepartment;
         this.costCenter = costCenter;
+        this.isEdit = isEdit;
+    }
+
+    public Integer getIsEdit() {
+        return isEdit;
+    }
+
+    public void setIsEdit(Integer isEdit) {
+        this.isEdit = isEdit;
     }
 
     public Integer getFinancialYear() {

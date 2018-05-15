@@ -28,4 +28,23 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
 
     public List<TAccLedger> findByNumberAndBranchAndType(Integer number, Integer branch, String JOURNAL);
 
+    @Query(value = "select t_acc_ledger.`*`\n"
+            + "     from t_acc_ledger\n"
+            + "     where t_acc_ledger.`type`=:name and\n"
+            + "     (:fromDate is null or t_acc_ledger.transaction_date>=:fromDate) and\n"
+            + "     (:toDate is null or t_acc_ledger.transaction_date<=:toDate) and\n"
+            + "     (:branch is null or t_acc_ledger.branch=:branch) and\n"
+            + "     (:year is null or t_acc_ledger.financial_year=:year)\n"
+            + "     group by t_acc_ledger.delete_ref_no\n"
+            + "     order by t_acc_ledger.index_no", nativeQuery = true)
+    public List<TAccLedger> getLedgerTypeDataList(
+            @Param("name") String name,
+            @Param("fromDate") String fromDate,
+            @Param("toDate") String toDate,
+            @Param("branch") String branch,
+            @Param("year") String year
+    );
+
+    public List<TAccLedger> findByDeleteRefNo(Integer number);
+
 }
