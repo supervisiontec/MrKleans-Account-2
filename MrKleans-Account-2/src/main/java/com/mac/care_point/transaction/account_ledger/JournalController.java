@@ -43,11 +43,6 @@ public class JournalController {
     }
     @RequestMapping(value = "/get-ledger-type-data-list", method = RequestMethod.POST)
     public List<TAccLedger> getLedgerTypeDataList(@RequestBody ParamModel paramModel) {
-        System.out.println(paramModel.getName());
-        System.out.println(paramModel.getFromDate());
-        System.out.println(paramModel.getToDate());
-        System.out.println(paramModel.getBranch());
-        System.out.println(paramModel.getFinancialYear());
         return journalService.getLedgerTypeDataList(paramModel.getName(),paramModel.getFromDate(),paramModel.getToDate(),paramModel.getBranch(),paramModel.getFinancialYear());
     }
     @RequestMapping(value = "/get-delete-ref-details/{number}", method = RequestMethod.GET)
@@ -57,6 +52,11 @@ public class JournalController {
     @RequestMapping(value = "/save-edit-enteries", method = RequestMethod.POST)
     public Integer saveEditEnteries(@RequestBody List<TAccLedger> list) {
         return journalService.saveEditEnteries(list);
+    }
+    
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Integer delete(@RequestBody List<TAccLedger> list) {
+        return journalService.delete(list);
     }
     
 }

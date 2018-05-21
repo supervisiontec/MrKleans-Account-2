@@ -9,6 +9,10 @@
             dashBoardMainList: [],
             dashBoardMainLable: [],
             dashBoardMainData: [],
+            ledgerTypeLabels: [],
+            ledgerTypeValues: [],
+            db2Labels: [],
+            db2Values: [],
             constructor: function () {
                 var that = this;
                 this.data = dashBoardFactory.newData();
@@ -16,9 +20,16 @@
                 dashBoardService.getDashBoardMain()
                         .success(function (data) {
                             that.dashBoardMainList = data;
-                            console.log(data);
                             that.getDashBoardMainLable();
                             that.getDashBoardMainData();
+                        });
+                dashBoardService.getDashBoard1()
+                        .success(function (data) {
+                            that.setDashboardData1(data);
+                        });
+                dashBoardService.getDashBoard2()
+                        .success(function (data) {
+                            that.setDashboardData2(data);
                         });
             }
             ,
@@ -29,7 +40,7 @@
                     labelList.push(value[1]);
                 });
                 that.dashBoardMainLable = labelList;
-                
+
             }
             ,
             getDashBoardMainData: function () {
@@ -40,7 +51,35 @@
                 });
                 that.dashBoardMainData = dataList;
             }
-
+            , setDashboardData1: function (data) {
+                var that = this;
+                var dataList = [];
+                var labelList = [];
+                angular.forEach(data[1], function (value) {
+                    dataList.push(value);
+                });
+                angular.forEach(data[0], function (value) {
+                    labelList.push(value);
+                });
+                that.ledgerTypeLabels=labelList;
+                that.ledgerTypeValues=dataList;
+            }
+            , setDashboardData2: function (data) {
+                var that = this;
+                var labelList = [];
+                var mainDataList = [];
+                var dataList1 = [];
+                var dataList2 = [];
+                angular.forEach(data, function (value) {
+                    labelList.push(value[0]);
+                    dataList1.push(value[1]);
+                    dataList2.push(value[2]);
+                });
+                mainDataList.push(dataList1);
+                mainDataList.push(dataList2);
+                that.db2Labels=labelList;
+                that.db2Values=mainDataList;
+            }
         };
         return dashBoard;
     };

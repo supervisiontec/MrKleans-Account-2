@@ -11,7 +11,9 @@ import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.zutil.SecurityUtil;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +95,26 @@ public class JournalService {
     public List<TAccLedger> getdeleteRefDetails(Integer number) {
         return journalRepository.findByDeleteRefNo(number);
     }
+
+    public Integer delete(List<TAccLedger> list) {
+        List<TAccLedger> editedlist = new ArrayList<>();
+        for (TAccLedger tAccLedger : list) {
+            BigDecimal value = new BigDecimal(0);
+            value = tAccLedger.getCredit();
+            tAccLedger.setCredit(tAccLedger.getDebit());
+            tAccLedger.setIndexNo(null);
+            tAccLedger.setDebit(value);
+            tAccLedger.setIsEdit(2);
+
+            editedlist.add(tAccLedger);
+        }
+        int size = journalRepository.save(editedlist).size();
+        if (size == list.size()) {
+            return size;
+        }
+        return -1;
+    }
+
+   
 
 }

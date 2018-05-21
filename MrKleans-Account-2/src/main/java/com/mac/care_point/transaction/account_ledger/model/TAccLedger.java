@@ -38,7 +38,7 @@ public class TAccLedger implements Serializable {
     @Basic(optional = false)
     @Column(name = "number")
     private Integer number;
-    
+
     @Basic(optional = false)
     @Column(name = "search_code")
     private String searchCode;
@@ -103,22 +103,22 @@ public class TAccLedger implements Serializable {
 
     @Column(name = "reconcile_group")
     private Integer reconcileGroup;
-   
+
     @Column(name = "is_main")
     private boolean isMain;
-   
+
     @Column(name = "is_cheque")
     private boolean isCheque;
-    
+
     @Column(name = "financial_year")
     private Integer financialYear;
-    
+
     @Column(name = "cost_department")
     private Integer costDepartment;
-    
+
     @Column(name = "cost_center")
     private Integer costCenter;
-   
+
     @Column(name = "is_edit")
     private Integer isEdit;
 
@@ -188,7 +188,6 @@ public class TAccLedger implements Serializable {
         this.costCenter = costCenter;
     }
 
-
     public String getSearchCode() {
         return searchCode;
     }
@@ -212,7 +211,6 @@ public class TAccLedger implements Serializable {
     public void setIsMain(boolean isMain) {
         this.isMain = isMain;
     }
-
 
     public Integer getReconcileAccount() {
         return reconcileAccount;

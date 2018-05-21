@@ -1,36 +1,170 @@
 <div class="index-content-header"></div>
 
 <div class="index-content-body" style="height: calc(100vh - 52px)">
-    <div class="col-sm-4">
-        <div class=" panel panel-primary">
-            <div class="panel-heading "> Information Chart 01</div>
-            <div class="panel-body">
-                <canvas id="doughnut" class="chart chart-doughnut"
-                        chart-data="model.dashBoardMainData" chart-labels="model.dashBoardMainLable">
-                </canvas> 
+    <div class="row col-lg-12 nopadding" style="border-bottom: 1px solid #ccc5c5">
+        <div class="col-lg-6 col-md-12 col-xs-12" style="padding-bottom: 10px">
+            <div class="col-lg-5">
+                <label class="control-label">FROM DATE :</label>
+                <input type="date" class="form-control" ng-model="model.filter.fromDate"/>
+            </div>
+            <div class="col-lg-5">
+                <label class="control-label">TO DATE :</label>
+                <input type="date" class="form-control" ng-model="model.filter.toDate"/>
+            </div>
+            <div class="col-lg-2">
+                <table class="table-rounded control-table square-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a class="btn btn-primary" style="margin-top: 16px" ng-click="ui.filterDashboard()">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
-        <div class=" panel panel-primary">
-            <div class="panel-heading "> Information Chart 02</div>
-            <div class="panel-body">
-                <canvas id="line" class="chart chart-line" chart-data="datas"
-                        chart-labels="label" chart-series="series" chart-options="options"
-                        chart-dataset-override="datasetOverride" chart-click="onClick">
-                </canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class=" panel panel-primary">
-            <div class="panel-heading "> Information Chart 03</div>
-            <div class="panel-body">
-                <canvas id="bar" class="chart chart-bar"
-                        chart-data="data1" chart-labels="label1"> chart-series="series1"
-                </canvas>
-            </div>
-        </div>
-    </div>
+    <div class="smart-scroll-y col-lg-12" style="height: calc(100vh - 129px);padding-top: 3px">
 
+        <div class="row nopadding">
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> main </div>
+                    <div class="panel-body">
+                        <canvas id="doughnut" class="chart chart-doughnut"
+                                chart-data="model.dashBoardMainData" chart-labels="model.dashBoardMainLable"
+                                chart-colors="colors4">
+                        </canvas> 
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> Ledger Type count</div>
+                    <div class="panel-body">
+                        <canvas id="bar" class="chart chart-bar"
+                                chart-data="model.ledgerTypeValues" chart-labels="model.ledgerTypeLabels" chart-series="series"
+                                chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> Expense Income</div>
+                    <div class="panel-body">
+                        <canvas id="bar" class="chart chart-bar"
+                                chart-data="model.db2Values" chart-labels="model.db2Labels" chart-series="series2"  chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row nopadding">
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 04</div>
+                    <div class="panel-body">
+                        <canvas id="line" class="chart chart-line" chart-data="data4"
+                                chart-labels="labels4" chart-series="series4" chart-options="options4"
+                                chart-dataset-override="datasetOverride4" chart-click="onClick4"  chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 05</div>
+                    <div class="panel-body">
+                        <canvas id="tables" class="chart chart-line" chart-data="data4" 
+                                chart-options="options4" chart-labels="labels4" chart-colors="colors4" 
+                                >
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 06</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-bar" id="bar" chart-data="data4" 
+                                chart-options="options4" chart-labels="labels4" chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row nopadding">
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 07</div>
+                    <div class="panel-body">
+                        <canvas id="tables" class="chart chart-line" chart-data="data4" 
+                                chart-options="options4" chart-labels="labels4" chart-colors="colors4" 
+                                >
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 08</div>
+                    <div class="panel-body">
+                        <canvas id="line" class="chart chart-line" chart-data="data4"
+                                chart-labels="labels4" chart-series="series4" chart-options="options4"
+                                chart-dataset-override="datasetOverride4" chart-click="onClick4"  chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 09</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-bar" id="bar" chart-data="data4" 
+                                chart-options="options4" chart-labels="labels4" chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row nopadding">
+
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 10</div>
+                    <div class="panel-body">
+                        <canvas id="tables" class="chart chart-line" chart-data="data4" 
+                                chart-options="options4" chart-labels="labels4" chart-colors="colors4" 
+                                >
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 11</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-bar" id="bar" chart-data="data4" 
+                                chart-options="options4" chart-labels="labels4" chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class=" panel panel-primary">
+                    <div class="panel-heading "> test 12</div>
+                    <div class="panel-body">
+                        <canvas id="line" class="chart chart-line" chart-data="data4"
+                                chart-labels="labels4" chart-series="series4" chart-options="options4"
+                                chart-dataset-override="datasetOverride4" chart-click="onClick4"  chart-colors="colors4">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

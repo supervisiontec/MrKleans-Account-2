@@ -44,17 +44,18 @@
                 editTransactionService.loadCostDepartment()
                         .success(function (data) {
                             that.costDepartmentList = data;
-                            console.log(that.costDepartmentList);
                         });
                 editTransactionService.loadCostCenter()
                         .success(function (data) {
                             that.costCenterList = data;
-                            console.log(that.costCenterList);
                         });
                 editTransactionService.loadfinancialYear()
                         .success(function (data) {
                             that.financialYearList = data;
-                            console.log(that.financialYearList);
+                        });
+                editTransactionService.getPermission('Edit Transaction')
+                        .success(function (data) {
+                            that.userPermission = data;
                         });
             },
             branchLable: function (model) {
@@ -117,24 +118,22 @@
                 });
                 return label;
             }
-            , getLedgerTypeList: function (name,param) {
-               
+            , getLedgerTypeList: function (name, param) {
+
                 var defer = $q.defer();
                 var that = this;
                 that.selectLedgerType = name;
-                var fDate=$filter('date')(param.fromDate, 'yyyy-MM-dd');
-                var tDate=$filter('date')(param.toDate, 'yyyy-MM-dd');
-                var paramModel={
-                    "name":that.selectLedgerType,
-                    "fromDate":fDate,
-                    "toDate":tDate,
-                    "branch":param.branch,
-                    "financialYear":param.financialYear
+                var fDate = $filter('date')(param.fromDate, 'yyyy-MM-dd');
+                var tDate = $filter('date')(param.toDate, 'yyyy-MM-dd');
+                var paramModel = {
+                    "name": that.selectLedgerType,
+                    "fromDate": fDate,
+                    "toDate": tDate,
+                    "branch": param.branch,
+                    "financialYear": param.financialYear
                 };
-                console.log(JSON.stringify(paramModel));
                 editTransactionService.getLedgerTypeDataList(JSON.stringify(paramModel))
                         .success(function (data) {
-                            console.log('success');
                             that.accLedgerTypeDataList = data;
                         });
                 return defer.promise;
@@ -146,7 +145,6 @@
                 editTransactionService.getDeleteRefDetails(number)
                         .success(function (data) {
                             that.deleteRefDetailList = data;
-                            console.log(that.deleteRefDetailList);
                             that.tabActive = 1;
                         });
                 return defer.promise;
@@ -157,20 +155,33 @@
                 that.tempData = data;
             }
             , addData: function () {
+                this.tempData.isEdit=1;
                 this.deleteRefDetailList.push(this.tempData);
                 this.tempData = editTransactionFactory.tempData();
-                console.log(this.deleteRefDetailList);
             }
             , refresh: function () {
                 this.deleteRefDetailList = [];
                 this.tempData = editTransactionFactory.tempData();
                 this.tabActive = 0;
-                this.accLedgerTypeDataList=[];
+                this.accLedgerTypeDataList = [];
             }
             , save: function () {
                 var defer = $q.defer();
                 var that = this;
                 editTransactionService.saveEditedData(JSON.stringify(this.deleteRefDetailList))
+                        .success(function (data) {
+                            that.refresh();
+                            defer.resolve(data);
+                        })
+                        .error(function (data) {
+                            defer.reject(data);
+                        });
+                return defer.promise;
+            }
+            , delete: function () {
+                var defer = $q.defer();
+                var that = this;
+                editTransactionService.delete(JSON.stringify(this.deleteRefDetailList))
                         .success(function (data) {
                             that.refresh();
                             defer.resolve(data);

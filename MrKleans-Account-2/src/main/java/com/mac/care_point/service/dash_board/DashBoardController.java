@@ -27,4 +27,12 @@ public class DashBoardController {
     public List<Object[]> getDashBoardMain() {
         return dashBoardService.getDashBoardMain();
     }
+    @RequestMapping(value = "/dash-board-1", method = RequestMethod.GET)
+    public List<Object> getDashBoard1() {
+        return dashBoardService.getDashBoard1();
+    }
+    @RequestMapping(value = "/dash-board-2", method = RequestMethod.GET)
+    public List<Object[]> getDashBoard2() {
+        return dashBoardService.getDashBoard2();
+    }
 }

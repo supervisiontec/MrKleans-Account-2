@@ -47,7 +47,7 @@
                                 .confirm(function () {
                                     $scope.model.save()
                                             .then(function (data) {
-                                                Notification.success(' journal entery save success.. ! code is ' + data);
+                                                Notification.success(' journal entery save success.. !');
                                                 $scope.ui.mode = "IDEAL";
                                             });
 

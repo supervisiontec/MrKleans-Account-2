@@ -245,7 +245,7 @@
                         <col style="width: 7%"/>
                         <tbody>
                             <tr class="background-dark" ng-repeat="data in model.deleteRefDetailList">
-                                <td>{{data.number}}</td>
+                                <td><label class="label" ng-class="ui.setIsEditClass(data.isEdit)"> {{data.number|fixedLength:5}}</label></td>
                                 <td>{{data.searchCode}}</td>
                                 <td>{{model.accountLable(data.accAccount)}}</td>
                                 <td>{{data.refNumber===null?'- - -':data.refNumber}}</td>
@@ -271,6 +271,7 @@
 
 <div class="fab-container">
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL' && model.tabActive === 0" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-danger" ng-show="ui.mode === 'NEW' && model.tabActive === 1" ng-click="ui.delete();"><i class="glyphicon glyphicon-remove"></i></a>
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW' && model.tabActive === 1" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
 </div>
 
