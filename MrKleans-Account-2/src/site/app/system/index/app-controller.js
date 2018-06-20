@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("appController", function ($scope, $cookies, $rootScope, $window, $filter, $location, SecurityService) {
+            .controller("appController", function ($scope, $http, $cookies, $rootScope, $window, $filter, $location, trialBalanceService, SecurityService) {
                 $scope.hamburgerOpen = true;
                 $scope.ui = {};
                 $scope.permissionList = [];
@@ -14,7 +14,7 @@
 
                 $scope.homepageUrls = [];
 
-                $scope.currentPageName = '';
+                $scope.currentPageName = 'Home';
 
                 $scope.loginUser = "";
                 $scope.currentBranch = "";
@@ -37,8 +37,12 @@
                             .success(function (data) {
                                 $rootScope.permissionList = data;
                             });
+                    trialBalanceService.getCompanyName()
+                            .success(function (data) {
+                                $rootScope.companyName = data.name;
+                            });
+                 
                 };
-
 
                 $scope.toggleHamburger = function (value) {
                     $scope.hamburgerOpen = !$scope.hamburgerOpen;

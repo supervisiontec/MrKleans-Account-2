@@ -30,8 +30,13 @@ public class SupplierController {
     public List<MSupplier> findAll() {
         return supplierService.findAll();
     }
-     @RequestMapping(value = "/save", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public MSupplier saveSupplier(@RequestBody MSupplier supplier) {
         return supplierService.saveSupplier(supplier);
+    }
+    @RequestMapping(value = "/get-accrued-suppliers", method = RequestMethod.GET)
+    public List<MSupplier> getAccruedSuppliers() {
+        return supplierService.getAccruedSuppliers();
     }
 }

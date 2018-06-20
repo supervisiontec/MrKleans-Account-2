@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/care-point/master/brand")
-
 public class BrandController {
 
     @Autowired

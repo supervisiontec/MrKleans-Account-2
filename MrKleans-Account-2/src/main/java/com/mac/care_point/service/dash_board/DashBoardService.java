@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -23,28 +24,39 @@ public class DashBoardService {
 
     @Autowired
     private DashBoardRepository dashBoardRepository;
+
     @Autowired
     private JournalRepository journalRepository;
 
-    public List<Object[]> getDashBoardMain() {
-        return dashBoardRepository.getDashBoardMain();
+    public List<Object[]> getDashBoardMain(@PathVariable String date) {
+        List<Object[]> dashBoardMain = dashBoardRepository.getDashBoardMain(date);
+        System.out.println(dashBoardMain);
+        return dashBoardMain;
     }
 
-    public List<Object> getDashBoard1() {
-        List<Object> ledgerTypes = journalRepository.getLedgerTypes();
+
+    public List<Object> getDashBoard2(String fDate, String tDate) {
+        List<Object> ledgerTypes = journalRepository.getLedgerTypes(fDate,tDate);
         List<Integer> countList = new ArrayList<>();
         List<Object> retuenList = new ArrayList<>();
         for (Object ledgerType : ledgerTypes) {
-            countList.add(journalRepository.getLedgerTypeCount(ledgerType.toString()).size());
+            countList.add(journalRepository.getLedgerTypeCount(ledgerType.toString(),fDate,tDate).size());
         }
         retuenList.add(ledgerTypes);
         retuenList.add(countList);
         return retuenList;
     }
 
-    public List<Object[]> getDashBoard2() {
-//        List<Object[]> dataList = journalRepository.getDashBoard2();
-        return journalRepository.getDashBoard2();
+    public List<Object[]> getDashBoard3(String fDate, String tDate) {
+        return journalRepository.getDashBoard3(fDate,tDate);
     }
 
+    public List<Object[]> getDashBoard4(String date) {
+        List<Object[]> dashBoardMain = dashBoardRepository.getDashBoard4(date);
+        return dashBoardMain;
+    }
+    public List<Object[]> getDashBoard5(String date) {
+        List<Object[]> dashBoardMain = dashBoardRepository.getDashBoard5(date);
+        return dashBoardMain;
+    }
 }

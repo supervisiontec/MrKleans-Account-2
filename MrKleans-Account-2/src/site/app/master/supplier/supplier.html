@@ -25,7 +25,7 @@
                         <tr>
                             <td><label>Type :</label></td>
                             <td>
-                                <select style="padding-left: 1px;" class="form-control" id="resident" ng-disabled="ui.mode !== 'NEW' && ui.mode !== 'EDIT'" ng-model="model.supplier.type">
+                                <select style="padding-left: 1px;" class="form-control" id="resident" ng-disabled="ui.mode !== 'NEW' && ui.mode === 'EDIT'" ng-model="model.supplier.type">
                                     <option value="NORMAL">NORMAL</option>
                                     <option value="ACCRUED">ACCRUED</option>
                                 </select>
@@ -85,7 +85,7 @@
                         <col style="width: 10%">
                         <col style="width: 10%">
                         <tbody>
-                            <tr ng-repeat="supplier in model.supplierList| filter:model.search.name | orderBy:'indexNo'">
+                            <tr ng-repeat="supplier in model.supplierList| filter:model.search.name | orderBy:'-indexNo'">
                                 <td><label class="label label-default">{{supplier.indexNo|fixedLength:5}}</label></td>
                                 <td>{{supplier.name}}</td>
                                 <td>{{supplier.contactName===null?'- - -':supplier.contactName}}</td>

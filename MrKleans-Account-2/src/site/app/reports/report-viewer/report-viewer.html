@@ -143,7 +143,7 @@
                                     <tr ng-show="ui.isParameterAvailable('AMOUNT')">
                                         <td><label class="control-label">AMOUNT</label></td>
                                         <td>
-                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.AMOUNT" >
+                                            <input class="form-control" id="status" smart-input="integer" type="number" ng-model="model.currentReport.parameterValues.AMOUNT" >
                                         </td>
                                     </tr>
                                     <tr ng-show="ui.isParameterAvailable('ITEM')">

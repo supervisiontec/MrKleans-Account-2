@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("createAccountController", function ($scope,printService,$filter, createAccountModel, $timeout, PrintPane, Notification, ConfirmPane) {
+            .controller("createAccountController", function ($scope, printService, $filter, createAccountModel, $timeout, PrintPane, Notification, ConfirmPane) {
                 $scope.model = new createAccountModel();
                 $scope.printService = new printService();
                 $scope.ui = {};
@@ -95,21 +95,10 @@
 
                     PrintPane.printConfirm("")
                             .confirm(function () {
-//                                var divToPrint = document.getElementById("printDiv");
-//                                newWin = window.open("financial_accounts");
-//                                newWin.document.write(divToPrint.outerHTML);
-//                                newWin.print();
-//                                newWin.close();
-                            $scope.printService.printPdf('printDiv');
+                                $scope.printService.printPdf('printDiv');
                             })
                             .discard(function () {
-                            $scope.printService.printExcel('printDiv');
-//                                var blob = new Blob([document.getElementById('printDiv').innerHTML], {
-////                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
-//                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//                                });
-//                                 var date=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
-//                                FileSaver.saveAs(blob, "financial_accounts("+date+").xls");
+                                $scope.printService.printExcel('printDiv','Financial_Account');
                             });
                 };
                 $scope.ui.getFinalAccountCount = function (list) {

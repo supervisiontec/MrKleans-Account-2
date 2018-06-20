@@ -6,7 +6,6 @@
 package com.mac.care_point.account_setting.acc_code_setting;
 
 import com.mac.care_point.account_setting.acc_code_setting.model.AccCodeSetting;
-import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;

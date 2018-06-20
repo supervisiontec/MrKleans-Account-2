@@ -273,7 +273,7 @@ public class SupplierPaymentSevrice {
                 BigDecimal balance = (BigDecimal) subtract(tAccLedger.getDebit(), tAccLedger.getCredit());
                 if (credit.doubleValue() > balance.doubleValue()) {
                     TAccLedger tAccLedger1 = new TAccLedger();
-                    tAccLedger1.setAccAccount(mix.getData().getAccAccount());// over payment account
+                    tAccLedger1.setAccAccount(mix.getData().getAccAccount());
                     tAccLedger1.setBankReconciliation(false);//
                     tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
                     tAccLedger1.setChequeDate(mix.getData().getChequeDate());
@@ -288,12 +288,13 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setSearchCode(searchCode);
                     tAccLedger1.setIsCheque(tAccLedger.getIsCheque());
                     tAccLedger1.setNumber(number);
-                    tAccLedger1.setReconcileAccount(0);//
-                    tAccLedger1.setReconcileGroup(tAccLedger.getReconcileGroup());//
+                    tAccLedger1.setReconcileAccount(0);
+                    tAccLedger1.setReconcileGroup(tAccLedger.getReconcileGroup());
                     tAccLedger1.setRefNumber(mix.getData().getRefNumber());
                     tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
                     tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
                     tAccLedger1.setType(mix.getData().getType());
+                    tAccLedger1.setIsEdit(0);
                     tAccLedger1.setTypeIndexNo(mix.getData().getTypeIndexNo());
                     tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
                     paymentRepository.save(tAccLedger1);
@@ -324,12 +325,12 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setType(mix.getData().getType());
                     tAccLedger1.setTypeIndexNo(mix.getData().getTypeIndexNo());
                     tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+                    tAccLedger1.setIsEdit(0);
                     paymentRepository.save(tAccLedger1);
                     break;
                 }
 
             }
-
 //            
             for (DataSub sub : mix.getDataList()) {
                 if (sub.getPay().doubleValue() > 0) {
@@ -359,10 +360,8 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 
                     paymentRepository.save(tAccLedger1);
-
                 }
             }
-
         }
         if ("SETTLEMENT".equals(mix.getData().getAccType())) {
             if ("RETURN".equals(mix.getData().getAccTypeSub())) {

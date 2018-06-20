@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -35,21 +36,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/security")
 public class SESecurityController {
 
-    @Autowired 
+    @Autowired
     private MUserService userService;
-    
-    @Autowired 
+
+    @Autowired
     private BackupService backupService;
-   
-    @Autowired 
+
+    @Autowired
     private BackupDetailService backupDetailService;
-    
+
+    @Value("${backup-creater}")
+    private Boolean backupCreater;
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public Principal login(Principal principal) {
-        String lastBackupDate = backupService.getLastBackupDate();
-        MBackupDetail backupDetail = backupDetailService.findAll();
-        Backup.startBackup(lastBackupDate,backupDetail);
-        backupService.updateNewDate();
+        System.out.println("backupCreater : "+backupCreater);
+        if (backupCreater) {
+            String lastBackupDate = backupService.getLastBackupDate();
+            MBackupDetail backupDetail = backupDetailService.findAll();
+
+            Backup.startBackup(lastBackupDate, backupDetail);
+            backupService.updateNewDate();
+        }
         return principal;
     }
 
@@ -72,6 +80,7 @@ public class SESecurityController {
     public Integer getCurrentBranch() {
         return SecurityUtil.getCurrentUser().getBranch();
     }
+
     @RequestMapping(value = "/user-list", method = RequestMethod.GET)
     public List<MUser> getUsers() {
         return userService.getUsers();

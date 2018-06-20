@@ -1,5 +1,5 @@
 (function () {
-    //index module
+//index module
     angular.module("appModule", [
         "ngRoute",
         "ngCookies",
@@ -11,6 +11,7 @@
         "itemModule",
         "costCenterModule",
         "costDepartmentModule",
+        "profitAndLostModule",
         // service
         "dashBoardModule",
         "budgetModule",
@@ -29,13 +30,12 @@
         "ngFileSaver",
         "accCodeSettingModule"
     ]);
-
     //constants
     angular.module("appModule")
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? "http://localhost:8075"
+                        ? 'http://localhost:8070'
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 
@@ -89,7 +89,7 @@
                             templateUrl: "app/master/cost-department/cost-department.html",
                             controller: "costDepartmentController"
                         })
-                        
+
                         //transaction
                         .when("/transaction/bank-reconciliation", {
                             templateUrl: "app/accounts/bank-reconciliation/bank-reconciliation.html",
@@ -127,9 +127,13 @@
                             templateUrl: "app/accounts/edit-transaction/edit-transaction.html",
                             controller: "editTransactionController"
                         })
-                        
+                        .when("/transaction/profit-and-lost", {
+                            templateUrl: "app/accounts/profit-and-lost/profit-and-lost.html",
+                            controller: "profitAndLostController"
+                        })
+
                         // services
-                        
+
                         .when("/service/item-sales", {
                             templateUrl: "app/service/item-sales/item-sales.html",
                             controller: "itemSalesController"
@@ -166,7 +170,7 @@
                             templateUrl: "app/master/budget/budget.html",
                             controller: "budgetController"
                         })
-                        
+
                         // setting
                         .when("/setting/account-settings", {
                             templateUrl: "app/setting/account-setting/account-settings.html",
@@ -180,11 +184,10 @@
                             templateUrl: "app/setting/account-code-setting/account-code-setting.html",
                             controller: "accCodeSettingController"
                         })
-                        
+
                         //otherwise
                         .otherwise({
                             redirectTo: "/"
                         });
             });
-
 }());

@@ -6,6 +6,7 @@
 package com.mac.care_point.master.supplier;
 
 import com.mac.care_point.master.supplier.model.MSupplier;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -13,5 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author kasun
  */
 public interface SupplierRepository extends JpaRepository<MSupplier, Integer>{
+
+    public List<MSupplier> findByType(String ACCRUED);
     
 }

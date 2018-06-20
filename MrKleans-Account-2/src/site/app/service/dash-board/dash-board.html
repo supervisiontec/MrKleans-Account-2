@@ -1,7 +1,7 @@
 <div class="index-content-header"></div>
 
 <div class="index-content-body" style="height: calc(100vh - 52px)">
-    <div class="row col-lg-12 nopadding" style="border-bottom: 1px solid #ccc5c5">
+    <div class="row col-lg-12 nopadding" ng-show="true" style="border-bottom: 1px solid #ccc5c5">
         <div class="col-lg-6 col-md-12 col-xs-12" style="padding-bottom: 10px">
             <div class="col-lg-5">
                 <label class="control-label">FROM DATE :</label>
@@ -27,66 +27,67 @@
             </div>
         </div>
     </div>
-    <div class="smart-scroll-y col-lg-12" style="height: calc(100vh - 129px);padding-top: 3px">
+    <div class="smart-scroll-y col-lg-12" style="height: calc(100vh - 129px);padding-top: 3px"  ng-show="true">
 
         <div class="row nopadding">
             <div class="col-sm-4">
                 <div class=" panel panel-primary">
-                    <div class="panel-heading "> main </div>
+                    <div class="panel-heading "> Trial Balance</div>
                     <div class="panel-body">
                         <canvas id="doughnut" class="chart chart-doughnut"
                                 chart-data="model.dashBoardMainData" chart-labels="model.dashBoardMainLable"
-                                chart-colors="colors4">
+                                chart-colors="colors4" chart-click="onClick">
                         </canvas> 
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4" >
                 <div class=" panel panel-primary">
-                    <div class="panel-heading "> Ledger Type count</div>
+                    <div class="panel-heading "> Ledger Type Count</div>
                     <div class="panel-body">
                         <canvas id="bar" class="chart chart-bar"
-                                chart-data="model.ledgerTypeValues" chart-labels="model.ledgerTypeLabels" chart-series="series"
-                                chart-colors="colors4">
+                                chart-data="model.ledgerTypeValues" chart-labels="model.ledgerTypeLabels" 
+                                chart-series="series" chart-colors="colors4">
                         </canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4" >
                 <div class=" panel panel-primary">
                     <div class="panel-heading "> Expense Income</div>
                     <div class="panel-body">
                         <canvas id="bar" class="chart chart-bar"
-                                chart-data="model.db2Values" chart-labels="model.db2Labels" chart-series="series2"  chart-colors="colors4">
+                                chart-data="model.db2Values" chart-labels="model.db2Labels" 
+                                chart-series="series2" chart-colors="colors4">
                         </canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row nopadding">
+        <div class="row nopadding" >
             <div class="col-sm-4">
                 <div class=" panel panel-primary">
-                    <div class="panel-heading "> test 04</div>
+                    <div class="panel-heading "> Current Assets Analysis</div>
                     <div class="panel-body">
-                        <canvas id="line" class="chart chart-line" chart-data="data4"
-                                chart-labels="labels4" chart-series="series4" chart-options="options4"
-                                chart-dataset-override="datasetOverride4" chart-click="onClick4"  chart-colors="colors4">
+                        <canvas id="bar" class="chart chart-bar" chart-data="model.dashboardValues4"
+                                chart-labels="model.dashboardLabels4" chart-series=""
+                                chart-click="onClick4"  chart-colors="colors4">
                         </canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4" >
                 <div class=" panel panel-primary">
-                    <div class="panel-heading "> test 05</div>
+                    <div class="panel-heading "> Current Liabilities Analysis</div>
                     <div class="panel-body">
-                        <canvas id="tables" class="chart chart-line" chart-data="data4" 
-                                chart-options="options4" chart-labels="labels4" chart-colors="colors4" 
-                                >
+                        <canvas id="bar" class="chart chart-bar" chart-data="model.dashboardValues5"
+                                chart-labels="model.dashboardLabels5" chart-series=""
+                                chart-click="onClick5"  chart-colors="colors4">
                         </canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4" >
                 <div class=" panel panel-primary">
                     <div class="panel-heading "> test 06</div>
                     <div class="panel-body">
@@ -97,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div class="row nopadding">
+        <div class="row nopadding" >
             <div class="col-sm-4">
                 <div class=" panel panel-primary">
                     <div class="panel-heading "> test 07</div>
@@ -115,7 +116,7 @@
                     <div class="panel-body">
                         <canvas id="line" class="chart chart-line" chart-data="data4"
                                 chart-labels="labels4" chart-series="series4" chart-options="options4"
-                                chart-dataset-override="datasetOverride4" chart-click="onClick4"  chart-colors="colors4">
+                                chart-click="onClick4" chart-colors="colors4">
                         </canvas>
                     </div>
                 </div>
@@ -131,7 +132,7 @@
                 </div>
             </div>
         </div>
-        <div class="row nopadding">
+        <div class="row nopadding" >
 
             <div class="col-sm-4">
                 <div class=" panel panel-primary">
@@ -160,7 +161,7 @@
                     <div class="panel-body">
                         <canvas id="line" class="chart chart-line" chart-data="data4"
                                 chart-labels="labels4" chart-series="series4" chart-options="options4"
-                                chart-dataset-override="datasetOverride4" chart-click="onClick4"  chart-colors="colors4">
+                                chart-click="onClick4"  chart-colors="colors4">
                         </canvas>
                     </div>
                 </div>
@@ -168,3 +169,31 @@
         </div>
     </div>
 </div>
+<script type="text/ng-template" id="detailPopup.html">
+    <div class="col-lg-12 background-light no-padding modal-dialog-1200">
+        <div class="row">
+            <div class="modal-header bg-primary">
+                <center>
+                    Test Model
+                </center>
+                
+            </div>
+            <div class="modal-body" style="height:450px;padding-left:0px;padding-right:0px">
+                <div class="col-lg-12">
+                     <input type="text" class="search-input" ng-model="searchText" placeholder="search here..">
+                </div>
+                
+                <div class="col-xs-12 ">
+                   <table class="table table-striped table-bordered table-hover" style="width:100%">
+                        <tr>
+                            <th ng-repeat="column in cols">{{column}}</th>
+                        </tr>
+                        <tr ng-repeat="row in rows">
+                            <td ng-repeat="column in cols">{{row[column]}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

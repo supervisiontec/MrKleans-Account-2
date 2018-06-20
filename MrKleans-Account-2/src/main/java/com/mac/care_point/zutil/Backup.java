@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
-import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,6 +27,7 @@ public class Backup {
             System.out.println("System Backup already exists !");
             return false;
         } else {
+            System.out.println("backup creating !");
             return createBackup(backupDetail);
         }
     }
@@ -60,19 +59,20 @@ public class Backup {
 //            fileName = dbName + "-" + formatDate + ".sql";
             fileName = dbName + "-" + formatDate + ".sql";
             String executeCmd = "mysqldump -h" + host + " -u" + userName + " -p" + password + " " + dbName + " -r " + backupPath + fileName;
-
+            System.out.println(executeCmd);
             /*NOTE: Executing the command here*/
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
-            runtimeProcess.waitFor();
+            int waitFor = runtimeProcess.waitFor();
+            System.out.println("waitFor : "+waitFor);
 
             /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/
-            if (1 == 0) {
+            if (1 == waitFor) {
                 System.out.println(" ");
-                System.out.println("Backup Complete ->" + executeCmd);
+                System.out.println("Backup Completed ->" + executeCmd);
                 System.out.println(" ");
                 return true;
             } else {
-                System.out.println("Backup Failure");
+                System.out.println("Backup Fail");
                 return false;
             }
 

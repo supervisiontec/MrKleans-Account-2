@@ -114,7 +114,7 @@
                             detailJSON,
                             function (data) {
                                 $scope.model.supplierList.splice($scope.model.supplierPlace(data.indexNo), 1);
-                                $scope.model.supplierList.push(data);
+                                $scope.model.supplierList.unshift(data);
                                 Notification.success(data.indexNo + " - " + data.name + " Save Successfully");
                                 $scope.model.reset();
                             },

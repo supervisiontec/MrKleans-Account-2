@@ -51,12 +51,7 @@
                         checkSave = false;
                         Notification.error('select an accrued account to save !');
                     }
-                    var transactionDate = $filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
-                    var newDate = $filter('date')(new Date(), 'yyyy-MM-dd');
-                    if (transactionDate > newDate) {
-                        checkSave = false;
-                        Notification.error("transfer date not valid ! ");
-                    }
+                    
 
                     if (checkSave) {
                         $scope.model.addData();
@@ -94,11 +89,11 @@
                     }
 
                     if (checkSave) {
-                        ConfirmPane.primaryConfirm("DO YOU WANT TO SAVE THIS FUND TRANSFER !")
+                        ConfirmPane.primaryConfirm("DO YOU WANT TO SAVE THIS BILL !")
                                 .confirm(function () {
                                     $scope.model.save()
                                             .then(function (data) {
-                                                Notification.success('payment voucher save Sucess');
+                                                Notification.success('save Sucess.Accrued transaction No :'+data+')');
                                                 $scope.ui.mode = "IDEAL";
                                                 $scope.model.data = {};
                                                 $scope.model.saveDataList = [];

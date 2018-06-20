@@ -26,7 +26,8 @@
                         "accTypeSub":null,
                         "financialYear": null,
                         "costDepartment": "",
-                        "costCenter": ""
+                        "costCenter": "",
+                        "isEdit":0
 
                     };
                     return data;

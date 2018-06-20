@@ -1,7 +1,8 @@
 (function () {
     angular.module("appModule")
-            .controller("trialBalanceController", function ($scope, trialBalanceModel, $timeout, Notification) {
+            .controller("trialBalanceController", function ($scope, trialBalanceModel,printService, $timeout, PrintPane, Notification) {
                 $scope.model = new trialBalanceModel();
+                $scope.printService = new printService();
                 $scope.ui = {};
 
                 //focus
@@ -17,9 +18,18 @@
                     $scope.model.date = new Date();
 
                 };
-                $scope.ui.selectDate=function (){
-                    console.log('data');
+                $scope.ui.selectDate = function () {
                     $scope.model.selectDate();
+                };
+                $scope.ui.exportExcel = function () {
+
+                    PrintPane.printConfirm("")
+                            .confirm(function () {
+                                $scope.printService.printPdf('printDiv');
+                            })
+                            .discard(function () {
+                                $scope.printService.printExcel('printDiv', 'Trial_Balance');
+                            });
                 };
 
 

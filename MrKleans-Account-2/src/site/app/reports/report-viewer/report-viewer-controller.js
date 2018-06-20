@@ -36,6 +36,7 @@
                 $scope.ui.viewCurrentReport = function () {
                     if ($scope.model.currentReport.report) {
                         $scope.ui.status = "LOADING";
+                        console.log($scope.model.currentReport.parameters);
                         ReportViewerService.viewReport(
                                 $scope.model.currentReport.report,
                                 $scope.model.currentReport.parameters,

@@ -7,6 +7,8 @@ package com.mac.care_point.service.payment_voucher;
 
 import com.mac.care_point.service.payment_voucher.model.BalancePaymentModel;
 import com.mac.care_point.service.payment_voucher.model.PaymentVoucherModel;
+import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
+import com.mac.care_point.transaction.supplier_payment.model.SupplierPaymentMix;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,17 +32,18 @@ public class PaymentVoucherController {
 
     @RequestMapping(value = "/get-client-balance/{client}", method = RequestMethod.GET)
     public Double loadclientBalance(@PathVariable Integer client) {
-        
-        Double clientBalance = paymentVoucherService.getClientBalance(client);
-        System.out.println("clientBalance "+clientBalance);
-        System.out.println("client "+client);
-        return clientBalance;
+        return paymentVoucherService.getClientBalance(client);
     }
 
-    @RequestMapping(value = "/get-client-over-payment/{client}", method = RequestMethod.GET)
+    @RequestMapping(value = "/get-over-payment-amount/{client}", method = RequestMethod.GET)
     public Double getClientOverPayment(@PathVariable Integer client) {
         return paymentVoucherService.getClientOverPayment(client);
     }
+//    @RequestMapping(value = "/get-over-payment-amount/{supplier}", method = RequestMethod.GET)
+//    public double getOverPaymentAmount(@PathVariable Integer supplier) {
+//        return paymentSevrice.getOverPaymentAmount(supplier);
+//
+//    }
 
     @RequestMapping(value = "/get-balance-invoice-count/{client}", method = RequestMethod.GET)
     public int getBalanceInvoiceCount(@PathVariable Integer client) {
@@ -52,14 +55,20 @@ public class PaymentVoucherController {
         return paymentVoucherService.getBalanceInvoice(client);
     }
 
-    @RequestMapping(value = "/save-payment-voucher", method = RequestMethod.POST)
-    public Integer savePaymentVoucher(@RequestBody PaymentVoucherModel voucherModel) {
-        return paymentVoucherService.savePaymentVoucher(voucherModel);
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public Integer saveSupplierPayment(@RequestBody SupplierPaymentMix paymentMix) {
+        return paymentVoucherService.save(paymentMix);
+
     }
 
     @RequestMapping(value = "/save-balance-payment-voucher", method = RequestMethod.POST)
     public Integer saveBalancePaymentVoucher(@RequestBody BalancePaymentModel balancePaymentModel) {
         return paymentVoucherService.saveBalancePaymentVoucher(balancePaymentModel);
+
+    }
+     @RequestMapping(value = "/get-payable-bills/{account}", method = RequestMethod.GET)
+    public List<TAccLedger> getPayableBills(@PathVariable Integer account) {
+        return paymentVoucherService.getPayableBills(account);
 
     }
 

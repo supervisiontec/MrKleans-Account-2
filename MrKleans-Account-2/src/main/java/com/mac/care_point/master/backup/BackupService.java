@@ -28,7 +28,11 @@ public class BackupService {
         MBackup backup = new MBackup();
         backup.setIndexNo(1);
         backup.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        return backupRepository.save(backup).getIndexNo();
+        Integer indexNo = backupRepository.save(backup).getIndexNo();
+        if (indexNo>0) {
+            System.out.println("Backup Creater Successfully !");
+        }
+        return indexNo;
     }
 
 }

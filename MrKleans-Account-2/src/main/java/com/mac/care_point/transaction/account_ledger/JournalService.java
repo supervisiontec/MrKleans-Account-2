@@ -6,7 +6,6 @@
 package com.mac.care_point.transaction.account_ledger;
 
 import com.mac.care_point.common.Constant;
-import com.mac.care_point.common.SearchCodeGenarator;
 import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;

@@ -33,27 +33,21 @@ public class MSupplier implements Serializable {
     @Column(name = "index_no")
     private Integer indexNo;
 
-    @Size(max = 50)
     @Column(name = "name")
     private String name;
 
-    @Size(max = 50)
     @Column(name = "contact_name")
     private String contactName;
 
-    @Size(max = 25)
     @Column(name = "contact_no")
     private String contactNo;
 
-    @Size(max = 25)
     @Column(name = "address_line_1")
     private String addressLine1;
 
-    @Size(max = 25)
     @Column(name = "address_line_2")
     private String addressLine2;
 
-    @Size(max = 25)
     @Column(name = "address_line_3")
     private String addressLine3;
 

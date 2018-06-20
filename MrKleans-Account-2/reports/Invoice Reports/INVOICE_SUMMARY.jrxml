@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2018-02-27T13:13:03 -->
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="INVOICE_SUMMARY" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f23a56b-ca18-4ef4-879b-881706863099">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="sv_account"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="account"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="CURRENT_BRANCH" class="java.lang.Integer">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -38,23 +37,51 @@ where m_branch.index_no = $P{CURRENT_BRANCH}
 and ( $P{VEHICLE} is null or m_vehicle.index_no= $P{VEHICLE} )
 and ( $P{INVOICE_NO} is null or t_type_index_detail.master_ref_id=$P{INVOICE_NO})
 and ( $P{CLIENT} is null or m_client.index_no= $P{CLIENT} )
-and ( $P{FROM_DATE} is null or t_invoice.date<= $P{FROM_DATE} )
-and ( $P{TO_DATE}  is null or t_invoice.date>= $P{TO_DATE} )
+and ( $P{FROM_DATE} is null or t_invoice.date>= $P{FROM_DATE} )
+and ( $P{TO_DATE}  is null or t_invoice.date<= $P{TO_DATE} )
 and t_invoice.`status`!='DELETED'
 GROUP by t_invoice.index_no
 HAVING `balance`>= $P{AMOUNT}
 order by t_invoice.date ,t_type_index_detail.master_ref_id]]>
 	</queryString>
-	<field name="inv_no" class="java.lang.String"/>
-	<field name="inv_date" class="java.sql.Date"/>
-	<field name="customer" class="java.lang.String"/>
-	<field name="vehicle_no" class="java.lang.String"/>
-	<field name="value" class="java.math.BigDecimal"/>
-	<field name="discount_amount" class="java.math.BigDecimal"/>
-	<field name="final_value" class="java.math.BigDecimal"/>
-	<field name="paid_amount" class="java.math.BigDecimal"/>
-	<field name="balance" class="java.math.BigDecimal"/>
-	<field name="branch_name" class="java.lang.String"/>
+	<field name="inv_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="inv_no"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_type_index_detail"/>
+	</field>
+	<field name="inv_date" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="inv_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_invoice"/>
+	</field>
+	<field name="customer" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="customer"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_client"/>
+	</field>
+	<field name="vehicle_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="vehicle_no"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_vehicle"/>
+	</field>
+	<field name="value" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="value"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_invoice"/>
+	</field>
+	<field name="discount_amount" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="discount_amount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_invoice"/>
+	</field>
+	<field name="final_value" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="final_value"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_invoice"/>
+	</field>
+	<field name="paid_amount" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="paid_amount"/>
+	</field>
+	<field name="balance" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="balance"/>
+	</field>
+	<field name="branch_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="branch_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_branch"/>
+	</field>
 	<variable name="value1" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{value}]]></variableExpression>
 	</variable>

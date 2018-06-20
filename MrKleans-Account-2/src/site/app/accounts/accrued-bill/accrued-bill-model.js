@@ -74,8 +74,10 @@
                 });
                 that.data.accAccount = accAccount;
                 if (accAccount !== null) {
-                    loadAccValue(accAccount);
-                    
+                    $timeout(function () {
+                        that.loadAccValue(accAccount);
+                    }, 30);
+
                     that.setAccountFlow(accAccount);
 
                 } else {
@@ -87,15 +89,14 @@
                 accruedBillService.setAccFlow(acc)
                         .success(function (data) {
                             that.accflowList = data;
-                            console.log(data);
                         });
             },
             loadAccValue: function (accAccount) {
                 var that = this;
                 accruedBillService.loadAccBalance(accAccount)
-                            .success(function (data) {
-                                that.data.value = data;
-                            });
+                        .success(function (data) {
+                            that.data.value = data;
+                        });
             },
 
             branchLable: function (model) {
@@ -214,7 +215,9 @@
                                         that.data.accAccount = data[i].accAccount;
                                         that.data.typeIndexNo = data[i].typeIndexNo;
                                         that.data.transactionDate = new Date(data[i].transactionDate);
-                                        that.loadAccValue(that.data.accAccount);
+                                        $timeout(function () {
+                                            that.loadAccValue(that.data.accAccount);
+                                        }, 30);
                                         defer.resolve();
                                     }
                                 }

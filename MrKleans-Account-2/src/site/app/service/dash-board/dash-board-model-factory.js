@@ -7,6 +7,13 @@
                     };
                     return data;
                 };
+                factory.filter = function () {
+                    var data = {
+                        "fromDate":null,
+                        "toDate":null
+                    };
+                    return data;
+                };
                 return factory;
             });
 }());

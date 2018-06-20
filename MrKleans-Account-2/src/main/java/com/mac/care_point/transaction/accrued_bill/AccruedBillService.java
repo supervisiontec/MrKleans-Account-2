@@ -34,14 +34,11 @@ public class AccruedBillService {
     @Autowired
     private BranchRepository branchRepository;
 
-    public Integer saveAccruedBill(AccruedBillMix accruedBillMix) {
+    public int saveAccruedBill(AccruedBillMix accruedBillMix) {
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.ACCRUED);
         int deleteNumber = journalRepository.getDeleteNumber();
         String searchCode = getSearchCode(Constant.CODE_ACCRUED_BILL, SecurityUtil.getCurrentUser().getBranch(), number);
         int count = 0;
-        System.out.println("%%$$%%$$%%$$%%%$$%$$$%%$%%$%%$%$%$%$%");
-        System.out.println(searchCode);
-        System.out.println("%%$$%%$$%%$$%%%$$%$$$%%$%%$%%$%$%$%$%");
         accruedBillMix.getData().setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
         accruedBillMix.getData().setNumber(number);
         accruedBillMix.getData().setDeleteRefNo(deleteNumber);
@@ -76,10 +73,10 @@ public class AccruedBillService {
             count++;
         }
         if (count == accruedBillMix.getDataList().size()) {
-            return 1;
+            return number;
         }
 
-        return 0;
+        return -1;
 
     }
      private String getSearchCode(String code, Integer branch, int number) {

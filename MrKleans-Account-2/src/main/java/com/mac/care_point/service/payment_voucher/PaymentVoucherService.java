@@ -10,9 +10,10 @@ import com.mac.care_point.account_setting.acc_code_setting.model.AccCodeSetting;
 import com.mac.care_point.account_setting.account_setting.AccountSettingRepository;
 import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import com.mac.care_point.common.Constant;
+import com.mac.care_point.master.account.AccAccountRepository;
+import com.mac.care_point.master.account.model.MAccAccount;
 import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
-import com.mac.care_point.master.client.model.Client;
 import com.mac.care_point.service.item_sale.model.TCustomerLedger;
 import com.mac.care_point.service.item_sale.model.TPayment;
 import com.mac.care_point.service.item_sale.model.TPaymentInformation;
@@ -37,6 +38,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.mac.care_point.master.client.CustomerRepository;
+import com.mac.care_point.transaction.supplier_payment.SupplierPaymentRepository;
+import com.mac.care_point.transaction.supplier_payment.model.DataSub;
+import com.mac.care_point.transaction.supplier_payment.model.SupplierPaymentMix;
+import java.math.BigInteger;
+import static org.apache.el.lang.ELArithmetic.subtract;
 
 /**
  *
@@ -59,7 +65,7 @@ public class PaymentVoucherService {
     private ClientLegerRepository clientLegerRepository;
 
     @Autowired
-    private JournalRepository accountLedgerRepository;
+    private JournalRepository journalRepository;
 
     @Autowired
     private BranchRepository branchRepository;
@@ -73,6 +79,15 @@ public class PaymentVoucherService {
     @Autowired
     private AccountSettingRepository accountSettingRepository;
 
+    @Autowired
+    private AccCodeSettingRepository accCodeSettingRepository;
+
+    @Autowired
+    private AccAccountRepository accAccountRepository;
+    
+     @Autowired
+    private SupplierPaymentRepository supplierPaymentRepository;
+
     public Object getClientVehicles(Integer client) {
         return paymentVoucherRepository.getClientVehicles(client);
 
@@ -83,7 +98,8 @@ public class PaymentVoucherService {
     }
 
     public Double getClientOverPayment(Integer client) {
-        return paymentVoucherRepository.getClientOverPayment(client);
+        MAccAccount overPaymentAccount = accAccountRepository.getOverPaymentIssueAccount(Constant.OVER_PAYMENT_RECEIVED);
+        return paymentVoucherRepository.getClientOverPayment(client, overPaymentAccount.getIndexNo());
     }
 
     public int getBalanceInvoiceCount(Integer client) {
@@ -220,8 +236,8 @@ public class PaymentVoucherService {
     }
 
     private Integer saveCustomerPaymentToAccountSystem(PaymentVoucherModel voucherModel) {
-        int number = accountLedgerRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.CUSTOMER_PAYMENT);
-        int deleteNumber = accountLedgerRepository.getDeleteNumber();
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.CUSTOMER_PAYMENT);
+        int deleteNumber = journalRepository.getDeleteNumber();
         Integer client = clientRepository.findByAccAccountFromClientIndex(voucherModel.getCustomerLedger().getClient());
         TTypeIndexDetail typeIndex = typeIndexDetailRepository.findByTypeAndAccountRefId(Constant.INVOICE, voucherModel.getCustomerLedger().getInvoice());
         MAccSetting setting = null;
@@ -268,7 +284,7 @@ public class PaymentVoucherService {
             accountLedger.setType(Constant.CUSTOMER_PAYMENT);
             accountLedger.setTypeIndexNo(voucherModel.getCustomerLedger().getPayment());
             accountLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-            accountLedgerRepository.save(accountLedger);
+            journalRepository.save(accountLedger);
 
         }
 
@@ -296,14 +312,472 @@ public class PaymentVoucherService {
         accountLedger.setType(Constant.CUSTOMER_PAYMENT);
         accountLedger.setTypeIndexNo(voucherModel.getCustomerLedger().getPayment());
         accountLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-       return accountLedgerRepository.save(accountLedger).getIndexNo();
-        
-       
+        return journalRepository.save(accountLedger).getIndexNo();
+
     }
 
     private String getSearchCode(String code, Integer branch, Integer number) {
         MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
-        return code + "/" + branchCode + "/" +number;
+        return code + "/" + branchCode + "/" + number;
     }
+
+    public List<TAccLedger> getPayableBills(Integer account) {
+        return journalRepository.getPayableBills(account);
+    }
+
+    public Integer save(SupplierPaymentMix mix) {
+        if (!"SETTLEMENT".equals(mix.getData().getAccType())) {
+            throw new RuntimeException("Other Transaction was blocked ! Customer Settlement only !");
+        }
+        int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.SUPPLIER_PAYMENT);
+        int deleteNumber = journalRepository.getDeleteNumber();
+        String code;
+        AccCodeSetting accCodeSetting = accCodeSettingRepository.findByAccount(mix.getData().getAccAccount());
+        if (accCodeSetting == null && !"SETTLEMENT".equals(mix.getData().getAccType())) {
+            throw new RuntimeException("Accout Code Setting not Found for this Account !");
+        } else if (accCodeSetting == null) {
+            code = getSearchCode2(Constant.CODE_SETTLEMENT, SecurityUtil.getCurrentUser().getBranch(), number);
+        } else {
+            code = getSearchCode(Constant.CODE_PAY, SecurityUtil.getCurrentUser().getBranch(), accCodeSetting);
+        }
+        String searchCode = getSearchCode(Constant.CODE_SUPPLIER_PAYMENT, SecurityUtil.getCurrentUser().getBranch(), number);
+        BigDecimal overPayment = new BigDecimal(0);
+        overPayment = (BigDecimal) subtract(mix.getData().getCredit(), mix.getData().getBillTotal());
+
+//        if ("BANK".equals(mix.getData().getAccType())) {
+//            MAccSetting unrealizedIssued = accountSettingRepository.findByName(Constant.UNREALIZED_ISSUED);
+//            TAccLedger tAccLedger = new TAccLedger();
+//            tAccLedger.setAccAccount(unrealizedIssued.getAccAccount());// reconcile account
+//            tAccLedger.setBankReconciliation(true);//
+//            tAccLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger.setChequeDate(mix.getData().getChequeDate());
+//            tAccLedger.setCredit(mix.getData().getCredit());
+//            tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//            tAccLedger.setDebit(BigDecimal.ZERO);
+//            tAccLedger.setDeleteRefNo(deleteNumber);
+//            tAccLedger.setDescription(mix.getData().getDescription());
+//            tAccLedger.setFormName(mix.getData().getFormName());
+//            tAccLedger.setIsMain(true);
+//            tAccLedger.setIsCheque(true);
+//            tAccLedger.setSearchCode(code);
+//            tAccLedger.setNumber(number);
+//            tAccLedger.setReconcileAccount(mix.getData().getAccAccount());//
+//            tAccLedger.setReconcileGroup(0);//
+//            tAccLedger.setRefNumber(mix.getData().getRefNumber());
+//            tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//            tAccLedger.setTransactionDate(mix.getData().getTransactionDate());
+//            tAccLedger.setType(mix.getData().getType());
+//            tAccLedger.setTypeIndexNo(mix.getData().getTypeIndexNo());
+//            tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//            TAccLedger save = journalRepository.save(tAccLedger);
+//            save.setReconcileGroup(save.getIndexNo());//
+//            journalRepository.save(tAccLedger);
+//
+//            for (DataSub sub : mix.getDataList()) {
+//                if (sub.getPay().doubleValue() > 0) {
+//
+//                    TAccLedger tAccLedger1 = new TAccLedger();
+//                    tAccLedger1.setAccAccount(sub.getAccAccount());//
+//                    tAccLedger1.setBankReconciliation(false);//
+//                    tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setChequeDate(sub.getChequeDate());
+//                    tAccLedger1.setCredit(new BigDecimal(BigInteger.ZERO));
+//                    tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                    tAccLedger1.setDebit(sub.getPay());
+//                    tAccLedger1.setDeleteRefNo(deleteNumber);
+//                    tAccLedger1.setDescription(mix.getData().getDescription());
+//                    tAccLedger1.setFormName(mix.getData().getFormName());
+//                    tAccLedger1.setIsMain(false);
+//                    tAccLedger1.setSearchCode(code);
+//                    tAccLedger1.setNumber(number);
+//                    tAccLedger1.setReconcileAccount(null);//
+//                    tAccLedger1.setReconcileGroup(sub.getReconcileGroup());//
+//                    tAccLedger1.setRefNumber(sub.getRefNumber());
+//                    tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//                    tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+//                    tAccLedger1.setType(mix.getData().getType());
+//                    tAccLedger1.setTypeIndexNo(sub.getTypeIndexNo());
+//                    tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//
+//                    journalRepository.save(tAccLedger1);
+//
+//                }
+//            }
+//            updateCodeSetting(accCodeSetting);
+//        }
+//        if ("CASH".equals(mix.getData().getAccType())) {
+//            TAccLedger tAccLedger = new TAccLedger();
+//            tAccLedger.setAccAccount(mix.getData().getAccAccount());//
+//            tAccLedger.setBankReconciliation(false);//
+//            tAccLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger.setChequeDate(mix.getData().getChequeDate());
+//            tAccLedger.setCredit(mix.getData().getCredit());
+//            tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//            tAccLedger.setDebit(BigDecimal.ZERO);
+//            tAccLedger.setDeleteRefNo(deleteNumber);
+//            tAccLedger.setDescription(mix.getData().getDescription());
+//            tAccLedger.setFormName(mix.getData().getFormName());
+//            tAccLedger.setIsMain(true);
+//            tAccLedger.setSearchCode(code);
+//            tAccLedger.setNumber(number);
+//            tAccLedger.setReconcileAccount(null);//
+//            tAccLedger.setReconcileGroup(0);//
+//            tAccLedger.setRefNumber(mix.getData().getRefNumber());
+//            tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//            tAccLedger.setTransactionDate(mix.getData().getTransactionDate());
+//            tAccLedger.setType(mix.getData().getType());
+//            tAccLedger.setTypeIndexNo(null);
+//            tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//
+//            journalRepository.save(tAccLedger);
+//
+//            for (DataSub sub : mix.getDataList()) {
+//                if (sub.getPay().doubleValue() > 0) {
+//
+//                    TAccLedger tAccLedger1 = new TAccLedger();
+//                    tAccLedger1.setAccAccount(sub.getAccAccount());//
+//                    tAccLedger1.setBankReconciliation(false);//
+//                    tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setChequeDate(sub.getChequeDate());
+//                    tAccLedger1.setCredit(new BigDecimal(BigInteger.ZERO));
+//                    tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                    tAccLedger1.setDebit(sub.getPay());
+//                    tAccLedger1.setDeleteRefNo(deleteNumber);
+//                    tAccLedger1.setDescription(mix.getData().getDescription());
+//                    tAccLedger1.setFormName(mix.getData().getFormName());
+//                    tAccLedger1.setIsMain(false);
+//                    tAccLedger1.setSearchCode(code);
+//                    tAccLedger1.setNumber(number);
+//                    tAccLedger1.setReconcileAccount(null);//
+//                    tAccLedger1.setReconcileGroup(sub.getReconcileGroup());//
+//                    tAccLedger1.setRefNumber(sub.getRefNumber());
+//                    tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//                    tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+//                    tAccLedger1.setType(mix.getData().getType());
+//                    tAccLedger1.setTypeIndexNo(sub.getTypeIndexNo());
+//                    tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//
+//                    journalRepository.save(tAccLedger1);
+//
+//                }
+//            }
+//            updateCodeSetting(accCodeSetting);
+//        }
+//        if ("ONLINE".equals(mix.getData().getAccType())) {
+//            TAccLedger tAccLedger = new TAccLedger();
+//            tAccLedger.setAccAccount(mix.getData().getAccAccount());// reconcile account
+//            tAccLedger.setBankReconciliation(false);//
+//            tAccLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger.setChequeDate(mix.getData().getChequeDate());
+//            tAccLedger.setCredit(mix.getData().getCredit());
+//            tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//            tAccLedger.setDebit(BigDecimal.ZERO);
+//            tAccLedger.setDeleteRefNo(deleteNumber);
+//            tAccLedger.setDescription(mix.getData().getDescription());
+//            tAccLedger.setFormName(mix.getData().getFormName());
+//            tAccLedger.setIsMain(true);
+//            tAccLedger.setNumber(number);
+//            tAccLedger.setSearchCode(code);
+//            tAccLedger.setReconcileAccount(0);//
+//            tAccLedger.setReconcileGroup(0);//
+//            tAccLedger.setRefNumber(mix.getData().getRefNumber());
+//            tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//            tAccLedger.setTransactionDate(mix.getData().getTransactionDate());
+//            tAccLedger.setType(mix.getData().getType());
+//            tAccLedger.setTypeIndexNo(null);
+//            tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//            TAccLedger save = journalRepository.save(tAccLedger);
+//            save.setReconcileGroup(save.getIndexNo());//
+//            journalRepository.save(tAccLedger);
+//
+//            for (DataSub sub : mix.getDataList()) {
+//                if (sub.getPay().doubleValue() > 0) {
+//
+//                    TAccLedger tAccLedger1 = new TAccLedger();
+//                    tAccLedger1.setAccAccount(sub.getAccAccount());//
+//                    tAccLedger1.setBankReconciliation(false);//
+//                    tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setChequeDate(sub.getChequeDate());
+//                    tAccLedger1.setCredit(new BigDecimal(BigInteger.ZERO));
+//                    tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                    tAccLedger1.setDebit(sub.getPay());
+//                    tAccLedger1.setDeleteRefNo(deleteNumber);
+//                    tAccLedger1.setDescription(mix.getData().getDescription());
+//                    tAccLedger1.setFormName(mix.getData().getFormName());
+//                    tAccLedger1.setIsMain(false);
+//                    tAccLedger1.setSearchCode(code);
+//                    tAccLedger1.setNumber(number);
+//                    tAccLedger1.setReconcileAccount(null);//
+//                    tAccLedger1.setReconcileGroup(sub.getReconcileGroup());//
+//                    tAccLedger1.setRefNumber(sub.getRefNumber());
+//                    tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//                    tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+//                    tAccLedger1.setType(mix.getData().getType());
+//                    tAccLedger1.setTypeIndexNo(sub.getTypeIndexNo());
+//                    tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//
+//                    journalRepository.save(tAccLedger1);
+//
+//                }
+//            }
+//            updateCodeSetting(accCodeSetting);
+//        }
+//        MAccSetting overPaymentIssue = accountSettingRepository.findByName(Constant.OVER_PAYMENT_ISSUED);
+//        if (overPaymentIssue.getIndexNo() <= 0) {
+//            throw new RuntimeException("Over Payment Issue Account Setting not found !");
+//        }
+//
+//        if ("OVER_PAYMENT".equals(mix.getData().getAccType())) {
+//            BigDecimal credit = mix.getData().getCredit();
+//            List<TAccLedger> fifoList = supplierPaymentRepository.getOverPaymentFifoList(mix.getData().getAccAccount(), mix.getData().getTypeIndexNo());
+//            for (TAccLedger tAccLedger : fifoList) {
+//                BigDecimal balance = (BigDecimal) subtract(tAccLedger.getDebit(), tAccLedger.getCredit());
+//                if (credit.doubleValue() > balance.doubleValue()) {
+//                    TAccLedger tAccLedger1 = new TAccLedger();
+//                    tAccLedger1.setAccAccount(mix.getData().getAccAccount());
+//                    tAccLedger1.setBankReconciliation(false);//
+//                    tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setChequeDate(mix.getData().getChequeDate());
+//                    tAccLedger1.setCredit(balance);
+//                    tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                    tAccLedger1.setDebit(BigDecimal.ZERO);
+//                    tAccLedger1.setDeleteRefNo(deleteNumber);
+//                    tAccLedger1.setDescription(mix.getData().getDescription());
+//                    tAccLedger1.setFormName(mix.getData().getFormName());
+//                    tAccLedger1.setIsMain(false);
+//                    tAccLedger1.setSearchCode(searchCode);
+//                    tAccLedger1.setIsCheque(tAccLedger.getIsCheque());
+//                    tAccLedger1.setNumber(number);
+//                    tAccLedger1.setReconcileAccount(0);
+//                    tAccLedger1.setReconcileGroup(tAccLedger.getReconcileGroup());
+//                    tAccLedger1.setRefNumber(mix.getData().getRefNumber());
+//                    tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//                    tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+//                    tAccLedger1.setType(mix.getData().getType());
+//                    tAccLedger1.setIsEdit(0);
+//                    tAccLedger1.setTypeIndexNo(mix.getData().getTypeIndexNo());
+//                    tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//                    journalRepository.save(tAccLedger1);
+//                    credit = (BigDecimal) subtract(credit, balance);
+//
+//                }
+//                if (credit.doubleValue() <= balance.doubleValue()) {
+//                    TAccLedger tAccLedger1 = new TAccLedger();
+//                    tAccLedger1.setAccAccount(mix.getData().getAccAccount());// over payment account
+//                    tAccLedger1.setBankReconciliation(false);//
+//                    tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setChequeDate(mix.getData().getChequeDate());
+//                    tAccLedger1.setCredit(credit);
+//                    tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                    tAccLedger1.setDebit(BigDecimal.ZERO);
+//                    tAccLedger1.setDeleteRefNo(deleteNumber);
+//                    tAccLedger1.setDescription(mix.getData().getDescription());
+//                    tAccLedger1.setFormName(mix.getData().getFormName());
+//                    tAccLedger1.setIsMain(false);
+//                    tAccLedger1.setSearchCode(searchCode);
+//                    tAccLedger1.setNumber(number);
+//                    tAccLedger1.setReconcileAccount(0);//
+//                    tAccLedger1.setReconcileGroup(tAccLedger.getReconcileGroup());//
+//                    tAccLedger1.setRefNumber(mix.getData().getRefNumber());
+//                    tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//                    tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+//                    tAccLedger1.setType(mix.getData().getType());
+//                    tAccLedger1.setTypeIndexNo(mix.getData().getTypeIndexNo());
+//                    tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//                    tAccLedger1.setIsEdit(0);
+//                    journalRepository.save(tAccLedger1);
+//                    break;
+//                }
+//
+//            }
+////            
+//            for (DataSub sub : mix.getDataList()) {
+//                if (sub.getPay().doubleValue() > 0) {
+//
+//                    TAccLedger tAccLedger1 = new TAccLedger();
+//                    tAccLedger1.setAccAccount(sub.getAccAccount());//
+//                    tAccLedger1.setBankReconciliation(false);//
+//                    tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setChequeDate(sub.getChequeDate());
+//                    tAccLedger1.setCredit(new BigDecimal(BigInteger.ZERO));
+//                    tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//                    tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                    tAccLedger1.setDebit(sub.getPay());
+//                    tAccLedger1.setDeleteRefNo(deleteNumber);
+//                    tAccLedger1.setDescription(mix.getData().getDescription());
+//                    tAccLedger1.setFormName(mix.getData().getFormName());
+//                    tAccLedger1.setIsMain(false);
+//                    tAccLedger1.setSearchCode(searchCode);
+//                    tAccLedger1.setNumber(number);
+//                    tAccLedger1.setReconcileAccount(null);//
+//                    tAccLedger1.setReconcileGroup(sub.getReconcileGroup());//
+//                    tAccLedger1.setRefNumber(mix.getData().getRefNumber());
+//                    tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//                    tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+//                    tAccLedger1.setType(mix.getData().getType());
+//                    tAccLedger1.setTypeIndexNo(sub.getTypeIndexNo());
+//                    tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//
+//                    journalRepository.save(tAccLedger1);
+//                }
+//            }
+//        }
+        if ("SETTLEMENT".equals(mix.getData().getAccType())) {
+//            if ("RETURN".equals(mix.getData().getAccTypeSub())) {
+//                for (DataSub detail : mix.getDataList()) {
+//                    if (detail.getPay().doubleValue() != 0) {
+//                        TAccLedger tAccLedger = new TAccLedger();
+//                        tAccLedger.setAccAccount(detail.getAccAccount());//
+//                        tAccLedger.setBankReconciliation(false);//
+//                        tAccLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//                        tAccLedger.setChequeDate(null);
+//                        tAccLedger.setDebit(detail.getPay().doubleValue() > 0 ? detail.getPay() : new BigDecimal(0));
+//                        tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//                        tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                        tAccLedger.setCredit(detail.getPay().doubleValue() < 0 ? (detail.getPay().multiply(new BigDecimal(-1))) : new BigDecimal(0));
+//                        tAccLedger.setDeleteRefNo(deleteNumber);
+//                        tAccLedger.setDescription(mix.getData().getDescription());
+//                        tAccLedger.setFormName(mix.getData().getFormName());
+//                        tAccLedger.setIsMain(false);
+//                        tAccLedger.setSearchCode(searchCode);
+//                        tAccLedger.setNumber(number);
+//                        tAccLedger.setReconcileAccount(null);//
+//                        tAccLedger.setReconcileGroup(detail.getReconcileGroup());//
+//                        tAccLedger.setRefNumber(mix.getData().getRefNumber());
+//                        tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//                        tAccLedger.setTransactionDate(mix.getData().getTransactionDate());
+//                        tAccLedger.setType(mix.getData().getType());
+//                        tAccLedger.setTypeIndexNo(null);
+//                        tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//
+//                        journalRepository.save(tAccLedger);
+//                    }
+//                }
+//            }
+            if ("ACCOUNT".equals(mix.getData().getAccTypeSub())) {
+                TAccLedger tAccLedger1 = new TAccLedger();
+                tAccLedger1.setAccAccount(mix.getData().getAccAccount());
+                tAccLedger1.setBankReconciliation(false);
+                tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+                tAccLedger1.setChequeDate(null);
+                tAccLedger1.setCredit(mix.getData().getBillTotal().doubleValue() < 0 ? mix.getData().getBillTotal().multiply(new BigDecimal(-1)) : new BigDecimal(BigInteger.ZERO));
+                tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+                tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                tAccLedger1.setDebit(mix.getData().getBillTotal().doubleValue() > 0 ? mix.getData().getBillTotal() : new BigDecimal(BigInteger.ZERO));
+                tAccLedger1.setDeleteRefNo(deleteNumber);
+                tAccLedger1.setDescription(mix.getData().getDescription());
+                tAccLedger1.setFormName(mix.getData().getFormName());
+                tAccLedger1.setIsMain(false);
+                tAccLedger1.setSearchCode(searchCode);
+                tAccLedger1.setNumber(number);
+                tAccLedger1.setReconcileAccount(null);
+                tAccLedger1.setReconcileGroup(null);
+                tAccLedger1.setRefNumber(mix.getData().getRefNumber());
+                tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+                tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+                tAccLedger1.setType(mix.getData().getType());
+                tAccLedger1.setTypeIndexNo(null);
+                tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+                tAccLedger1.setCostDepartment(mix.getData().getCostDepartment());
+                tAccLedger1.setCostCenter(mix.getData().getCostCenter());
+                tAccLedger1.setFinancialYear(mix.getData().getFinancialYear());
+
+                TAccLedger save = journalRepository.save(tAccLedger1);
+                if (save.getIndexNo() <= 0) {
+                    throw new RuntimeException("Save Fail !");
+                }
+                for (DataSub detail : mix.getDataList()) {
+                    if (detail.getPay().doubleValue() != 0) {
+                        TAccLedger tAccLedger = new TAccLedger();
+                        tAccLedger.setAccAccount(detail.getAccAccount());
+                        tAccLedger.setBankReconciliation(false);
+                        tAccLedger.setBranch(SecurityUtil.getCurrentUser().getBranch());
+                        tAccLedger.setChequeDate(null);
+                        tAccLedger.setCredit(detail.getPay().doubleValue() > 0 ? detail.getPay() : new BigDecimal(0));
+                        tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+                        tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                        tAccLedger.setDebit(detail.getPay().doubleValue() < 0 ? (detail.getPay().multiply(new BigDecimal(-1))) : new BigDecimal(0));
+                        tAccLedger.setDeleteRefNo(deleteNumber);
+                        tAccLedger.setDescription(mix.getData().getDescription());
+                        tAccLedger.setFormName(mix.getData().getFormName());
+                        tAccLedger.setIsMain(false);
+                        tAccLedger.setSearchCode(searchCode);
+                        tAccLedger.setNumber(number);
+                        tAccLedger.setReconcileAccount(null);
+                        tAccLedger.setReconcileGroup(detail.getReconcileGroup());
+                        tAccLedger.setRefNumber(mix.getData().getRefNumber());
+                        tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+                        tAccLedger.setTransactionDate(mix.getData().getTransactionDate());
+                        tAccLedger.setType(mix.getData().getType());
+                        tAccLedger.setTypeIndexNo(null);
+                        tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+
+                        journalRepository.save(tAccLedger);
+                    }
+                }
+            }
+        }
+//        //over payment save
+//        if (overPayment.doubleValue() > 0) {
+//            TAccLedger tAccLedger1 = new TAccLedger();
+//            tAccLedger1.setAccAccount(overPaymentIssue.getAccAccount());
+//            tAccLedger1.setBankReconciliation(false);
+//            tAccLedger1.setBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger1.setChequeDate(null);
+//            tAccLedger1.setCredit(new BigDecimal(BigInteger.ZERO));
+//            tAccLedger1.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+//            tAccLedger1.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//            tAccLedger1.setDebit(overPayment);
+//            tAccLedger1.setDeleteRefNo(deleteNumber);
+//            tAccLedger1.setDescription(mix.getData().getDescription());
+//            tAccLedger1.setFormName(mix.getData().getFormName());
+//            tAccLedger1.setIsMain(false);
+//            tAccLedger1.setNumber(number);
+//            tAccLedger1.setSearchCode(searchCode);
+//            tAccLedger1.setReconcileAccount(null);
+//            tAccLedger1.setReconcileGroup(0);
+//            tAccLedger1.setRefNumber(mix.getData().getRefNumber());
+//            tAccLedger1.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+//            tAccLedger1.setTransactionDate(mix.getData().getTransactionDate());
+//            tAccLedger1.setType(mix.getData().getType());
+//            tAccLedger1.setTypeIndexNo(mix.getData().getTypeIndexNo());
+//            tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
+//
+//            TAccLedger save = journalRepository.save(tAccLedger1);
+//            save.setReconcileGroup(save.getIndexNo());
+//            journalRepository.save(save);
+//        }
+
+        return 1;
+    }
+
+    private String getSearchCode2(String code, Integer branch, int number) {
+        MBranch branchModel = branchRepository.findOne(branch);
+        String branchCode = branchModel.getBranchCode();
+        return code + "/" + branchCode + "/" + number;
+    }
+     private String getSearchCode(String code, Integer branch, AccCodeSetting accCodeSetting) {
+        MBranch branchModel = branchRepository.findOne(branch);
+        String branchCode = branchModel.getBranchCode();
+        return code + "/" + branchCode + "/" + accCodeSetting.getCode() + "/" + (accCodeSetting.getMaxNo() + 1);
+    }
+      private Integer updateCodeSetting(AccCodeSetting accCodeSetting) {
+        accCodeSetting.setMaxNo(accCodeSetting.getMaxNo() + 1);
+        AccCodeSetting save1 = accCodeSettingRepository.save(accCodeSetting);
+        if (save1.getIndexNo() > 0) {
+            return save1.getIndexNo();
+        } else {
+            throw new RuntimeException("Voucher Save Fail !");
+        }
+    }
+
 }

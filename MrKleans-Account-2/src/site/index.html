@@ -18,7 +18,7 @@
             <div>
                 <div class="brand">
 
-                    <div class="brand-text">SUPERVISION</div>
+                    <div class="brand-text">{{companyName}}</div>
                 </div>
 
                 <div class="user">
@@ -64,6 +64,7 @@
                                 <li ng-show="ui.include('Return Cheque')"><a href="#/transaction/return-cheque" ng-click="toggleHamburger('Return Cheque');">Return Cheque</a></li>    
                                 <li ng-show="ui.include('Trial Balance')"><a href="#/transaction/trial-balance" ng-click="toggleHamburger('Trial Balance');">Trial Balance</a></li>    
                                 <li ng-show="ui.include('Edit Transaction')"><a href="#/transaction/edit-transaction" ng-click="toggleHamburger('Edit Transaction');">Edit Transaction</a></li>    
+                                <li ng-show="ui.include('Profit and lost')"><a href="#/transaction/profit-and-lost" ng-click="toggleHamburger('Profit and lost');">Profit And Lost</a></li>    
                             </ul>
                         </li>
                         <li ng-show="ui.include('Reports')">
@@ -113,7 +114,7 @@
                 </div>
                 <div class="col-xs-3">
                     <span class="text-primary">
-                        SUPERVISION
+                        {{companyName}}
                     </span>
                     <span class="text-default">
                         |

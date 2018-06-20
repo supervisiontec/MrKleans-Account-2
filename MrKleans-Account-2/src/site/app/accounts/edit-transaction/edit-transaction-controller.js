@@ -68,8 +68,8 @@
                     }
                 };
                 $scope.ui.setIsEditClass=function (isEdit){
-                    if (isEdit===0) {
-                        return 'label-default';
+                    if (isEdit===0 || isEdit===null) {
+                        return 'label-primary';
                     }
                     if (isEdit===1) {
                         return 'label-warning';

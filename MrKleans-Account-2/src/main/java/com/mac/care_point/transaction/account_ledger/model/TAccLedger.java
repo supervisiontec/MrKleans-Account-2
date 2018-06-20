@@ -64,11 +64,11 @@ public class TAccLedger implements Serializable {
     private int user;
 
     @Basic(optional = false)
-    @Column(name = "debit")
+    @Column(name = "`debit`")
     private BigDecimal debit;
 
     @Basic(optional = false)
-    @Column(name = "credit")
+    @Column(name = "`credit`")
     private BigDecimal credit;
 
     @Column(name = "form_name")
@@ -119,7 +119,7 @@ public class TAccLedger implements Serializable {
     @Column(name = "cost_center")
     private Integer costCenter;
 
-    @Column(name = "is_edit")
+    @Column(name = "`is_edit`")
     private Integer isEdit;
 
     public TAccLedger() {
