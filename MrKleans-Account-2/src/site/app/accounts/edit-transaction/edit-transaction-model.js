@@ -119,22 +119,32 @@
                 return label;
             }
             , getLedgerTypeList: function (name, param) {
-
+                var paramModel = {};
                 var defer = $q.defer();
                 var that = this;
                 that.selectLedgerType = name;
                 var fDate = $filter('date')(param.fromDate, 'yyyy-MM-dd');
                 var tDate = $filter('date')(param.toDate, 'yyyy-MM-dd');
+                var invDate = $filter('date')(param.invDate, 'yyyy-MM-dd');
                 var paramModel = {
                     "name": that.selectLedgerType,
                     "fromDate": fDate,
                     "toDate": tDate,
                     "branch": param.branch,
-                    "financialYear": param.financialYear
+                    "financialYear": param.financialYear,
+                    "account": param.account,
+                    "invDate": invDate,
+                    "refNo": param.refNo
+
                 };
                 editTransactionService.getLedgerTypeDataList(JSON.stringify(paramModel))
                         .success(function (data) {
-                            that.accLedgerTypeDataList = data;
+                            if (data) {
+                                that.accLedgerTypeDataList = data;
+                            } else {
+                                Notification.error("Empty data. change parameeter and try again !");
+                                that.accLedgerTypeDataList = [];
+                            }
                         });
                 return defer.promise;
             }
@@ -155,7 +165,7 @@
                 that.tempData = data;
             }
             , addData: function () {
-                this.tempData.isEdit=1;
+                this.tempData.isEdit = 1;
                 this.deleteRefDetailList.push(this.tempData);
                 this.tempData = editTransactionFactory.tempData();
             }

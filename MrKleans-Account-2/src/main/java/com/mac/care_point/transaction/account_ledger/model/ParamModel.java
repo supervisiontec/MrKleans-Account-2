@@ -11,22 +11,53 @@ import java.io.Serializable;
  *
  * @author kasun
  */
-public class ParamModel implements Serializable{
+public class ParamModel implements Serializable {
+
     private String name;
     private String fromDate;
     private String toDate;
     private String branch;
     private String financialYear;
+    private Integer account;
+    private String invDate;
+    private String refNo;
 
     public ParamModel() {
     }
 
-    public ParamModel(String name, String fromDate, String toDate, String branch, String financialYear) {
+    public ParamModel(String name, String fromDate, String toDate, String branch, String financialYear, Integer account, String invDate, String refNo) {
         this.name = name;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.branch = branch;
         this.financialYear = financialYear;
+        this.account = account;
+        this.invDate = invDate;
+        this.refNo = refNo;
+    }
+
+    public Integer getAccount() {
+        return account;
+    }
+
+    public void setAccount(Integer account) {
+        this.account = account;
+    }
+
+    public String getInvDate() {
+        return invDate;
+    }
+
+    public void setInvDate(String invDate) {
+        this.invDate = invDate;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
     public String getName() {
@@ -68,5 +99,5 @@ public class ParamModel implements Serializable{
     public void setFinancialYear(String financialYear) {
         this.financialYear = financialYear;
     }
-    
+
 }

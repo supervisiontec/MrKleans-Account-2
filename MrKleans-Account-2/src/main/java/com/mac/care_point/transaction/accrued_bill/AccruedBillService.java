@@ -35,47 +35,61 @@ public class AccruedBillService {
     private BranchRepository branchRepository;
 
     public int saveAccruedBill(AccruedBillMix accruedBillMix) {
+        System.out.println("1");
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.ACCRUED);
+        System.out.println("2");
         int deleteNumber = journalRepository.getDeleteNumber();
+        System.out.println("3");
         String searchCode = getSearchCode(Constant.CODE_ACCRUED_BILL, SecurityUtil.getCurrentUser().getBranch(), number);
         int count = 0;
         accruedBillMix.getData().setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
+        System.out.println("4");
         accruedBillMix.getData().setNumber(number);
         accruedBillMix.getData().setDeleteRefNo(deleteNumber);
         accruedBillMix.getData().setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         accruedBillMix.getData().setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
+        System.out.println("5");
         accruedBillMix.getData().setUser(SecurityUtil.getCurrentUser().getBranch());
         accruedBillMix.getData().setReconcileGroup(0);
         accruedBillMix.getData().setBankReconciliation(false);
         accruedBillMix.getData().setIsMain(true);
         accruedBillMix.getData().setIsCheque(false);
         accruedBillMix.getData().setSearchCode(searchCode);
+        System.out.println("6");
 
         TAccLedger save = journalRepository.save(accruedBillMix.getData());
+        System.out.println("7");
         save.setReconcileGroup(save.getIndexNo());
         journalRepository.save(save);
+        System.out.println("8");
 
         for (TAccLedger tAccLedger : accruedBillMix.getDataList()) {
+            System.out.println("9");
             tAccLedger.setNumber(number);
             tAccLedger.setDeleteRefNo(deleteNumber);
             tAccLedger.setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
             tAccLedger.setCurrentDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            System.out.println("10");
             tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getBranch());
             tAccLedger.setTransactionDate(accruedBillMix.getData().getTransactionDate());
             tAccLedger.setReconcileGroup(0);
+            System.out.println("11");
             tAccLedger.setIsMain(Boolean.FALSE);
             tAccLedger.setIsCheque(Boolean.FALSE);
             tAccLedger.setBankReconciliation(false);
             tAccLedger.setSearchCode(searchCode);
 
             journalRepository.save(tAccLedger);
+            System.out.println("12");
             count++;
         }
         if (count == accruedBillMix.getDataList().size()) {
+            System.out.println("13");
             return number;
         }
 
+        System.out.println("14");
         return -1;
 
     }

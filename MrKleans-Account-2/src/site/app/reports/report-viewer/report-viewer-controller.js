@@ -13,8 +13,8 @@
 
 //                $scope.model.currentReport.parameterValues.FROM_DATE = new Date();
 //                $scope.model.currentReport.parameterValues.TO_DATE = new Date();
-                $scope.model.currentReport.parameterValues.FROM_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
-                $scope.model.currentReport.parameterValues.TO_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
+//                $scope.model.currentReport.parameterValues.FROM_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
+//                $scope.model.currentReport.parameterValues.TO_DATE = $filter('date')(new Date(), 'dd-MM-yyyy');
 
                 $scope.ui.selectReportGroup = function (reportGroup) {
                     $scope.model.currentReportGroup = reportGroup;
@@ -25,7 +25,6 @@
 
                     ReportViewerService.listParameters(report)
                             .success(function (data) {
-                                console.log(data);
                                 $scope.model.currentReport.parameters = data;
                             });
 
@@ -36,7 +35,7 @@
                 $scope.ui.viewCurrentReport = function () {
                     if ($scope.model.currentReport.report) {
                         $scope.ui.status = "LOADING";
-                        console.log($scope.model.currentReport.parameters);
+                        console.log($scope.model.currentReport.parameterValues);
                         ReportViewerService.viewReport(
                                 $scope.model.currentReport.report,
                                 $scope.model.currentReport.parameters,

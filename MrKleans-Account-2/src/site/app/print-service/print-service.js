@@ -14,7 +14,7 @@
             , printPdf: function (id) {
 //                01 working
                 var divToPrint = document.getElementById(id);
-                newWin = window.open("financial_accounts");
+                newWin = window.open("print");
                 newWin.document.write(divToPrint.outerHTML);
                 newWin.print();
                 newWin.close();

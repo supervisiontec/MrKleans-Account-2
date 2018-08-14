@@ -30,7 +30,7 @@ public class SupplierPaymentController {
     private SupplierPaymentSevrice paymentSevrice;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Integer saveSupplierPayment(@RequestBody SupplierPaymentMix paymentMix) {
+    public TAccLedger saveSupplierPayment(@RequestBody SupplierPaymentMix paymentMix) {
         return paymentSevrice.saveSupplierPayment(paymentMix);
 
     }

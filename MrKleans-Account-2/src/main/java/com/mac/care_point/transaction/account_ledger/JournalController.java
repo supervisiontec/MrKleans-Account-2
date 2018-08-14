@@ -30,7 +30,7 @@ public class JournalController {
     private JournalService journalService;
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Integer saveJournal(@RequestBody List<TAccLedger> list) {
+    public TAccLedger saveJournal(@RequestBody List<TAccLedger> list) {
         return journalService.saveJournal(list);
     }
     @RequestMapping(value = "/find-journal-and-branch/{number}", method = RequestMethod.GET)
@@ -43,7 +43,25 @@ public class JournalController {
     }
     @RequestMapping(value = "/get-ledger-type-data-list", method = RequestMethod.POST)
     public List<TAccLedger> getLedgerTypeDataList(@RequestBody ParamModel paramModel) {
-        return journalService.getLedgerTypeDataList(paramModel.getName(),paramModel.getFromDate(),paramModel.getToDate(),paramModel.getBranch(),paramModel.getFinancialYear());
+        return journalService.getLedgerTypeDataList(
+                paramModel.getName(),
+                paramModel.getFromDate(),
+                paramModel.getToDate(),
+                paramModel.getBranch(),
+                paramModel.getFinancialYear(),
+                paramModel.getAccount(),
+                paramModel.getInvDate(),
+                paramModel.getRefNo()
+        );
+    }
+    
+    @RequestMapping(value = "/get-supplier-balance-list", method = RequestMethod.GET)
+    public Object[] getSupplierBalanceList() {
+        return journalService.getSupplierBalanceList();
+    }
+    @RequestMapping(value = "/get-account-ledger-by-account/{account}", method = RequestMethod.GET)
+    public List<TAccLedger> getAccountLedgerByAccount(@PathVariable("account")Integer account) {
+        return journalService.getAccountLedgerByAccount(account);
     }
     @RequestMapping(value = "/get-delete-ref-details/{number}", method = RequestMethod.GET)
     public List<TAccLedger> getdeleteRefDetails(@PathVariable("number")Integer number) {

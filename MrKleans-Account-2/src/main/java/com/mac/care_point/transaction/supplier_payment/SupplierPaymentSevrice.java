@@ -61,21 +61,22 @@ public class SupplierPaymentSevrice {
     }
 
     @Transactional
-    public Integer saveSupplierPayment(SupplierPaymentMix mix) {
+    public TAccLedger saveSupplierPayment(SupplierPaymentMix mix) {
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.SUPPLIER_PAYMENT);
         int deleteNumber = journalRepository.getDeleteNumber();
         String code;
         AccCodeSetting accCodeSetting = accCodeSettingRepository.findByAccount(mix.getData().getAccAccount());
-        if (accCodeSetting == null && !"SETTLEMENT".equals(mix.getData().getAccType()) ) {
+        if (accCodeSetting == null && !"SETTLEMENT".equals(mix.getData().getAccType())) {
             throw new RuntimeException("Accout Code Setting not Found for this Account !");
-        }else if(accCodeSetting == null ){
-            code=getSearchCode2(Constant.CODE_SETTLEMENT,SecurityUtil.getCurrentUser().getBranch(),number);
-        }else{
+        } else if (accCodeSetting == null) {
+            code = getSearchCode2(Constant.CODE_SETTLEMENT, SecurityUtil.getCurrentUser().getBranch(), number);
+        } else {
             code = getSearchCode(Constant.CODE_PAY, SecurityUtil.getCurrentUser().getBranch(), accCodeSetting);
         }
         String searchCode = getSearchCode(Constant.CODE_SUPPLIER_PAYMENT, SecurityUtil.getCurrentUser().getBranch(), number);
         BigDecimal overPayment = new BigDecimal(0);
         overPayment = (BigDecimal) subtract(mix.getData().getCredit(), mix.getData().getBillTotal());
+        TAccLedger save = new TAccLedger();
 
         if ("BANK".equals(mix.getData().getAccType())) {
             MAccSetting unrealizedIssued = accountSettingRepository.findByName(Constant.UNREALIZED_ISSUED);
@@ -103,9 +104,9 @@ public class SupplierPaymentSevrice {
             tAccLedger.setType(mix.getData().getType());
             tAccLedger.setTypeIndexNo(mix.getData().getTypeIndexNo());
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-            TAccLedger save = paymentRepository.save(tAccLedger);
+            save = paymentRepository.save(tAccLedger);
             save.setReconcileGroup(save.getIndexNo());//
-            paymentRepository.save(tAccLedger);
+            paymentRepository.save(save);
 
             for (DataSub sub : mix.getDataList()) {
                 if (sub.getPay().doubleValue() > 0) {
@@ -165,7 +166,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setTypeIndexNo(null);
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 
-            paymentRepository.save(tAccLedger);
+            save = paymentRepository.save(tAccLedger);
 
             for (DataSub sub : mix.getDataList()) {
                 if (sub.getPay().doubleValue() > 0) {
@@ -224,7 +225,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setType(mix.getData().getType());
             tAccLedger.setTypeIndexNo(null);
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
-            TAccLedger save = paymentRepository.save(tAccLedger);
+            save = paymentRepository.save(tAccLedger);
             save.setReconcileGroup(save.getIndexNo());//
             paymentRepository.save(tAccLedger);
 
@@ -423,8 +424,8 @@ public class SupplierPaymentSevrice {
                 tAccLedger1.setCostCenter(mix.getData().getCostCenter());
                 tAccLedger1.setFinancialYear(mix.getData().getFinancialYear());
 
-                TAccLedger save = paymentRepository.save(tAccLedger1);
-                if (save.getIndexNo() <= 0) {
+                TAccLedger save1 = paymentRepository.save(tAccLedger1);
+                if (save1.getIndexNo() <= 0) {
                     throw new RuntimeException("Save Fail !");
                 }
                 for (DataSub detail : mix.getDataList()) {
@@ -484,12 +485,12 @@ public class SupplierPaymentSevrice {
             tAccLedger1.setTypeIndexNo(mix.getData().getTypeIndexNo());
             tAccLedger1.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 
-            TAccLedger save = paymentRepository.save(tAccLedger1);
-            save.setReconcileGroup(save.getIndexNo());
-            paymentRepository.save(save);
+            TAccLedger save1 = paymentRepository.save(tAccLedger1);
+            save1.setReconcileGroup(save1.getIndexNo());
+            paymentRepository.save(save1);
         }
 
-        return 1;
+        return save;
 
     }
 
@@ -525,7 +526,7 @@ public class SupplierPaymentSevrice {
     }
 
     private String getSearchCode2(String code, Integer branch, int number) {
-         MBranch branchModel = branchRepository.findOne(branch);
+        MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
         return code + "/" + branchCode + "/" + number;
     }

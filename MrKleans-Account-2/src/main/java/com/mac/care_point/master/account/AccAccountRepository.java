@@ -63,4 +63,6 @@ public interface AccAccountRepository extends JpaRepository<MAccAccount, Integer
             + "from m_acc_account\n"
             + "where m_acc_account.sub_account_of=:subOf", nativeQuery = true)
     public List<MAccAccount> getList(@Param("subOf") Integer subOf);
+
+    public List<MAccAccount> findByIsAccAccountAndAccTypeOrAccTypeOrAccType(boolean b, String cash, String bank, String cheque);
 }

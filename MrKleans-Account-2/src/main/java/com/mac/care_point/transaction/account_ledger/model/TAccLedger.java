@@ -65,11 +65,11 @@ public class TAccLedger implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "`debit`")
-    private BigDecimal debit;
+    private BigDecimal debit=new BigDecimal(0);
 
     @Basic(optional = false)
     @Column(name = "`credit`")
-    private BigDecimal credit;
+    private BigDecimal credit=new BigDecimal(0);
 
     @Column(name = "form_name")
     private String formName;
@@ -107,8 +107,8 @@ public class TAccLedger implements Serializable {
     @Column(name = "is_main")
     private boolean isMain;
 
-    @Column(name = "is_cheque")
-    private boolean isCheque;
+    @Column(name = "is_cheque", columnDefinition="tinyint(1) default false")
+    private boolean isCheque=false;
 
     @Column(name = "financial_year")
     private Integer financialYear;
@@ -195,7 +195,8 @@ public class TAccLedger implements Serializable {
     public void setSearchCode(String searchCode) {
         this.searchCode = searchCode;
     }
-
+    
+    
     public boolean getIsCheque() {
         return isCheque;
     }

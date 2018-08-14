@@ -67,6 +67,7 @@ public class ReturnChequeService {
         int deleteNumber = journalRepository.getDeleteNumber();
         String searchCode = getSearchCode(Constant.CODE_CHEQUE_RETURN, SecurityUtil.getCurrentUser().getBranch(), number);
 
+        Integer saveCount = 0;
         for (TAccLedger tAccLedger : mix.getDataList()) {
             BigDecimal debit = tAccLedger.getDebit();
             BigDecimal credit = tAccLedger.getCredit();
@@ -87,10 +88,16 @@ public class ReturnChequeService {
             tAccLedger.setCredit(debit);
             tAccLedger.setIsMain(false);
 
-            returnChequeRepository.save(tAccLedger).getIndexNo();
+            TAccLedger save = returnChequeRepository.save(tAccLedger);
+            save.setReconcileGroup(save.getIndexNo());
+            returnChequeRepository.save(save);
+            saveCount++;
 
         }
-        return 1;
+        if (saveCount == mix.getDataList().size()) {
+            return saveCount;
+        }
+        return -1;
     }
 
     private String getSearchCode(String code, Integer branch, int number) {

@@ -6,6 +6,7 @@
 package com.mac.care_point.transaction.voucher;
 
 //import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
+import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.transaction.voucher.model.VoucherMix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,7 +28,7 @@ public class VoucherController {
     private VoucherService voucherService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Integer saveJournal(@RequestBody VoucherMix voucherMix) {
+    public TAccLedger saveJournal(@RequestBody VoucherMix voucherMix) {
         return voucherService.saveVoucher(voucherMix);
 
     }

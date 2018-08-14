@@ -59,6 +59,13 @@
                             'NON_STOCK',
                             'SERVICE'
                         ];
+                        this.reportNameList = [
+                            'Petty Cash Voucher',
+                            'Payment Voucher',
+                            'Supplier Payment Voucher',
+                            'Fund Transfer',
+                            'Journal Voucher'
+                        ];
                     }
                     
                     , accountLable: function (id) {
@@ -145,6 +152,9 @@
                     }
                     , itemTypeLable: function (type) {
                         return type;
+                    }
+                    , reportNameLable: function (name) {
+                        return name;
                     }
 
                 };

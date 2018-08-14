@@ -66,7 +66,7 @@ public interface Constant {
     public static final String CODE_BANK_RECONCILIATION = "RECON";
     public static final String CODE_SUPPLIER_PAYMENT = "SUPPAY";
     public static final String CODE_ACCRUED_BILL = "ACRDBIL";
-    public static final String CODE_FUND_TRANSFER = "FNDTRA";
+    public static final String CODE_FUND_TRANSFER = "TRA";
     public static final String CODE_CHEQUE_RETURN = "CHQRTN";
     public static final String CODE_PAYMENT_VOUCHER = "PAYVUC";
     public static final String CODE_PAY = "PAY";

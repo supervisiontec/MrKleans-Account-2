@@ -71,7 +71,47 @@
                     </table>
                 </div>
             </div>
-
+            <div class="col-xs-9 background-light">
+                <table class="table-rounded ">
+                    <colgroup>
+                        <col style="width: 20%">
+                        <col style="width: 20%">
+                        <col style="width: 20%">
+                        <col style="width: 20%">
+                        <col style="width: 5%">
+                        <col style="width: 5%">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Account :
+                                <input class="form-control" type="text" ng-model="param.account" 
+                                       uib-typeahead="acc.indexNo as (acc.accCode + ' - ' + acc.name) for acc in model.accountList |filter:$viewValue|limitTo:10" 
+                                       typeahead-input-formatter="model.accountLable($model)" 
+                                       typeahead-editable="false" ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                Invoice Date :
+                                <input class="form-control" type="date" ng-model="param.invDate" ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                RefNo / cheque no :
+                                <input class="form-control" type="text" ng-model="param.refNo" ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                Filter :
+                                <input class="form-control" type="text" ng-model="searchCode" ng-disabled="ui.mode !== 'NEW'"/>
+                            </td>
+                            <td>
+                                <a class="btn btn-success" style="margin-top: 23px;" ng-click="ui.selectLedgerType(null)"><span class="glyphicon glyphicon-search"></span></a>
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" style="margin-top: 23px;" ng-click="ui.clearParam()"><span class="glyphicon glyphicon-refresh"></span></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="col-xs-9 background-light" ng-show="model.accLedgerTypeDataList.length">
 
                 <table class="table-rounded " >
@@ -99,7 +139,7 @@
                         </tr>
                     </thead>
                 </table>
-                <div class="smart-scroll-y" style="height: calc(100vh - 140px);">
+                <div class="smart-scroll-y" style="height: calc(100vh - 215px);">
                     <table class="table-rounded">
                         <col style="width: 8%"/>
                         <col style="width: 15%"/>
@@ -111,7 +151,7 @@
                         <col style="width: 10%"/>
                         <col style="width: 5%"/>
                         <tbody>
-                            <tr class="background-dark" ng-repeat="data in model.accLedgerTypeDataList">
+                            <tr class="background-dark" ng-repeat="data in model.accLedgerTypeDataList| filter:{searchCode}">
                                 <td>{{data.number}}</td>
                                 <td>{{data.searchCode}}</td>
                                 <td>{{data.transactionDate|date:'yyyy-MM-dd'}}</td>
@@ -130,7 +170,7 @@
                 </div>
             </div>
 
-            <div class="placeholder col-md-9" ng-hide="model.accLedgerTypeDataList.length" style="height: calc(100vh - 110px); padding: 0px 10px 10px 10px;">
+            <div class="placeholder col-md-9" ng-hide="model.accLedgerTypeDataList.length" style="height: calc(100vh - 183px); padding: 0px 10px 10px 10px;">
                 <h1>SELECT A TYPE AND FILTERS TO VIEW DETAILS OR DETAIL WAS EMPTY :(</h1>
             </div>
         </uib-tab>
@@ -195,8 +235,8 @@
                                                         typeahead-input-formatter="model.costCenterLable($model)" 
                                                         typeahead-editable="false"
                                                         ng-disabled="ui.mode !== 'NEW'"></td>
-                                <td>DEBIT :<input class="form-control text-right" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'"></td>
-                                <td>CREDIT :<input class="form-control text-right" ng-model="model.tempData.credit" ng-disabled="ui.mode !== 'NEW'"></td>
+                                <td>DEBIT :<input class="form-control text-right border-cal" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAddFunctionDebit($event,model.tempData.debit)"></td>
+                                <td>CREDIT :<input class="form-control text-right border-cal" ng-model="model.tempData.credit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAddFunctionCredit($event,model.tempData.credit)"></td>
                                 <td>
                                     <a class="btn btn-primary" style="margin-top: 28px" ng-click="ui.addData()">
                                         <span class="glyphicon glyphicon-plus">
@@ -261,7 +301,7 @@
                 </div>
             </div>
 
-            <div class="placeholder col-md-12" ng-hide="model.deleteRefDetailList.length" style="height: calc(100vh - 110px); padding: 0px 10px 10px 10px;">
+            <div class="placeholder col-md-12" ng-hide="model.deleteRefDetailList.length" style="height: calc(100vh - 280px); padding: 0px 10px 10px 10px;">
                 <h1>SELECT A TYPE TO VIEW DETAILS OR DETAIL WAS EMPTY :(</h1>
             </div>
         </uib-tab>

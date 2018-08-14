@@ -1,16 +1,34 @@
 (function () {
     angular.module("appModule")
-            .controller("editTransactionController", function ($scope, editTransactionModel, $timeout, Notification, ConfirmPane) {
+            .controller("editTransactionController", function ($scope, editTransactionModel,calculator, Notification, ConfirmPane) {
                 $scope.model = new editTransactionModel();
                 $scope.ui = {};
                 $scope.param = {
                     "fromDate": null,
                     "toDate": null,
                     "branch": null,
-                    "finacialYear": null
+                    "finacialYear": null,
+                    "account": null,
+                    "invDate": null,
+                    "refNo": null
+
                 };
                 $scope.ui.selectLedgerType = function (name) {
                     $scope.model.getLedgerTypeList(name, $scope.param);
+                };
+                $scope.ui.clearParam = function () {
+                    $scope.param = {
+                        "fromDate": null,
+                        "toDate": null,
+                        "branch": null,
+                        "finacialYear": null,
+                        "account": null,
+                        "invDate": null,
+                        "refNo": null
+
+                    };
+                    $scope.model.accLedgerTypeDataList = [];
+                    ;
                 };
                 $scope.ui.edit = function (number) {
                     $scope.model.getDeleteRefDetails(number);
@@ -67,14 +85,30 @@
                         $scope.model.addData();
                     }
                 };
-                $scope.ui.setIsEditClass=function (isEdit){
-                    if (isEdit===0 || isEdit===null) {
+                $scope.ui.focusAddFunctionDebit = function (e, debit) {
+                    var code = e ? e.keyCode || e.which : 13;
+                    if (code === 13) {
+                        var value = calculator.cal(debit);
+                        console.log(value);
+                        $scope.model.tempData.debit = value;
+                    }
+                };
+                $scope.ui.focusAddFunctionCredit = function (e, credit) {
+                    var code = e ? e.keyCode || e.which : 13;
+                    if (code === 13) {
+                        var value = calculator.cal(credit);
+                        console.log(value);
+                        $scope.model.tempData.credit = value;
+                    }
+                };
+                $scope.ui.setIsEditClass = function (isEdit) {
+                    if (isEdit === 0 || isEdit === null) {
                         return 'label-primary';
                     }
-                    if (isEdit===1) {
+                    if (isEdit === 1) {
                         return 'label-warning';
                     }
-                    if (isEdit===2) {
+                    if (isEdit === 2) {
                         return 'label-danger';
                     }
                 };

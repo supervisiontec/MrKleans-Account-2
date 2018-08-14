@@ -26,7 +26,7 @@ public interface TrialBalanceRepository extends JpaRepository<TAccLedger, Intege
             + "			 left JOIN t_acc_ledger on t_acc_ledger.acc_account=acc2.index_no\n"
             + "			 left JOIN m_acc_main on m_acc_main.index_no=acc2.acc_main\n"
             + "		where left(acc2.acc_code,length(acc.acc_code))=acc.acc_code \n"
-            + "			 and t_acc_ledger.transaction_date<=:date\n"
+            + "			 and t_acc_ledger.transaction_date <= :date\n"
             + "		group by acc.acc_code),0.00)	as debit,\n"
             + "	ifnull((select ifnull(if(m_acc_main.increment='CREDIT',sum(t_acc_ledger.credit)-sum(t_acc_ledger.debit),0.00),0.00)\n"
             + "		from m_acc_account acc3\n"

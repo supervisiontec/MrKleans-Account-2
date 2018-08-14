@@ -35,7 +35,7 @@
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? 'http://localhost:8070'
+                        ? 'http://localhost:8075'
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 
@@ -122,6 +122,10 @@
                         .when("/transaction/journal", {
                             templateUrl: "app/accounts/journal/journal.html",
                             controller: "journalController"
+                        })
+                        .when("/transaction/all-transaction", {
+                            templateUrl: "app/accounts/all-transaction/all-transaction.html",
+                            controller: "allTransactionController"
                         })
                         .when("/transaction/edit-transaction", {
                             templateUrl: "app/accounts/edit-transaction/edit-transaction.html",

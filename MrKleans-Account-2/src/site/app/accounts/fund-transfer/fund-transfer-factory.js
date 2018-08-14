@@ -16,13 +16,14 @@
                         "accAccount": null,
                         "formName": 'fund_transfer',
                         "refNumber": null,
-                        "type": 'voucher',
+                        "type": 'transfer',
                         "typeIndexNo": null,
                         "description": '',
                         "chequeDate": null,
                         "bankReconciliation": false,
                         "reconcileAccount":null,
-                        "reconcileGroup":0
+                        "reconcileGroup":0,
+                        "isCheque":0
 
                     };
                     return data;

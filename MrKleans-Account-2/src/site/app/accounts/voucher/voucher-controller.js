@@ -1,10 +1,18 @@
 (function () {
     angular.module("appModule")
-            .controller("voucherController", function ($scope, voucherModel, $timeout, $uibModal, Notification, ConfirmPane) {
+            .controller("voucherController", function ($scope, $sce, voucherModel,calculator, printService, voucherService, $timeout, $uibModal, Notification, ConfirmPane) {
                 $scope.model = new voucherModel();
+                $scope.printService = new printService();
                 $scope.ui = {};
                 $scope.model.currentBranch = {};
                 $scope.model.type = null;
+
+                $scope.reportName = "General Voucher";
+
+                $scope.printModel = {};
+                $scope.printModel.currentReportGroup = {};
+                $scope.printModel.currentReport = {};
+                $scope.printModel.currentReport.parameterValues = {};
 
                 //focus
                 $scope.ui.focus = function (id) {
@@ -81,13 +89,71 @@
                         }
                     }
                     if (checkSave) {
-                        $scope.model.save()
-                                .then(function (data) {
-                                    Notification.success('Payment voucher save Sucess');
-                                    $scope.ui.mode = "IDEAL";
-                                    $scope.model.saveDataList = [];
+                        ConfirmPane.successConfirm("DO YOU WANT TO SAVE !")
+                                .confirm(function () {
+                                    $scope.model.save()
+                                            .then(function (data) {
+                                                Notification.success('Payment voucher save Sucess');
+                                                $scope.ui.mode = "IDEAL";
+                                                $scope.model.saveDataList = [];
+
+                                                ConfirmPane.primaryConfirm("DO YOU WANT TO PRINT !")
+                                                        .confirm(function () {
+                                                            $scope.ui.modalOpen(data.searchCode);
+                                                        });
+                                            });
                                 });
                     }
+                };
+                $scope.ui.modalOpen = function (searchCode) {
+
+                    var reportName = "VOUCHER";
+                    //get report details
+                    voucherService.reportData(reportName)
+                            .success(function (data) {
+                                $scope.printModel.currentReport.report = data;
+
+                                //get report paramiters
+                                voucherService.listParameters(data)
+                                        .success(function (data) {
+                                            $scope.printModel.currentReport.parameters = data;
+                                        });
+
+                                //set paramiters values
+
+                                $scope.printModel.currentReport.parameterValues.REPORT_NAME = $scope.reportName;
+//                                $scope.printModel.currentReport.parameterValues.COMPANY_NAME = $scope.model.company.name;
+                                $scope.printModel.currentReport.parameterValues.CURRENT_BRANCH = $scope.model.currentBranch.indexNo;
+                                $scope.printModel.currentReport.parameterValues.SEARCH_CODE = searchCode;
+
+                                //view reports
+                                voucherService.viewReport(
+                                        $scope.printModel.currentReport.report,
+                                        $scope.printModel.currentReport.parameters,
+                                        $scope.printModel.currentReport.parameterValues
+                                        )
+                                        .success(function (response) {
+                                            var file = new Blob([response], {type: 'application/pdf'});
+                                            var fileURL = URL.createObjectURL(file);
+
+                                            $scope.content = $sce.trustAsResourceUrl(fileURL);
+
+                                            $uibModal.open({
+                                                animation: true,
+                                                ariaLabelledBy: 'modal-title',
+                                                ariaDescribedBy: 'modal-body',
+                                                templateUrl: 'voucher_popup.html',
+                                                scope: $scope,
+                                                size: 'lg'
+                                            });
+
+                                        });
+                            });
+                };
+                $scope.ui.exportExcel = function () {
+                    console.log("exportExcel");
+                    console.log("not support yet !");
+//                    $scope.printService.printExcel('printDiv', $scope.reportName);
                 };
                 $scope.ui.edit = function (index, data) {
                     $scope.model.tempData = data;
@@ -105,14 +171,17 @@
                     $scope.model.setClear();
 
                 };
-                $scope.ui.focusAdd = function (model) {
+                $scope.ui.focusAdd = function (model,amount) {
                     if (model.which === 13) {
-                        $scope.ui.addData();
+                        var value = calculator.cal(amount);
+                        console.log(value);
+                        $scope.model.tempData.debit = value;
                     }
                 };
                 $scope.ui.searchVoucherByNumber = function (number) {
                     var key = event ? event.keyCode || event.which : 13;
                     if (key === 13) {
+                        
                         $scope.model.searchVoucherByNumber(number)
                                 .then(function () {
 

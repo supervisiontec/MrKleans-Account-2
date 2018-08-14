@@ -68,7 +68,7 @@
                     <col style="width: 60%"/>
                     <tbody>
                         <tr>
-                            <td>Transaction Date :</td>
+                            <td>Inv Date :</td>
                             <td>
                                 <input class="form-control" placeholder="" type="date" ng-model="model.data.transactionDate" ng-disabled="ui.mode !== 'NEW'" >
                             </td>
@@ -232,7 +232,7 @@
                         </td>
                         <td>
                             Amount:
-                            <input class="form-control text-right" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAdd($event)">
+                            <input class="form-control text-right border-cal" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAdd($event,model.tempData.debit)">
                         </td>
                         <td>
                             <a class="btn btn-primary" style="margin-top: 28px" id="btnAddData" ng-click="ui.addData()">

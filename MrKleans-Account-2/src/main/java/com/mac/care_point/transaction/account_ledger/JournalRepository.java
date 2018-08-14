@@ -29,15 +29,15 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
     public List<TAccLedger> findByNumberAndBranchAndType(Integer number, Integer branch, String JOURNAL);
 
     @Query(value = "select t_acc_ledger.index_no,\n"
-            + "   t_acc_ledger.number,\n"
+            + "	t_acc_ledger.number,\n"
             + "   t_acc_ledger.transaction_date,\n"
             + "   t_acc_ledger.current_date,\n"
             + "   t_acc_ledger.time,\n"
             + "   t_acc_ledger.branch,\n"
             + "   t_acc_ledger.current_branch,\n"
             + "   t_acc_ledger.user,\n"
-            + "   t_acc_ledger.debit ,\n"
-            + "   t_acc_ledger.credit ,\n"
+            + "   sum(t_acc_ledger.debit) as debit ,\n"
+            + "   sum(t_acc_ledger.credit) as credit ,\n"
             + "   t_acc_ledger.acc_account,\n"
             + "   t_acc_ledger.form_name,\n"
             + "   t_acc_ledger.ref_number,\n"
@@ -56,20 +56,27 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
             + "   t_acc_ledger.cost_department,\n"
             + "   t_acc_ledger.cost_center,\n"
             + "   t_acc_ledger.is_edit\n"
-            + "     from t_acc_ledger\n"
-            + "     where t_acc_ledger.`type`=:name and\n"
-            + "     (:fromDate is null or t_acc_ledger.transaction_date>=:fromDate) and\n"
-            + "     (:toDate is null or t_acc_ledger.transaction_date<=:toDate) and\n"
-            + "     (:branch is null or t_acc_ledger.branch=:branch) and\n"
-            + "     (:year is null or t_acc_ledger.financial_year=:year)\n"
-            + "     group by t_acc_ledger.delete_ref_no\n"
-            + "     order by t_acc_ledger.index_no", nativeQuery = true)
+            + "   from t_acc_ledger\n"
+            + "   where \n"
+            + "	(:name is null or t_acc_ledger.`type`=:name) and\n"
+            + "   (:fromDate is null or t_acc_ledger.transaction_date>=:fromDate) and\n"
+            + "   (:toDate is null or t_acc_ledger.transaction_date<=:toDate) and\n"
+            + "   (:branch is null or t_acc_ledger.branch=:branch) and\n"
+            + "   (:year is null or t_acc_ledger.transaction_date BETWEEN (select m_financial_year.start_date from m_financial_year where m_financial_year.index_no=:year) and (select m_financial_year.end_date from m_financial_year where m_financial_year.index_no=:year) ) and \n"
+            + "   (:account is null or t_acc_ledger.acc_account=:account) and\n"
+            + "   (:invDate is null or t_acc_ledger.transaction_date=:invDate)and \n"
+            + "   (:refNo is null or t_acc_ledger.ref_number=:refNo)\n"
+            + "   group by t_acc_ledger.delete_ref_no\n"
+            + "   order by t_acc_ledger.index_no desc", nativeQuery = true)
     public List<TAccLedger> getLedgerTypeDataList(
             @Param("name") String name,
             @Param("fromDate") String fromDate,
             @Param("toDate") String toDate,
             @Param("branch") String branch,
-            @Param("year") String year
+            @Param("year") String year,
+            @Param("account") Integer account,
+            @Param("invDate") String invDate,
+            @Param("refNo") String refNo
     );
 
     public List<TAccLedger> findByDeleteRefNo(Integer number);
@@ -148,9 +155,22 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
             + "   t_acc_ledger.is_edit\n"
             + "from t_acc_ledger\n"
             + "where t_acc_ledger.acc_account=:account\n"
-            +"and (t_acc_ledger.reconcile_group!=null or t_acc_ledger.reconcile_group!=0)\n"
+            + "and (t_acc_ledger.reconcile_group!=null or t_acc_ledger.reconcile_group!=0)\n"
             + "group by t_acc_ledger.reconcile_group\n"
             + "having debit!=credit", nativeQuery = true)
     public List<TAccLedger> getPayableBills(@Param("account") Integer account);
+
+    @Query(value = "select m_supplier.acc_account,\n"
+            + "m_acc_account.name as supplier_name,\n"
+            + "ifnull(sum(t_acc_ledger.credit)-sum(t_acc_ledger.debit),0.00) as balance,\n"
+            + "m_supplier.index_no as typeIndexNo\n"
+            + "from m_supplier\n"
+            + "left join m_acc_account on m_acc_account.index_no=m_supplier.acc_account\n"
+            + "left join t_acc_ledger on t_acc_ledger.acc_account=m_acc_account.index_no\n"
+            + "group by t_acc_ledger.acc_account\n"
+            + "order by m_acc_account.name", nativeQuery = true)
+    public Object[] getSupplierBalanceList();
+
+    public List<TAccLedger> findByAccAccountOrderByTransactionDate(Integer account);
 
 }

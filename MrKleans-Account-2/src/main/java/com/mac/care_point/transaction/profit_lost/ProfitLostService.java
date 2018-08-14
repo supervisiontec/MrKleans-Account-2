@@ -30,12 +30,12 @@ public class ProfitLostService {
     BigDecimal purchase = new BigDecimal(0);
     BigDecimal closeStock = new BigDecimal(0);
 
-    public List<TProfitLostModel> loadProfitLostMain() {
+    public List<TProfitLostModel> loadProfitLostMain(Integer financialYear) {
 
         List<TProfitLostModel> mainList = profitLostRepository.findAll();
         List<TProfitLostModel> returnList = new ArrayList<>();
 
-        BigDecimal salesIncome = getRevenueTotal();
+        BigDecimal salesIncome = getRevenueTotal(financialYear);
         BigDecimal cost = new BigDecimal(0);
         BigDecimal otherIncome = getOtherIncome();
         BigDecimal otherExpense = getOtherExpense();
@@ -83,8 +83,8 @@ public class ProfitLostService {
 
     }
 
-    private BigDecimal getRevenueTotal() {
-        return profitLostRepository.getRevenueTotal();
+    private BigDecimal getRevenueTotal(Integer financialYear) {
+        return profitLostRepository.getRevenueTotal(financialYear);
     }
 
     private BigDecimal getOtherIncome() {

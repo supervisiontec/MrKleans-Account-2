@@ -188,18 +188,29 @@ public class AccAccountService {
         return arrayList;
     }
 
-    public List<MAccAccount> change(Integer subOf,Integer length,Integer place) {
-        List<MAccAccount> list=accAccountRepository.getList(subOf);
-        List<MAccAccount> list2=new ArrayList<>();
+    public List<MAccAccount> change(Integer subOf, Integer length, Integer place) {
+        List<MAccAccount> list = accAccountRepository.getList(subOf);
+        List<MAccAccount> list2 = new ArrayList<>();
         for (MAccAccount mAccAccount : list) {
             String[] split = mAccAccount.getAccCode().split(Pattern.quote("."));
-            String fixedLength="%"+length+"s";
+            String fixedLength = "%" + length + "s";
             String val = String.format(fixedLength, split[place]).replace(' ', '0');
             System.out.println(val);
-            mAccAccount.setAccCode(split[0]+"."+split[1]+"."+split[2]+"."+val);
+            mAccAccount.setAccCode(split[0] + "." + split[1] + "." + split[2] + "." + val);
             list2.add(mAccAccount);
         }
         accAccountRepository.save(list2);
         return list2;
+    }
+
+    public List<MAccAccount> findByIsAccAccountAndAccTypeOrAccTypeOrAccType(boolean b, String cash, String bank, String cheque) {
+        ArrayList<MAccAccount> returnList = new ArrayList<MAccAccount>();
+        List<MAccAccount> list = accAccountRepository.findByIsAccAccountAndAccTypeOrAccTypeOrAccType(b, cash, bank,cheque);
+        for (MAccAccount mAccAccount : list) {
+            if (mAccAccount.getIsAccAccount()) {
+                returnList.add(mAccAccount);
+            }
+        }
+        return returnList;
     }
 }

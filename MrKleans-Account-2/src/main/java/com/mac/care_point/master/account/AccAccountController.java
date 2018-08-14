@@ -61,9 +61,13 @@ public class AccAccountController {
         return accAccountService.findAccountForSetting();
     }
 
-    @RequestMapping(value = "/find-only-cahs-bank", method = RequestMethod.GET)
-    public List<MAccAccount> findCahsBank() {
+    @RequestMapping(value = "/find-only-cash-bank", method = RequestMethod.GET)
+    public List<MAccAccount> findCashBank() {
         return accAccountService.findByIsAccAccountAndAccTypeOrAccType(true, "CASH", "BANK");
+    }
+    @RequestMapping(value = "/find-only-cash-bank-cheque", method = RequestMethod.GET)
+    public List<MAccAccount> findCashBankCheque() {
+        return accAccountService.findByIsAccAccountAndAccTypeOrAccTypeOrAccType(true, "CASH", "BANK","CHEQUE");
     }
 
     @RequestMapping(value = "/find-over-payment-issue-account", method = RequestMethod.GET)

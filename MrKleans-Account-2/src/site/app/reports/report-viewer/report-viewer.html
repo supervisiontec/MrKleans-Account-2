@@ -162,6 +162,14 @@
                                                typeahead-input-formatter="newModel.itemTypeLable(model.currentReport.parameterValues.ITEM_TYPE)" >
                                         </td>
                                     </tr>
+                                    <tr ng-show="ui.isParameterAvailable('REPORT_NAME')">
+                                        <td><label class="control-label">REPORT NAME</label></td>
+                                        <td>
+                                            <input class="form-control" id="status" ng-model="model.currentReport.parameterValues.REPORT_NAME" 
+                                               uib-typeahead="name as (name) for name in newModel.reportNameList |filter:$viewValue |limitTo:10" 
+                                               typeahead-input-formatter="newModel.reportNameLable(model.currentReport.parameterValues.REPORT_NAME)" >
+                                        </td>
+                                    </tr>
                                 </tbody>                 
                             </table>
                             <a class="btn btn-block btn-primary" ng-click="ui.viewCurrentReport();">VIEW</a>

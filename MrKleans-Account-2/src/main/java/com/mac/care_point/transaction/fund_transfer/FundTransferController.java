@@ -29,7 +29,7 @@ public class FundTransferController {
     private FundTransferService fundTransferService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Integer saveJournal(@RequestBody FundTransferMix fundTransferMix) {
+    public TAccLedger saveJournal(@RequestBody FundTransferMix fundTransferMix) {
         return fundTransferService.saveFundTransfer(fundTransferMix);
     }
     @RequestMapping(value = "/find-fund-transfer-by-number-and-branch/{number}", method = RequestMethod.GET)

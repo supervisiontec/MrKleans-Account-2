@@ -37,7 +37,6 @@
                         });
                 fundTransferService.getPermission('Fund Transfer')
                         .success(function (data) {
-                            console.log(data);
                             that.userPermission = data;
                         });
 
@@ -103,14 +102,14 @@
                 data.dataList = this.saveDataList;
                 this.data.transactionDate = $filter('date')(this.data.transactionDate, 'yyyy-MM-dd');
                 this.data.chequeDate = $filter('date')(this.data.chequeDate, 'yyyy-MM-dd');
+                
                 data.data = this.data;
-
-                console.log(data);
+                data.data.isCheque = angular.isUndefined(this.data.isCheque)?false:this.data.isCheque;
 
                 var defer = $q.defer();
                 fundTransferService.saveFundTransfer(JSON.stringify(data))
                         .success(function (data) {
-                            that.saveDataList = [];
+                            that.setClear();
                             defer.resolve(data);
                         })
                         .error(function (data) {
@@ -122,8 +121,6 @@
 
                 this.tempData = fundTransferFactory.tempData();
                 this.data = fundTransferFactory.Data();
-                this.tempData.transactionDate = new Date();
-                this.data.transactionDate = new Date();
                 this.tempData.branch = this.currentBranch.indexNo;
                 this.data.branch = this.currentBranch.indexNo;
                 this.saveDataList = [];

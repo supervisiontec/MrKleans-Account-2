@@ -1,372 +1,501 @@
 <div class="index-content-header"></div>
 
 <div class="index-content-body ">
-    <div class="col-xs-4" >
-        <table class="table-rounded control-table">
-            <colgroup>
-                <col style="width: 100%">
-            </colgroup>
-            <tbody>
-                <tr class="select-primary-row-table-header">
-                    <td><label class="control-label text-center">SUPPLIER PAYMENT</label></td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table-rounded control-table">
-            <colgroup>
-                <col style="width: 40%">
-                <col style="width: 60%">
-            </colgroup>
-            <tbody>
-                <tr >
-                    <td>
-                        <label class="control-label text-center">SELECT SUPPLIER :</label>
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" ng-model="model.data.typeIndexNo" 
-                               uib-typeahead="supplier.indexNo as (supplier.indexNo + ' - ' + supplier.name) for supplier in model.supplierList |filter:$viewValue | limitTo:10" 
-                               typeahead-input-formatter="model.supplierLable(model.data.typeIndexNo)" 
-                               typeahead-on-select="model.getPayableBills(model.data.typeIndexNo);"
-                               typeahead-editable="false"
-                               ng-disabled="ui.mode !== 'NEW'"
-                               id="supplier"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="background-dark smart-scroll-y" style="height: calc(100vh - 150px)">
-            <div class="col-xs-12 background-light nopadding">
-                <div class="row col-xs-12 nopadding">
-                    <table class="table-rounded control-table square-table">
-                        <col style="width: 33.3%"/>
-                        <col style="width: 33.3%"/>
-                        <col style="width: 33.3%"/>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    CASH
-                                    <input type="radio" name='type' checked style="margin-left: 10px" ng-model="model.typeCash" 
-                                           ng-click="ui.checkType('CASH')"
-                                           ng-disabled="ui.mode !== 'NEW'"/>
-                                </td>
-                                <td>
-                                    BANK
-                                    <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeBank" 
-                                           ng-click="ui.checkType('BANK')"
-                                           ng-disabled="ui.mode !== 'NEW'"/>
-                                </td>
-                                <td>
-                                    ONLINE
-                                    <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeOnline" 
-                                           ng-click="ui.checkType('ONLINE')"
-                                           ng-disabled="ui.mode !== 'NEW'"/>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row col-xs-12 nopadding">
-                    <table class="table-rounded control-table square-table">
-                        <col style="width: 50%"/>
-                        <col style="width: 50%"/>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    OVER PAYMENT
-                                    <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeOverPayment" 
-                                           ng-click="ui.checkType('OVER_PAYMENT')"
-                                           ng-disabled="ui.mode !== 'NEW' || !model.data.overAmount"/>
-                                </td>
-                                <td>
-                                    SETTLEMENT
-                                    <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeSettlement" 
-                                           ng-click="ui.checkType('SETTLEMENT')"
-                                           ng-disabled="ui.mode !== 'NEW'"/>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row col-xs-12 nopadding" ng-show="model.data.accType === 'SETTLEMENT'">
-                    <table class="table-rounded control-table square-table">
-                        <col style="width: 50%"/>
-                        <col style="width: 50%"/>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    WITH ACCOUNT
-                                    <input type="radio" name='type1' style="margin-left: 10px" ng-model="model.typeAccount" 
-                                           ng-click="ui.checkTypeSub('ACCOUNT')"
-                                           ng-disabled="ui.mode !== 'NEW'"/>
-                                </td>
-                                <td>
-                                    WITH RETURN
-                                    <input type="radio" name='type1' style="margin-left: 10px" ng-model="model.typeReturn" 
-                                           ng-click="ui.checkTypeSub('RETURN')"
-                                           ng-disabled="ui.mode !== 'NEW'"/>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-
-            <div class="background-dark">
-                <table class="table-rounded control-table" style="padding: 3px;">
-                    <colgroup>
-                        <col style="width: 40%">
-                        <col style="width: 60%">
-                    </colgroup>
-                    <tbody>
-                        <tr class="background-light">
-                            <td>
-                                <label class="control-label text-center">Select Account :</label>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" ng-model='model.data.accAccount'
-                                       uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.typeAccAccountList |filter:$viewValue | limitTo:10" 
-                                       typeahead-input-formatter="model.accountLable(model.data.accAccount)" 
-                                       typeahead-on-select="model.getValue(model.data.accAccount)"
-                                       typeahead-editable="false"
-                                       ng-disabled="ui.mode !== 'NEW' || model.data.accType === 'OVER_PAYMENT' || model.data.accTypeSub === 'RETURN'"
-                                       id="account"
-                                       />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="table-rounded control-table" style="padding: 3px;" ng-show="model.data.accType !== 'OVER_PAYMENT'">
-                    <colgroup>
-                        <col style="width: 40%">
-                        <col style="width: 60%">
-                    </colgroup>
-                    <tbody>
-                        <tr class="background-light">
-                            <td>
-                                <label class="control-label text-center">Account Value:</label>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control text-right" ng-model='model.data.value'
-                                       ng-disabled="true"/>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <table class="table-rounded control-table">
-                <colgroup>
-                    <col style="width: 40%">
-                    <col style="width: 60%">
-                </colgroup>
-                <tbody>
-                    <tr >
-                        <td>
-                            <label class="control-label text-center">PAY TOTAL :</label>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control text-right" ng-model='model.data.credit' 
-                                   ng-disabled="ui.mode !== 'NEW' || model.data.accTypeSub === 'RETURN'" ng-change="model.changePayAmount()"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table-rounded control-table" ng-show="model.data.accType === 'BANK'">
-                <colgroup>
-                    <col style="width: 40%">
-                    <col style="width: 60%">
-                </colgroup>
-                <tbody>
-                    <tr >
-                        <td>
-                            <label class="control-label text-center">CHEQUE NO :</label>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" ng-model='model.data.refNumber'>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table-rounded control-table" ng-show="model.data.accType === 'BANK'">
-                <colgroup>
-                    <col style="width: 40%">
-                    <col style="width: 60%">
-                </colgroup>
-                <tbody>
-                    <tr >
-                        <td>
-                            <label class="control-label text-center">CHEQUE DATE :</label>
-                        </td>
-                        <td>
-                            <input type="DATE" class="form-control" ng-model='model.data.chequeDate'/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table-rounded control-table" ng-show="model.data.accType !== 'BANK'">
-                <colgroup>
-                    <col style="width: 40%">
-                    <col style="width: 60%">
-                </colgroup>
-                <tbody>
-                    <tr >
-                        <td>
-                            <label class="control-label text-center">REF NUMBER :</label>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" ng-disabled="ui.mode !== 'NEW'" ng-model='model.data.refNumber'/>
-                        </td>
-                    </tr>
-                    <tr ng-show="model.data.accTypeSub === 'ACCOUNT'">
-                        <td>
-                            <label class="control-label text-center">Cost Department :</label>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" ng-model="model.data.costDepartment" 
-                                   uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostDepartmentList | filter:$viewValue | limitTo:10" 
-                                   typeahead-input-formatter="model.activeCostDepartmentLable($model);" 
-                                   ng-disabled="ui.mode !== 'NEW'">
-                        </td>
-                    </tr>
-                    <tr ng-show="model.data.accTypeSub === 'ACCOUNT'">
-                        <td>
-                            <label class="control-label text-center">Cost Center :</label>
-                        </td>
-                        <td>
-                            <input class="form-control" ng-model="model.data.costCenter" 
-                                   uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostCenterList | filter:$viewValue | limitTo:10" 
-                                   typeahead-input-formatter="model.activeCostCenterLable($model);" 
-                                   ng-disabled="ui.mode !== 'NEW'">
-                        </td>
-                    </tr>
-                    <tr >
-                        <td>
-                            <label class="control-label">Over Payment Stmt. :</label>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control text-right" ng-model='model.data.overAmount' ng-disabled='true'/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col-xs-8 background-dark">
-        <div class="row" style="display: flex; flex-flow: column; padding: 5px">
-
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+    <uib-tabset active="model.tabActive">
+        <uib-tab heading="SELECTION" index="0" select="ui.toggleType('SELECTION');">
+            <div class="col-xs-4">
                 <table class="table-rounded control-table">
-                    <col style="width: 33.3%"/>
-                    <col style="width: 33.3%"/>
-                    <col style="width: 33.3%"/>
+                    <colgroup>
+                        <col style="width: 100%">
+                    </colgroup>
+                    <tbody>
+                        <tr class="select-primary-row-table-header">
+                            <td><label class="control-label text-center">SELECT SUPPLIER</label></td>
+                        </tr>
+                        <tr>
+                            <td class="nopadding"><input type="text" class="form-control" placeholder="search supplier" ng-disabled="ui.mode !== 'NEW'" ng-model="search" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-rounded control-table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 50%">
+                        <col style="width: 40%">
+                    </colgroup>
+                    <tbody>
+                        <tr class="background-dark">
+                            <td><b>#</b></td>
+                            <td>Supplier Name</td>
+                            <td class="text-right">Amount</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="smart-scroll-y" style="height: calc(100vh - 238px)" ng-show="model.supplierBalanceList.length">
+                    <table class="table-rounded control-table table-hover" ng-class="ui.mode === 'NEW' ? '' : 'table-disabled'">
+                        <colgroup>
+                            <col style="width: 10%">
+                            <col style="width: 50%">
+                            <col style="width: 40%">
+                        </colgroup>
+                        <tbody>
+                            <tr ng-repeat="data in model.supplierBalanceList| filter:search" ng-click="model.selectBalanceSupplier(data[0],data[3])" ng-class="model.selectSupplier === data[3] ? 'select-default-row-table-header' : ''">
+                                <td><label class="label label-primary">{{$index + 1}}</label></td>
+                                <td>{{data[1]}}</td>
+                                <td class="text-right">{{data[2]|number:2}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="placeholder col-md-12" ng-hide="model.supplierBalanceList.length" style="height: calc(100vh - 260px); padding: 0px 10px 0px 10px;">
+                    <h1>EMPTY BALANCE SUPPLIER :(</h1>
+                </div>
+            </div>
+            <div class="col-xs-8 background-dark">
+                <table class="table-rounded control-table">
+                    <colgroup>
+                        <col style="width: 100%">
+                    </colgroup>
                     <tbody>
                         <tr>
-                            <td>
-                                Number :
-                                <input type="text" class="form-control" ng-model="model.data.number" ng-keypress="ui.searchByNumber(model.data.number)"
-                                       ng-disabled="ui.mode !== 'IDEAL'" />    
-                            </td>
-                            <td>
-                                Transaction Date :
-                                <input class="form-control" placeholder="" type="date" ng-model="model.data.transactionDate" ng-disabled="ui.mode !== 'NEW'" >
-                            </td>
-                            <td>
-                                Description :
-                                <input class="form-control" placeholder="" ng-model="model.data.description" ng-disabled="ui.mode !== 'NEW'" >
-                            </td>
+                            <td><input type="text" class="form-control" ng-repeat="searchDetail"/></td>
                         </tr>
                     </tbody>
                 </table>
+                <table class="table-rounded " >
+                    <col style="width: 7%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 15%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 20%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 10%"/>
+
+                    <thead class="background-dark">
+                        <tr>
+                            <th>Number</th>
+                            <th>Code</th>
+                            <th>Account</th>
+                            <th>Ref No</th>
+                            <th>description</th>
+                            <th class="text-right">Debit</th>
+                            <th class="text-right">Credit</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="smart-scroll-y" style="height: calc(100vh - 145px)" ng-show="model.accLedgerList.length">
+
+                    <table class="table-rounded control-table">
+                        <col style="width: 7%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 15%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 20%"/>
+                        <col style="width: 10%"/>
+                        <col style="width: 10%"/>
+                        <tbody>
+                            <tr ng-repeat="data in model.accLedgerList|filter:{searchDetail}">
+                                <td><label class="label label-default"> {{data.number|fixedLength:5}}</label></td>
+                                <td>{{data.searchCode}}</td>
+                                <td>{{model.accountLable(data.accAccount)}}</td>
+                                <td>{{data.refNumber===null?'- - -':data.refNumber}}</td>
+                                <td class="over-flow-hidden">{{data.description===null?'- - -':data.description}}</td>
+                                <td class="text-right">{{data.debit|number:2}}</td>
+                                <td class="text-right">{{data.credit|number:2}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                 <div class="placeholder col-md-12" ng-hide="model.accLedgerList.length" style="height: calc(100vh - 183px); padding: 0px 10px 0px 10px;">
+                    <h1>SELECT A SUPPLIER VIEW DETAIL OR EMPTY DETAILS  :(</h1>
+                </div>
             </div>
-
-            <table class="table-rounded control-table">
-                <colgroup>
-                    <col style="width: 100%">
-                </colgroup>
-                <tbody>
-                    <tr class="select-primary-row-table-header">
-                        <td><label class="control-label text-center">BILL DETAILS</label></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table class="table-rounded control-table">
-                <colgroup>
-                    <col style="width: 14%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 13%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 17%"/>
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <td><label>Search Code</label></td>
-                        <td><label>Ref No</label></td>
-                        <td><label>Tra.Date</label></td>
-                        <td><label class="pull-right">Bill Amount</label></td>
-                        <td><label class="pull-right">Paid Amount</label></td>
-                        <td><label class="pull-right">Balance</label></td>
-                        <td><label>Pay Amount</label></td>
-
-                    </tr>
-                </tbody>
-            </table>
-            <div class="smart-scroll-y" style="height: calc(100vh - 285px)" ng-show="model.billList.length">
-                <table class="table-rounded control-table table-hover">
-                    <col style="width: 14%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 13%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 14%"/>
-                    <col style="width: 17%"/>
+        </uib-tab>
+        <uib-tab heading="PAYMENT" index="1" select="ui.toggleType('PAYMENT');">
+            <div class="col-xs-4" >
+                <table class="table-rounded control-table">
+                    <colgroup>
+                        <col style="width: 100%">
+                    </colgroup>
                     <tbody>
-                        <tr ng-repeat="bill in model.billList| orderBy:'transactionDate'">
-                            <td><label class="label label-default">{{bill.searchCode}}</label></td>
-                            <td><label>{{bill.refNumber===null?'- - -':bill.refNumber}}</label></td>
-                            <td><label>{{bill.transactionDate}}</label></td>
-                            <td><label class="pull-right">{{bill.credit| number:2}}</label></td>
-                            <td><label class="pull-right">{{bill.debit| number:2}}</label></td>
-                            <td><label class="pull-right">{{(bill.credit - bill.debit)| number:2}}</label></td>
-                            <td><input class="form-control text-right" ng-model="bill.pay" ng-change="model.changePayAmount()" ng-focus="model.setBalanceAmountToPay(bill);"> </td>
+                        <tr class="select-primary-row-table-header">
+                            <td><label class="control-label text-center">SUPPLIER PAYMENT</label></td>
                         </tr>
                     </tbody>
                 </table>
+                <table class="table-rounded control-table">
+                    <colgroup>
+                        <col style="width: 40%">
+                        <col style="width: 60%">
+                    </colgroup>
+                    <tbody>
+                        <tr >
+                            <td>
+                                <label class="control-label text-center">SELECT SUPPLIER :</label>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="model.data.typeIndexNo" 
+                                       uib-typeahead="supplier.indexNo as (supplier.indexNo + ' - ' + supplier.name) for supplier in model.supplierList |filter:$viewValue | limitTo:10" 
+                                       typeahead-input-formatter="model.supplierLable(model.data.typeIndexNo)" 
+                                       typeahead-on-select="model.getPayableBills(model.data.typeIndexNo);"
+                                       typeahead-editable="false"
+                                       ng-disabled="ui.mode !== 'NEW'"
+                                       id="supplier"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="background-dark smart-scroll-y" style="height: calc(100vh - 190px)">
+                    <div class="col-xs-12 background-light nopadding">
+                        <div class="row col-xs-12 nopadding">
+                            <table class="table-rounded control-table square-table">
+                                <col style="width: 33.3%"/>
+                                <col style="width: 33.3%"/>
+                                <col style="width: 33.3%"/>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            CASH
+                                            <input type="radio" name='type' checked style="margin-left: 10px" ng-model="model.typeCash" 
+                                                   ng-click="ui.checkType('CASH')"
+                                                   ng-disabled="ui.mode !== 'NEW'"/>
+                                        </td>
+                                        <td>
+                                            BANK
+                                            <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeBank" 
+                                                   ng-click="ui.checkType('BANK')"
+                                                   ng-disabled="ui.mode !== 'NEW'"/>
+                                        </td>
+                                        <td>
+                                            ONLINE
+                                            <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeOnline" 
+                                                   ng-click="ui.checkType('ONLINE')"
+                                                   ng-disabled="ui.mode !== 'NEW'"/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row col-xs-12 nopadding">
+                            <table class="table-rounded control-table square-table">
+                                <col style="width: 50%"/>
+                                <col style="width: 50%"/>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            OVER PAYMENT
+                                            <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeOverPayment" 
+                                                   ng-click="ui.checkType('OVER_PAYMENT')"
+                                                   ng-disabled="ui.mode !== 'NEW' || !model.data.overAmount"/>
+                                        </td>
+                                        <td>
+                                            SETTLEMENT
+                                            <input type="radio" name='type' style="margin-left: 10px" ng-model="model.typeSettlement" 
+                                                   ng-click="ui.checkType('SETTLEMENT')"
+                                                   ng-disabled="ui.mode !== 'NEW'"/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row col-xs-12 nopadding" ng-show="model.data.accType === 'SETTLEMENT'">
+                            <table class="table-rounded control-table square-table">
+                                <col style="width: 50%"/>
+                                <col style="width: 50%"/>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            WITH ACCOUNT
+                                            <input type="radio" name='type1' style="margin-left: 10px" ng-model="model.typeAccount" 
+                                                   ng-click="ui.checkTypeSub('ACCOUNT')"
+                                                   ng-disabled="ui.mode !== 'NEW'"/>
+                                        </td>
+                                        <td>
+                                            WITH RETURN
+                                            <input type="radio" name='type1' style="margin-left: 10px" ng-model="model.typeReturn" 
+                                                   ng-click="ui.checkTypeSub('RETURN')"
+                                                   ng-disabled="ui.mode !== 'NEW'"/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="background-dark">
+                        <table class="table-rounded control-table" style="padding: 3px;">
+                            <colgroup>
+                                <col style="width: 40%">
+                                <col style="width: 60%">
+                            </colgroup>
+                            <tbody>
+                                <tr class="background-light">
+                                    <td>
+                                        <label class="control-label text-center">Select Account :</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" ng-model='model.data.accAccount'
+                                               uib-typeahead="account.indexNo as (account.accCode + ' - ' + account.name) for account in model.typeAccAccountList |filter:$viewValue | limitTo:10" 
+                                               typeahead-input-formatter="model.accountLable(model.data.accAccount)" 
+                                               typeahead-on-select="model.getValue(model.data.accAccount)"
+                                               typeahead-editable="false"
+                                               ng-disabled="ui.mode !== 'NEW' || model.data.accType === 'OVER_PAYMENT' || model.data.accTypeSub === 'RETURN'"
+                                               id="account"
+                                               />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table-rounded control-table" style="padding: 3px;" ng-show="model.data.accType !== 'OVER_PAYMENT'">
+                            <colgroup>
+                                <col style="width: 40%">
+                                <col style="width: 60%">
+                            </colgroup>
+                            <tbody>
+                                <tr class="background-light">
+                                    <td>
+                                        <label class="control-label text-center">Account Value:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-right" ng-model='model.data.value'
+                                               ng-disabled="true"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <table class="table-rounded control-table">
+                        <colgroup>
+                            <col style="width: 40%">
+                            <col style="width: 60%">
+                        </colgroup>
+                        <tbody>
+                            <tr >
+                                <td>
+                                    <label class="control-label text-center">PAY TOTAL :</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control text-right border-cal" ng-model='model.data.credit' 
+                                           ng-disabled="ui.mode !== 'NEW' || model.data.accTypeSub === 'RETURN'" ng-change="model.changePayAmount($event,model.data.credit)" ng-keypress="ui.setFocusAdd($event,model.data.credit)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table-rounded control-table" ng-show="model.data.accType === 'BANK'">
+                        <colgroup>
+                            <col style="width: 40%">
+                            <col style="width: 60%">
+                        </colgroup>
+                        <tbody>
+                            <tr >
+                                <td>
+                                    <label class="control-label text-center">CHEQUE NO :</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" ng-model='model.data.refNumber'>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table-rounded control-table" ng-show="model.data.accType === 'BANK'">
+                        <colgroup>
+                            <col style="width: 40%">
+                            <col style="width: 60%">
+                        </colgroup>
+                        <tbody>
+                            <tr >
+                                <td>
+                                    <label class="control-label text-center">CHEQUE DATE :</label>
+                                </td>
+                                <td>
+                                    <input type="DATE" class="form-control" ng-model='model.data.chequeDate'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table-rounded control-table" ng-show="model.data.accType !== 'BANK'">
+                        <colgroup>
+                            <col style="width: 40%">
+                            <col style="width: 60%">
+                        </colgroup>
+                        <tbody>
+                            <tr >
+                                <td>
+                                    <label class="control-label text-center">REF NUMBER :</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" ng-disabled="ui.mode !== 'NEW'" ng-model='model.data.refNumber'/>
+                                </td>
+                            </tr>
+                            <tr ng-show="model.data.accTypeSub === 'ACCOUNT'">
+                                <td>
+                                    <label class="control-label text-center">Cost Department :</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" ng-model="model.data.costDepartment" 
+                                           uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostDepartmentList | filter:$viewValue | limitTo:10" 
+                                           typeahead-input-formatter="model.activeCostDepartmentLable($model);" 
+                                           ng-disabled="ui.mode !== 'NEW'">
+                                </td>
+                            </tr>
+                            <tr ng-show="model.data.accTypeSub === 'ACCOUNT'">
+                                <td>
+                                    <label class="control-label text-center">Cost Center :</label>
+                                </td>
+                                <td>
+                                    <input class="form-control" ng-model="model.data.costCenter" 
+                                           uib-typeahead="data.indexNo as (data.indexNo + ' - ' + data.name) for data in model.activeCostCenterList | filter:$viewValue | limitTo:10" 
+                                           typeahead-input-formatter="model.activeCostCenterLable($model);" 
+                                           ng-disabled="ui.mode !== 'NEW'">
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>
+                                    <label class="control-label">Over Payment Stmt. :</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control text-right" ng-model='model.data.overAmount' ng-disabled='true'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="placeholder col-md-12" ng-hide="model.billList.length" style="height: calc(100vh - 300px); padding: 0px 10px 0px 10px;">
-                <h1>DETAILS EMPTY :(</h1>
-            </div>
-            <table class="table-rounded control-table">
-                <col style="width: 25%"/>
-                <col style="width: 25%"/>
-                <col style="width: 25%"/>
-                <col style="width: 25%"/>
-                <tbody>
-                    <tr>
-                        <td><label>Over Pay Amount</label></td>
-                        <td><input class="form-control text-right" ng-model="model.data.overPay"
-                                   ng-disabled="true" > 
-                        </td>
-                        <td><label>Pay Amount</label></td>
-                        <td><input class="form-control text-right" ng-model="model.data.billTotal"
-                                   ng-disabled="true" > 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+            <div class="col-xs-8 background-dark">
+                <div class="row" style="display: flex; flex-flow: column; padding: 5px">
+
+                    <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                        <table class="table-rounded control-table">
+                            <col style="width: 33.3%"/>
+                            <col style="width: 33.3%"/>
+                            <col style="width: 33.3%"/>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Number :
+                                        <input type="text" class="form-control" ng-model="model.data.number" ng-keypress="ui.searchByNumber(model.data.number)"
+                                               ng-disabled="ui.mode !== 'IDEAL'" />    
+                                    </td>
+                                    <td>
+                                        Transaction Date :
+                                        <input class="form-control" placeholder="" type="date" ng-model="model.data.transactionDate" ng-disabled="ui.mode !== 'NEW'" >
+                                    </td>
+                                    <td>
+                                        Description :
+                                        <input class="form-control" placeholder="" ng-model="model.data.description" ng-disabled="ui.mode !== 'NEW'" >
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <table class="table-rounded control-table">
+                        <colgroup>
+                            <col style="width: 100%">
+                        </colgroup>
+                        <tbody>
+                            <tr class="select-primary-row-table-header">
+                                <td><label class="control-label text-center">BILL DETAILS</label></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table-rounded control-table">
+                        <colgroup>
+                            <col style="width: 14%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 13%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 17%"/>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td><label>Search Code</label></td>
+                                <td><label>Ref No</label></td>
+                                <td><label>Tra.Date</label></td>
+                                <td><label class="pull-right">Bill Amount</label></td>
+                                <td><label class="pull-right">Paid Amount</label></td>
+                                <td><label class="pull-right">Balance</label></td>
+                                <td><label>Pay Amount</label></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="smart-scroll-y" style="height: calc(100vh - 325px)" ng-show="model.billList.length">
+                        <table class="table-rounded control-table table-hover">
+                            <col style="width: 14%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 13%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 14%"/>
+                            <col style="width: 17%"/>
+                            <tbody>
+                                <tr ng-repeat="bill in model.billList| orderBy:'transactionDate'">
+                                    <td><label class="label label-default">{{bill.searchCode}}</label></td>
+                                    <td><label>{{bill.refNumber===null?'- - -':bill.refNumber}}</label></td>
+                                    <td><label>{{bill.transactionDate}}</label></td>
+                                    <td><label class="pull-right">{{bill.credit| number:2}}</label></td>
+                                    <td><label class="pull-right">{{bill.debit| number:2}}</label></td>
+                                    <td><label class="pull-right">{{(bill.credit - bill.debit)| number:2}}</label></td>
+                                    <td><input class="form-control text-right" ng-model="bill.pay" ng-change="model.changePayAmount()" ng-focus="model.setBalanceAmountToPay(bill);"> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="placeholder col-md-12" ng-hide="model.billList.length" style="height: calc(100vh - 340px); padding: 0px 10px 0px 10px;">
+                        <h1>DETAILS EMPTY :(</h1>
+                    </div>
+                    <table class="table-rounded control-table">
+                        <col style="width:25%"/>
+                        <col style="width: 25%"/>
+                        <col style="width: 25%"/>
+                        <col style="width: 25%"/>
+                        <tbody>
+                            <tr>
+                                <td><label>Over Pay Amount</label></td>
+                                <td><input class="form-control text-right" ng-model="model.data.overPay"
+                                           ng-disabled="true" >                                           
+                                </td>
+                                <td><label>Pay Amount</label></td>
+                                <td><input class="form-control text-right" ng-model="model.data.billTotal"
+                                           ng-disabled="true" >                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </uib-tab>
+        </uib-tabset>
 </div>
 
 <div class="fab-container">
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW' && ui.toggleTypeLabel === 'SELECTION'" ng-click="ui.setToggle();"><i class="glyphicon glyphicon-arrow-right"></i></a>
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
-    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW' && ui.toggleTypeLabel !== 'SELECTION'" ng-click="ui.save();"><i  class="glyphicon glyphicon-ok"></i></a>
 </div>
 
+<script type="text/ng-template" id="voucher_popup.html"> 
+    <div class="col-lg-12 border-all nopadding">
+        <div class="col-lg-12 bg-primary nopadding text-center" style="height: 40px">
+            Print Module
+        </div>
+        <div class="col-lg-12 nopadding">
+            <object data="{{content}}" id="printDiv" class="smart-scroll-y" type="application/pdf" style="width:100%;height: calc(100vh - 120px);">
+            </object>
+        </div>
+        <div class="col-lg-12 background-ultra-dark text-center nopadding">
+            <!-- <button type="button" class="btn btn-secondary" ng-click="ui.exportExcel()">Exce        l</button>-->
+        </div>
+    </div>
+</script>
 
 

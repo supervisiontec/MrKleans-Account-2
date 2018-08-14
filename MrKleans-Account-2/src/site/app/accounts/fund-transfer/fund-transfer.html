@@ -10,7 +10,7 @@
                 </colgroup>
                 <tbody>
                     <tr class="select-primary-row-table-header">
-                        <td><label class="control-label text-center">FUND TRANSFER</label></td>
+                        <td><label class="control-label text-center">FUND & CHEQUE TRANSFER</label></td>
                     </tr>
                 </tbody>
             </table>
@@ -96,19 +96,6 @@
                     <tbody>
                         <tr>
                             <!--bank-->
-                            <td>Cheque No :</td>
-                            <td><input class="form-control" ng-model="model.data.refNumber" ng-disabled="ui.mode !== 'NEW'" ></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;" ng-show="false">
-                <table class="table-rounded control-table">
-                    <col style="width: 40%"/>
-                    <col style="width: 60%"/>
-                    <tbody>
-                        <tr>
-                            <!--bank-->
                             <td>Cheque Date :</td>
                             <td><input class="form-control"  type="date" ng-model="model.data.chequeDate" ng-disabled="ui.mode !== 'NEW'" ></td>
                         </tr>
@@ -126,6 +113,19 @@
                                 Description :
                             </td>
                             <td><input class="form-control" placeholder="" ng-model="model.data.description" ng-disabled="ui.mode !== 'NEW'" ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table">
+                    <col style="width: 40%"/>
+                    <col style="width: 60%"/>
+                    <tbody>
+                        <tr>
+                            <!--bank-->
+                            <td>Is Cheque :</td>
+                            <td><input type="checkbox" ng-model="model.data.isCheque" ng-disabled="ui.mode !== 'NEW'" ></td>
                         </tr>
                     </tbody>
                 </table>
@@ -167,7 +167,7 @@
                         </td>
                         <td>
                             Amount:
-                            <input class="form-control" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAdd($event)">
+                            <input class="form-control text-right border-cal" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAdd($event,model.tempData.debit)">
                         </td>
                         <td>
                             <a class="btn btn-primary" style="margin-top: 28px" id="btnAddData" ng-click="ui.addData()">
@@ -258,6 +258,20 @@
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
 </div>
+<script type="text/ng-template" id="voucher_popup.html"> 
+    <div class="col-lg-12 border-all nopadding">
+        <div class="col-lg-12 bg-primary nopadding text-center" style="height: 40px">
+            Print Module
+        </div>
+        <div class="col-lg-12 nopadding">
+            <object data="{{content}}" id="printDiv" class="smart-scroll-y" type="application/pdf" style="width:100%;height: calc(100vh - 120px);">
+            </object>
+        </div>
+        <div class="col-lg-12 background-ultra-dark text-center nopadding">
+            <!-- <button type="button" class="btn btn-secondary" ng-click="ui.exportExcel()">Excel</button>-->
+        </div>
+    </div>
+</script>
 
 
 

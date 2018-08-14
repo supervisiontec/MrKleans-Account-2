@@ -1,6 +1,6 @@
 
 (function () {
-    var factory = function (supplierPaymentFactory, supplierPaymentService, $q, $timeout, $filter, Notification) {
+    var factory = function (supplierPaymentFactory, supplierPaymentService, $q,  $filter, Notification) {
         function supplierPaymentModel() {
             this.constructor();
         }
@@ -18,6 +18,10 @@
             activeCostCenterList: [],
             activeCostDepartmentList: [],
             accType: null,
+            supplierBalanceList: [],
+            tabActive: 0,
+            selectSupplier: null,
+            accLedgerList: [],
             userPermission: {},
             //constructor
             constructor: function () {
@@ -49,6 +53,10 @@
                         .success(function (data) {
                             that.activeCostCenterList = data;
                         });
+                supplierPaymentService.getSupplierBalanceList()
+                        .success(function (data) {
+                            that.supplierBalanceList = data;
+                        });
 
                 this.loadAccAccount();
             },
@@ -66,6 +74,18 @@
                             that.data.value = data;
                             console.log(that.data.value);
                         });
+
+            },
+            selectBalanceSupplier: function (account, typeIndexNo) {
+                var that = this;
+                console.log(account);
+                that.selectSupplier = typeIndexNo;
+                supplierPaymentService.loadAccLedgerByAccount(account)
+                        .success(function (data) {
+                            that.accLedgerList = data;
+                            console.log(data);
+                        });
+
 
             },
             getPayableBills: function (supplierId) {
@@ -113,11 +133,12 @@
             },
             setBalanceAmountToPay: function (bill) {
                 if (!bill.pay) {
-                    bill.pay = (bill.credit - bill.debit);
+                    bill.pay = (parseFloat(bill.credit)) - (parseFloat(bill.debit));
                 }
                 this.setPayTotalAndOverPayment();
             },
             changePayAmount: function () {
+               
                 this.setPayTotalAndOverPayment();
             },
             setPayTotalAndOverPayment: function () {
@@ -131,7 +152,13 @@
 //                        Notification.error("Can't set over amount for this bill !");
 //                        bill.pay = 0.00;
                     }
-                    that.data.billTotal += parseFloat(bill.pay);
+                    console.log(that.data.billTotal);
+                    that.data.billTotal += parseFloat(Math.round(bill.pay * 100) / 100);
+                    that.data.billTotal = parseFloat(Math.round(that.data.billTotal * 100) / 100);
+
+                    console.log(Math.round(parseFloat(bill.pay) * 100) / 100);
+                    console.log(that.data.billTotal);
+                    console.log("----------");
                 });
                 that.data.overPay = (that.data.credit - that.data.billTotal) > 0 ? (that.data.credit - that.data.billTotal) : 0.00;
                 this.checkOverValueAvailable();
@@ -257,10 +284,15 @@
                 supplierPaymentService.saveSupplierPayment(JSON.stringify(data))
                         .success(function (data) {
                             that.billList = [];
+                            that.tabActive = 0;
+                            that.selectSupplier = null;
+                            that.accLedgerList = [];
                             that.data = supplierPaymentFactory.Data();
                             defer.resolve(data);
                         })
                         .error(function (data) {
+                            console.log('error');
+                            Notification.error(data.message);
                             defer.reject(data);
                         });
                 return defer.promise;

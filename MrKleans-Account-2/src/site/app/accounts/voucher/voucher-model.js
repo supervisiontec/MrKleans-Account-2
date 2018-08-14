@@ -38,7 +38,6 @@
                         });
                 voucherService.getPermission('General Voucher')
                         .success(function (data) {
-                            console.log(data);
                             that.userPermission = data;
                         });
                 voucherService.activeCostDepartmentList()

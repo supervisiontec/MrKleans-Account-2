@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("accruedBillController", function ($scope, accruedBillModel, $timeout, $filter, Notification, ConfirmPane) {
+            .controller("accruedBillController", function ($scope, accruedBillModel, $timeout, $filter, calculator, Notification, ConfirmPane) {
                 $scope.model = new accruedBillModel();
                 $scope.ui = {};
                 $scope.model.currentBranch = {};
@@ -16,10 +16,7 @@
                 $scope.ui.new = function () {
                     $scope.ui.mode = "NEW";
                     $scope.ui.focus('#account');
-                    $scope.model.tempData.transactionDate = new Date();
-                    $scope.model.data.transactionDate = new Date();
                     $scope.model.tempData.branch = $scope.model.data.branch;
-//                    $scope.model.data.branch = $scope.model.data.branch;
                 };
                 $scope.ui.addData = function () {
                     var checkSave = true;
@@ -51,8 +48,6 @@
                         checkSave = false;
                         Notification.error('select an accrued account to save !');
                     }
-                    
-
                     if (checkSave) {
                         $scope.model.addData();
                         $scope.ui.new();
@@ -93,10 +88,10 @@
                                 .confirm(function () {
                                     $scope.model.save()
                                             .then(function (data) {
-                                                Notification.success('save Sucess.Accrued transaction No :'+data+')');
+                                                Notification.success('Save Sucess. Accrued transaction No :' + data);
                                                 $scope.ui.mode = "IDEAL";
-                                                $scope.model.data = {};
-                                                $scope.model.saveDataList = [];
+//                                                $scope.model.data = {};
+//                                                $scope.model.saveDataList = [];
                                             });
                                 });
                     }
@@ -118,9 +113,11 @@
 
                     console.log($scope.model.selectAccType);
                 };
-                $scope.ui.focusAdd = function (model) {
+                $scope.ui.focusAdd = function (model, debit) {
                     if (model.which === 13) {
-                        $scope.ui.addData();
+                        var value = calculator.cal(debit);
+                        console.log(value);
+                        $scope.model.tempData.debit = value;
                     }
                 };
                 $scope.ui.searchByNumber = function (number) {

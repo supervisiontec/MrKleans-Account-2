@@ -34,12 +34,14 @@ public class JournalService {
     @Autowired
     private BranchRepository branchRepository;
 
-    public Integer saveJournal(List<TAccLedger> list) {
+    @Transactional
+    public TAccLedger saveJournal(List<TAccLedger> list) {
         int count = 0;
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.JOURNAL);
         int deleteNumber = journalRepository.getDeleteNumber();
         String searchCode = getSearchCode(Constant.CODE_JOURNAL, SecurityUtil.getCurrentUser().getBranch(), number);
         String transactionDate = null;
+        TAccLedger save = null;
         for (TAccLedger tAccLedger : list) {
             transactionDate = tAccLedger.getTransactionDate();
             tAccLedger.setNumber(number);
@@ -56,13 +58,13 @@ public class JournalService {
             tAccLedger.setBankReconciliation(false);
             tAccLedger.setIsMain(Boolean.FALSE);
             tAccLedger.setIsCheque(Boolean.FALSE);
-            TAccLedger save = journalRepository.save(tAccLedger);
+            save = journalRepository.save(tAccLedger);
             if (save.getIndexNo() != null) {
                 count++;
             }
         }
         if (count == list.size()) {
-            return count;
+            return save;
         }
         return null;
     }
@@ -81,9 +83,8 @@ public class JournalService {
         return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.VOUCHER);
     }
 
-    public List<TAccLedger> getLedgerTypeDataList(String name, String fromDate, String toDate, String branch, String year) {
-        return journalRepository.getLedgerTypeDataList(name, fromDate, toDate, branch, year);
-//        return journalRepository.getLedgerTypeDataList(name, null,null,null,null);
+    public List<TAccLedger> getLedgerTypeDataList(String name, String fromDate, String toDate, String branch, String year,Integer account,String invDate,String refNo) {
+        return journalRepository.getLedgerTypeDataList(name, fromDate, toDate, branch, year,account,invDate,refNo);
     }
 
     public Integer saveEditEnteries(List<TAccLedger> list) {
@@ -112,6 +113,14 @@ public class JournalService {
             return size;
         }
         return -1;
+    }
+
+    public Object[] getSupplierBalanceList() {
+         return journalRepository.getSupplierBalanceList();
+    }
+
+    public List<TAccLedger> getAccountLedgerByAccount(Integer account) {
+         return journalRepository.findByAccAccountOrderByTransactionDate(account);
     }
 
    

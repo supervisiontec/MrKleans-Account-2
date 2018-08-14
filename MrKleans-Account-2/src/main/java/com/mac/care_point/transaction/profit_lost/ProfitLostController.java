@@ -25,9 +25,9 @@ public class ProfitLostController {
     @Autowired 
     private ProfitLostService profitLostService;
     
-    @RequestMapping(value = "/load-profit-lost-main", method = RequestMethod.GET)
-    public List<TProfitLostModel> loadProfitLostMain() {
-        return profitLostService.loadProfitLostMain();
+    @RequestMapping(value = "/load-profit-lost-main/{financialYear}", method = RequestMethod.GET)
+    public List<TProfitLostModel> loadProfitLostMain(@PathVariable Integer financialYear) {
+        return profitLostService.loadProfitLostMain(financialYear);
     }
     @RequestMapping(value = "/get-sub-list/{index}", method = RequestMethod.GET)
     public List<TProfitLostModel> getSubList(@PathVariable Integer index) {

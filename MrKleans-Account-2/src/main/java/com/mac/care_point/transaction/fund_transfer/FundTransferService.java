@@ -45,13 +45,14 @@ public class FundTransferService {
     @Autowired
     private BranchRepository branchRepository;
 
-    Integer saveFundTransfer(FundTransferMix fundTransferMix) {
+    TAccLedger saveFundTransfer(FundTransferMix fundTransferMix) {
         int number = journalRepository.getNumber(SecurityUtil.getCurrentUser().getBranch(), Constant.FUND_TRANSFER);
         int deleteNumber = journalRepository.getDeleteNumber();
         MAccSetting unrealizedIssued = accountSettingRepository.findByName(Constant.UNREALIZED_ISSUED);
         MAccSetting unrealizedReceived = accountSettingRepository.findByName(Constant.UNREALIZED_RECEIVED);
         String searchCode = getSearchCode(Constant.CODE_FUND_TRANSFER, SecurityUtil.getCurrentUser().getBranch(), number);
-
+        boolean isCheque=false;
+        isCheque = fundTransferMix.getData().getIsCheque();
         fundTransferMix.getData().setCurrentBranch(SecurityUtil.getCurrentUser().getBranch());
         fundTransferMix.getData().setNumber(number);
         fundTransferMix.getData().setDeleteRefNo(deleteNumber);
@@ -59,8 +60,8 @@ public class FundTransferService {
         fundTransferMix.getData().setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
         fundTransferMix.getData().setUser(SecurityUtil.getCurrentUser().getBranch());
         fundTransferMix.getData().setIsMain(true);
-        fundTransferMix.getData().setIsCheque(false);
         fundTransferMix.getData().setSearchCode(searchCode);
+        fundTransferMix.getData().setType(Constant.FUND_TRANSFER);
         TAccLedger save = journalRepository.save(fundTransferMix.getData());
 
         MAccAccount account = accountRepository.findOne(fundTransferMix.getData().getAccAccount());
@@ -69,9 +70,15 @@ public class FundTransferService {
             save.setAccAccount(unrealizedIssued.getAccAccount());
             save.setReconcileGroup(save.getIndexNo());
             save.setBankReconciliation(true);
-            journalRepository.save(save);
-
+            save=journalRepository.save(save);
         }
+        if ("CHEQUE".equals(account.getAccType())) {
+            save.setReconcileAccount(fundTransferMix.getData().getAccAccount());
+            save.setReconcileGroup(save.getIndexNo());
+            save.setBankReconciliation(true);
+            journalRepository.save(save);
+        }
+        int size=0;
         for (TAccLedger tAccLedger : fundTransferMix.getDataList()) {
             tAccLedger.setNumber(number);
             tAccLedger.setDeleteRefNo(deleteNumber);
@@ -82,6 +89,10 @@ public class FundTransferService {
             tAccLedger.setIsMain(false);
             tAccLedger.setSearchCode(searchCode);
             tAccLedger.setIsCheque(false);
+            tAccLedger.setType(Constant.FUND_TRANSFER);
+            if (isCheque) {
+                tAccLedger.setIsCheque(true);
+            }
             tAccLedger.setTransactionDate(fundTransferMix.getData().getTransactionDate());
             TAccLedger save1 = journalRepository.save(tAccLedger);
 
@@ -91,11 +102,19 @@ public class FundTransferService {
                 save1.setReconcileGroup(save1.getIndexNo());
                 save1.setBankReconciliation(true);
                 journalRepository.save(save1);
-
             }
+            if ("CHEQUE".equals(account.getAccType())) {
+                save1.setRefNumber(fundTransferMix.getData().getRefNumber());
+                journalRepository.save(save1);
+            }
+            size++;
         }
-
-        return 1;
+        
+        if (fundTransferMix.getDataList().size()==size) {
+            return save;
+            
+        }
+        throw new RuntimeException("Fund Transfer Save Fail !");
     }
 
     private String getSearchCode(String code, Integer branch, int number) {
@@ -105,7 +124,7 @@ public class FundTransferService {
     }
 
     public List<TAccLedger> findFundTransferByNumberAndBranch(Integer number, Integer branch) {
-      return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.FUND_TRANSFER);
+        return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.FUND_TRANSFER);
     }
 
 }

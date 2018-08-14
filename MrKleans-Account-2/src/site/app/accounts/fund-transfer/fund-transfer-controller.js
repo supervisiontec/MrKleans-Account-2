@@ -1,8 +1,16 @@
 (function () {
     angular.module("appModule")
-            .controller("fundTransferController", function ($scope, fundTransferModel, $timeout,$filter, Notification, ConfirmPane) {
+            .controller("fundTransferController", function ($scope, printService, $uibModal, calculator,fundTransferService, $sce, fundTransferModel, $timeout, $filter, Notification, ConfirmPane) {
                 $scope.model = new fundTransferModel();
+                $scope.printService = new printService();
                 $scope.ui = {};
+
+                $scope.reportName = "Fund Transfer Voucher";
+                $scope.printModel = {};
+                $scope.printModel.currentReportGroup = {};
+                $scope.printModel.currentReport = {};
+                $scope.printModel.currentReport.parameterValues = {};
+
                 $scope.model.currentBranch = {};
                 $scope.model.type = null;
 
@@ -47,17 +55,17 @@
                         checkSave = false;
                         Notification.error('select a main account to add !');
                     }
-                    if ($scope.model.saveDataList.length>=1) {
+                    if ($scope.model.saveDataList.length >= 1) {
                         checkSave = false;
                         Notification.error('transfer account Limited to one');
                     }
-                    var transactionDate=$filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
-                    var newDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-                    if (transactionDate>newDate) {
-                        checkSave=false;
+                    var transactionDate = $filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
+                    var newDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+                    if (transactionDate > newDate) {
+                        checkSave = false;
                         Notification.error("transfer date not valid ! ");
                     }
-                    
+
                     if (checkSave) {
                         $scope.model.addData();
                         $scope.ui.new();
@@ -86,26 +94,78 @@
                         checkSave = false;
                         Notification.error('insert description to save !');
                     }
-                    
-                    var transactionDate=$filter('date')($scope.model.data.transactionDate, 'yyyy-MM-dd');
-                    var newDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-                    if (transactionDate>newDate) {
-                        checkSave=false;
-                        Notification.error("transfer date not valid ! ");
-                    }
 
                     if (checkSave) {
-                        ConfirmPane.primaryConfirm("DO YOU WANT TO SAVE THIS FUND TRANSFER !")
+                        ConfirmPane.successConfirm("DO YOU WANT TO SAVE THIS FUND TRANSFER !")
                                 .confirm(function () {
                                     $scope.model.save()
                                             .then(function (data) {
-                                                Notification.success('payment voucher save Sucess');
+                                                Notification.success('Transfer save Sucess');
                                                 $scope.ui.mode = "IDEAL";
-                                                $scope.model.data = {};
-                                                $scope.model.saveDataList = [];
+
+                                                ConfirmPane.primaryConfirm("DO YOU WANT TO PRINT !")
+                                                        .confirm(function () {
+                                                            $scope.ui.modalOpen(data.searchCode);
+                                                        });
+                                                $scope.model.setClear();
+                                            })
+                                            .then(function (data) {
+                                                Notification.error(data.message);
                                             });
                                 });
                     }
+                };
+                $scope.ui.modalOpen = function (searchCode) {
+
+                    var reportName = "VOUCHER";
+                    //get report details
+                    fundTransferService.reportData(reportName)
+                            .success(function (data) {
+                                $scope.printModel.currentReport.report = data;
+
+                                //get report paramiters
+                                fundTransferService.listParameters(data)
+                                        .success(function (data) {
+                                            $scope.printModel.currentReport.parameters = data;
+                                        });
+
+                                //set paramiters values
+                                console.log($scope.model.currentBranch.indexNo);
+                                console.log(searchCode);
+
+                                $scope.printModel.currentReport.parameterValues.REPORT_NAME = $scope.reportName;
+//                                $scope.printModel.currentReport.parameterValues.COMPANY_NAME = $scope.model.company.name;
+                                $scope.printModel.currentReport.parameterValues.CURRENT_BRANCH = $scope.model.currentBranch.indexNo;
+                                $scope.printModel.currentReport.parameterValues.SEARCH_CODE = searchCode;
+
+                                //view reports
+                                fundTransferService.viewReport(
+                                        $scope.printModel.currentReport.report,
+                                        $scope.printModel.currentReport.parameters,
+                                        $scope.printModel.currentReport.parameterValues
+                                        )
+                                        .success(function (response) {
+                                            var file = new Blob([response], {type: 'application/pdf'});
+                                            var fileURL = URL.createObjectURL(file);
+
+                                            $scope.content = $sce.trustAsResourceUrl(fileURL);
+
+                                            $uibModal.open({
+                                                animation: true,
+                                                ariaLabelledBy: 'modal-title',
+                                                ariaDescribedBy: 'modal-body',
+                                                templateUrl: 'voucher_popup.html',
+                                                scope: $scope,
+                                                size: 'lg'
+                                            });
+
+                                        });
+                            });
+                };
+                $scope.ui.exportExcel = function () {
+                    console.log("exportExcel");
+                    console.log("not support yet !");
+//                    $scope.printService.printExcel('printDiv', $scope.reportName);
                 };
                 $scope.ui.edit = function (index, data) {
                     $scope.model.tempData = data;
@@ -124,9 +184,11 @@
 
                     console.log($scope.model.selectAccType);
                 };
-                $scope.ui.focusAdd = function (model) {
+                $scope.ui.focusAdd = function (model, debit) {
                     if (model.which === 13) {
-                        $scope.ui.addData();
+                        var value = calculator.cal(debit);
+                        console.log(value);
+                        $scope.model.tempData.debit = value;
                     }
                 };
                 $scope.ui.searchByNumber = function (number) {
@@ -134,7 +196,7 @@
                     if (key === 13) {
                         $scope.model.searchByNumber(number)
                                 .then(function () {
-                                    
+
                                 }, function () {
                                     Notification.error('Invalid number !!!');
                                 });

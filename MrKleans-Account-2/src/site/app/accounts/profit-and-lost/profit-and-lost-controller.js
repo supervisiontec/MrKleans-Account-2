@@ -5,8 +5,9 @@ angular.module("profitAndLostModule")
         .factory("profitAndLostFactory", function ($http, systemConfig) {
             var factory = {};
 
-            factory.loadMainData = function (callback) {
-                var url = systemConfig.apiUrl + "/api/care-point/transaction/profit-lost/load-profit-lost-main";
+            factory.loadMainData = function (financialYear,callback) {
+                console.log(financialYear);
+                var url = systemConfig.apiUrl + "/api/care-point/transaction/profit-lost/load-profit-lost-main/"+financialYear;
 
                 $http.get(url)
                         .success(function (data, status, headers) {
@@ -27,6 +28,17 @@ angular.module("profitAndLostModule")
                             callback(data);
                         });
             };
+            factory.loadFinancialYearList = function (callback) {
+                var url = systemConfig.apiUrl + "/api/care-point/master/financial-year";
+
+                $http.get(url)
+                        .success(function (data, status, headers) {
+                            callback(data);
+                        })
+                        .error(function (data, status, headers) {
+                            callback(data);
+                        });
+            };
             return factory;
         });
 
@@ -36,6 +48,7 @@ angular.module("profitAndLostModule")
             $scope.selectedNode = "";
             $scope.clickList = [];
             $scope.mainList = [];
+            $scope.financialYearList = [];
 
             $scope.ui = {};
             $scope.model = {};
@@ -52,8 +65,8 @@ angular.module("profitAndLostModule")
             };
 
             $scope.ui.init = function () {
-                profitAndLostFactory.loadMainData(function (data) {
-                    $scope.mainList = data;
+                profitAndLostFactory.loadFinancialYearList(function (data) {
+                    $scope.financialYearList = data;
                 });
             };
             $scope.ui.unitClick = function (data) {
@@ -83,7 +96,7 @@ angular.module("profitAndLostModule")
                         console.log('Empty Sub List');
                     });
                 }
-            }
+            };
             $scope.ui.modifierClass = function (data) {
                 var classLable = "";
                 if (data.isBold) {
@@ -108,11 +121,27 @@ angular.module("profitAndLostModule")
             };
             $scope.ui.setDividend = function () {
 
-                $scope.ui.findElmByIndex(10).credit=$scope.model.dividends;
+                $scope.ui.findElmByIndex(10).credit = $scope.model.dividends;
                 $scope.profitCalc();
             };
             $scope.profitCalc = function () {
                 $scope.ui.findElmByIndex(11).credit = $scope.ui.findElmByIndex(8).credit - parseFloat($scope.model.dividends);
+            };
+            $scope.model.financialYearLable = function (model) {
+                var label;
+                angular.forEach($scope.financialYearList, function (value) {
+                    if (value.indexNo === model) {
+                        label = value.name;
+                        return;
+                    }
+                });
+                return label;
+            };
+            $scope.ui.setFinancialYear=function () {
+                var financialYear=$scope.model.financialYear;
+                 profitAndLostFactory.loadMainData(financialYear,function (data) {
+                    $scope.mainList = data;
+                });
             };
 
             $scope.ui.init();

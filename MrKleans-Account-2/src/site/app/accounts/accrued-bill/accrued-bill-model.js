@@ -168,7 +168,7 @@
                 this.data.credit = value;
             },
             save: function () {
-
+                console.log('save data');
                 var that = this;
                 var data = {};
                 data.dataList = this.saveDataList;
@@ -182,6 +182,7 @@
                 accruedBillService.saveAccruedBill(JSON.stringify(data))
                         .success(function (data) {
                             that.saveDataList = [];
+                            that.setClear();
                             defer.resolve(data);
                         })
                         .error(function (data) {
@@ -193,8 +194,6 @@
 
                 this.tempData = accruedBillFactory.tempData();
                 this.data = accruedBillFactory.Data();
-                this.tempData.transactionDate = new Date();
-                this.data.transactionDate = new Date();
                 this.tempData.branch = this.currentBranch.indexNo;
                 this.data.branch = this.currentBranch.indexNo;
                 this.saveDataList = [];

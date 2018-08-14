@@ -11,7 +11,8 @@
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/branch");
         };
         this.loadSupplier = function () {
-            return $http.get(systemConfig.apiUrl + "/api/care-point/master/supplier/get-accrued-suppliers");
+//            return $http.get(systemConfig.apiUrl + "/api/care-point/master/supplier/get-accrued-suppliers");
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/supplier");
         };
         this.loadAccBalance = function (index) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/master/acc-account/find-account-value/"+index);

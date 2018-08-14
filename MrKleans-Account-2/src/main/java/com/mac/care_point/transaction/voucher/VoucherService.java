@@ -43,7 +43,7 @@ public class VoucherService {
     @Autowired
     private AccCodeSettingRepository accCodeSettingRepository;
 
-    public Integer saveVoucher(VoucherMix voucherMix) {
+    public TAccLedger saveVoucher(VoucherMix voucherMix) {
 
         AccCodeSetting accCodeSetting = accCodeSettingRepository.findByAccount(voucherMix.getVoucher().getAccAccount());
         if (accCodeSetting == null) {
@@ -88,7 +88,7 @@ public class VoucherService {
         accCodeSetting.setMaxNo(accCodeSetting.getMaxNo() + 1);
         AccCodeSetting save1 = accCodeSettingRepository.save(accCodeSetting);
         if (save1.getIndexNo() > 0) {
-            return save1.getIndexNo();
+            return save;
         } else {
             throw new RuntimeException("Voucher Save Fail !");
         }
