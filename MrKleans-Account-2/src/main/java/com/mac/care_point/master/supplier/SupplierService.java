@@ -41,7 +41,8 @@ public class SupplierService {
     MSupplier saveSupplier(MSupplier supplier) {
         MAccSetting supplierSubAccountOf=null;
         if ("NORMAL".equals(supplier.getType())) {
-            supplierSubAccountOf = accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
+            throw new RuntimeException("Cant create normal suppliers. Supplier will be created by account integration system !");
+//            supplierSubAccountOf = accountSettingRepository.findByName(Constant.SUPPLIER_SUB_ACCOUNT_OF);
         }
         else if ("ACCRUED".equals(supplier.getType())) {
             supplierSubAccountOf = accountSettingRepository.findByName(Constant.NON_CREDIT_SUPPLIER_ACCOUNT);

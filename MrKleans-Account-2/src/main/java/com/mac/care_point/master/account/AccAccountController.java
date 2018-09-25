@@ -44,10 +44,9 @@ public class AccAccountController {
         accAccount.setUser(SecurityUtil.getCurrentUser().getIndexNo());
         return accAccountService.saveNewAccount(accAccount);
     }
-//
 
     @RequestMapping(value = "/delete-account/{index}", method = RequestMethod.DELETE)
-    public Integer saveNewAccount(@PathVariable Integer index) {
+    public Integer deleteAccount(@PathVariable Integer index) {
         return accAccountService.deleteAccount(index);
     }
 

@@ -191,7 +191,8 @@
             , delete: function () {
                 var defer = $q.defer();
                 var that = this;
-                editTransactionService.delete(JSON.stringify(this.deleteRefDetailList))
+                console.log(this.deleteRefDetailList[0].deleteRefNo);
+                editTransactionService.delete(this.deleteRefDetailList[0].deleteRefNo)
                         .success(function (data) {
                             that.refresh();
                             defer.resolve(data);

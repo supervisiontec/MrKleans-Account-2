@@ -8,8 +8,10 @@ package com.mac.care_point.transaction.account_ledger;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -172,5 +174,10 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
     public Object[] getSupplierBalanceList();
 
     public List<TAccLedger> findByAccAccountOrderByTransactionDate(Integer account);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "UPDATE t_acc_ledger SET `is_edit`='2' WHERE delete_ref_no=:number", nativeQuery = true)
+    public void setDelete(@Param ("number")Integer number);
 
 }

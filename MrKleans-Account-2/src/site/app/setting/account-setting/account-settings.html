@@ -12,7 +12,7 @@
                             <div class="panel-heading" ng-init="ui.end()">{{setting.name}}</div>
                             <div class="panel-body">
                                 <label style="padding-bottom: 10px">
-                                    {{setting.description}}
+                                    {{setting.description| uppercase}}
                                 </label>
                                 <input type="text" class="form-control" ng-model="setting.tempAccount"
                                        uib-typeahead="acc.indexNo as (acc.accCode + ' - ' + acc.name) for acc in model.accAccountList | filter:$viewValue | filter:{accMain:setting.filter} | limitTo:10 | orderBy:'accCode'" 
@@ -43,6 +43,9 @@
             <div class="col-sm-8 background-dark" style="height: calc(100vh - 92px)">
                 <div class="placeholder col-md-12" ng-hide="false" style="height: calc(100vh - 112px); padding: 0px 10px 10px 10px;">
                     <h1>NEW ACCOUNT SETTING COMMING SOON :(</h1>
+                </div>
+                <div class="col-md-12" style="height: 100%" ng-hide="true">
+                    <iframe src="http://123.231.112.90:8070" width="100%" height="100%"></iframe>
                 </div>
             </div>
             <!--            <div class="col-sm-4 background-dark" style="height: calc(100vh - 92px)">

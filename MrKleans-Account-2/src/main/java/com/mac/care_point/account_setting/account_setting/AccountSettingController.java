@@ -28,7 +28,7 @@ public class AccountSettingController {
 
     @RequestMapping( method = RequestMethod.GET)
     public List<MAccSetting> findAll() {
-        return accountSettingService.findAll();
+        return accountSettingService.findByView(true);
     }
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Integer save(@RequestBody List<MAccSetting> settingList) {

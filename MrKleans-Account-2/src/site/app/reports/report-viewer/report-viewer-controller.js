@@ -35,7 +35,7 @@
                 $scope.ui.viewCurrentReport = function () {
                     if ($scope.model.currentReport.report) {
                         $scope.ui.status = "LOADING";
-                        console.log($scope.model.currentReport.parameterValues);
+                        
                         ReportViewerService.viewReport(
                                 $scope.model.currentReport.report,
                                 $scope.model.currentReport.parameters,
@@ -44,8 +44,7 @@
                                 .success(function (response) {
                                     $scope.ui.status = "LOADED";
                                     var file = new Blob([response], {type: 'application/pdf'});
-                                    var fileURL = URL.createObjectURL(file);
-
+                                    var fileURL = URL.createObjectURL(file);;
                                     $scope.content = $sce.trustAsResourceUrl(fileURL);
                                 });
                     }

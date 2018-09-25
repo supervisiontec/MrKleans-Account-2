@@ -133,11 +133,11 @@
                 var debit = 0.00;
                 var credit = 0.00;
                 angular.forEach(this.dataList, function (value) {
-                    debit += value.debit;
-                    credit += value.credit;
+                    debit += parseFloat(value.debit);
+                    credit += parseFloat(value.credit);
                 });
-                this.data.totalDebit = debit;
-                this.data.totalCredit = credit;
+                this.data.totalDebit = parseFloat(debit);
+                this.data.totalCredit = parseFloat(credit);
             },
             save: function () {
                 var defer = $q.defer();

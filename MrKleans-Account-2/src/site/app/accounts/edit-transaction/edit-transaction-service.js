@@ -32,7 +32,7 @@
             return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/journal/save-edit-enteries", data);
         };
         this.delete = function (data) {
-            return $http.post(systemConfig.apiUrl + "/api/care-point/transaction/journal/delete", data);
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/journal/delete/"+ data);
         };
          this.getPermission = function (form) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-form/"+form);

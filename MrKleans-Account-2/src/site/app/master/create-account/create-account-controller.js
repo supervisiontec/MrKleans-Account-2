@@ -84,7 +84,7 @@
                         $scope.ui.mode = "IDEAL";
                         $scope.model.save()
                                 .then(function (data) {
-                                    Notification.success('New Account save Sucess');
+                                    Notification.success(data.indexNo+' - '+data.name+' Account save Sucess');
                                     if ($scope.model.data.clearAll) {
                                         $scope.model.clearData();
                                     }

@@ -72,9 +72,9 @@ public class JournalController {
         return journalService.saveEditEnteries(list);
     }
     
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Integer delete(@RequestBody List<TAccLedger> list) {
-        return journalService.delete(list);
+    @RequestMapping(value = "/delete/{delete}", method = RequestMethod.GET)
+    public Integer delete(@PathVariable ("delete") Integer number) {
+        return journalService.delete(number);
     }
     
 }

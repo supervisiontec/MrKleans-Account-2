@@ -117,7 +117,7 @@
                             .confirm(function () {
                                 $scope.model.delete()
                                         .then(function (data) {
-                                            Notification.success('save success.. !');
+                                            Notification.success('Delete ref no '+data+' delete success.. !');
                                             //clear
                                             $scope.ui.mode = "IDEAL";
                                         });

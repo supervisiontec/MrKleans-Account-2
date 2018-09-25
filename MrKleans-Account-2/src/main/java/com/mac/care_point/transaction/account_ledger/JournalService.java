@@ -10,9 +10,7 @@ import com.mac.care_point.master.branch.BranchRepository;
 import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.zutil.SecurityUtil;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +81,8 @@ public class JournalService {
         return journalRepository.findByNumberAndBranchAndType(number, branch, Constant.VOUCHER);
     }
 
-    public List<TAccLedger> getLedgerTypeDataList(String name, String fromDate, String toDate, String branch, String year,Integer account,String invDate,String refNo) {
-        return journalRepository.getLedgerTypeDataList(name, fromDate, toDate, branch, year,account,invDate,refNo);
+    public List<TAccLedger> getLedgerTypeDataList(String name, String fromDate, String toDate, String branch, String year, Integer account, String invDate, String refNo) {
+        return journalRepository.getLedgerTypeDataList(name, fromDate, toDate, branch, year, account, invDate, refNo);
     }
 
     public Integer saveEditEnteries(List<TAccLedger> list) {
@@ -96,33 +94,36 @@ public class JournalService {
         return journalRepository.findByDeleteRefNo(number);
     }
 
-    public Integer delete(List<TAccLedger> list) {
-        List<TAccLedger> editedlist = new ArrayList<>();
-        for (TAccLedger tAccLedger : list) {
-            BigDecimal value = new BigDecimal(0);
-            value = tAccLedger.getCredit();
-            tAccLedger.setCredit(tAccLedger.getDebit());
-            tAccLedger.setIndexNo(null);
-            tAccLedger.setDebit(value);
-            tAccLedger.setIsEdit(2);
-
-            editedlist.add(tAccLedger);
-        }
-        int size = journalRepository.save(editedlist).size();
-        if (size == list.size()) {
-            return size;
-        }
-        return -1;
-    }
-
+//    public Integer delete(List<TAccLedger> list) {
+//        List<TAccLedger> editedlist = new ArrayList<>();
+//        for (TAccLedger tAccLedger : list) {
+//            BigDecimal value = new BigDecimal(0);
+//            value = tAccLedger.getCredit();
+//            tAccLedger.setCredit(tAccLedger.getDebit());
+//            tAccLedger.setIndexNo(null);
+//            tAccLedger.setDebit(value);
+//            tAccLedger.setIsEdit(2);
+//
+//            editedlist.add(tAccLedger);
+//        }
+//        int size = journalRepository.save(editedlist).size();
+//        if (size == list.size()) {
+//            return size;
+//        }
+//        return -1;
+//    }
     public Object[] getSupplierBalanceList() {
-         return journalRepository.getSupplierBalanceList();
+        return journalRepository.getSupplierBalanceList();
     }
 
     public List<TAccLedger> getAccountLedgerByAccount(Integer account) {
-         return journalRepository.findByAccAccountOrderByTransactionDate(account);
+        return journalRepository.findByAccAccountOrderByTransactionDate(account);
     }
 
-   
+    Integer delete(Integer number) {
+        System.out.println(number);
+        journalRepository.setDelete(number);
+        return number;
+    }
 
 }

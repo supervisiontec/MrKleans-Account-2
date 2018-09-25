@@ -41,7 +41,7 @@
                             .success(function (data) {
                                 $rootScope.companyName = data.name;
                             });
-                 
+
                 };
 
                 $scope.toggleHamburger = function (value) {
@@ -82,14 +82,21 @@
                     $scope.$apply();
                 });
                 $scope.ui.include = function (name) {
-                    return $rootScope.permissionList.includes(name);
+                    if ($rootScope.permissionList) {
+                        if (!angular.isUndefined($rootScope.permissionList)) {
+                            return $rootScope.permissionList.includes(name);
+                        }
+                    }
                 };
                 $scope.ui.includeList = function (paramList) {
                     var check = false;
                     angular.forEach(paramList, function (name) {
-                        var isView = $rootScope.permissionList.includes(name);
-                        if (isView) {
-                            check = true;
+                        if (!angular.isUndefined($rootScope.permissionList)) {
+                            var isView = $rootScope.permissionList.includes(name);
+                            if (isView) {
+                                check = true;
+                                return;
+                            }
                         }
                     });
                     return check;

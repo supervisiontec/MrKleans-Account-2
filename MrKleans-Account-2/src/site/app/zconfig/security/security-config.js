@@ -37,6 +37,7 @@
                                 //if login success redirrect to home page
                                 if ($location.path() === "/login") {
                                     $location.path("/");
+                                    console.log()
                                 }
                             })
                             .error(function (data, status) {

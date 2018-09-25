@@ -23,12 +23,12 @@ public class AccountSettingService {
     @Autowired
     private AccountSettingRepository accountSettingRepository;
     
-    public List<MAccSetting> findAll() {
-        return accountSettingRepository.findAll();
-    }
-
     public Integer save(List<MAccSetting> settingList) {
         return accountSettingRepository.save(settingList).size();
+    }
+
+    public List<MAccSetting> findByView(boolean view) {
+        return accountSettingRepository.findByView(view);
     }
     
 }
