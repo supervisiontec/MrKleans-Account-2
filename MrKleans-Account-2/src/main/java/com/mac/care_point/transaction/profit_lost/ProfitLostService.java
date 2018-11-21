@@ -5,6 +5,8 @@
  */
 package com.mac.care_point.transaction.profit_lost;
 
+import com.mac.care_point.master.financial_year.FinancialYearRepository;
+import com.mac.care_point.master.financial_year.model.MFinancialYear;
 import com.mac.care_point.transaction.profit_lost.model.TProfitLostModel;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,20 +28,28 @@ public class ProfitLostService {
     @Autowired
     private ProfitLostRepository profitLostRepository;
 
+    @Autowired
+    private FinancialYearRepository financialYearRepository;
+
     BigDecimal openStock = new BigDecimal(0);
     BigDecimal purchase = new BigDecimal(0);
     BigDecimal closeStock = new BigDecimal(0);
 
-    public List<TProfitLostModel> loadProfitLostMain(Integer financialYear) {
+    public List<TProfitLostModel> loadProfitLostMain(String financialYear, String fromDate, String toDate) {
 
         List<TProfitLostModel> mainList = profitLostRepository.findAll();
         List<TProfitLostModel> returnList = new ArrayList<>();
-
-        BigDecimal salesIncome = getRevenueTotal(financialYear);
+        
+        if (!"null".equals(financialYear) ) {
+            MFinancialYear fYear = financialYearRepository.findOne(Integer.valueOf(financialYear));
+            fromDate = fYear.getStartDate();
+            toDate = fYear.getEndDate();
+        }
+        BigDecimal salesIncome = getRevenueTotal(fromDate, toDate);
         BigDecimal cost = new BigDecimal(0);
-        BigDecimal otherIncome = getOtherIncome();
-        BigDecimal otherExpense = getOtherExpense();
-        BigDecimal taxExpense = getTaxExpense();
+        BigDecimal otherIncome = getOtherIncome(fromDate, toDate);
+        BigDecimal otherExpense = getOtherExpense(fromDate, toDate);
+        BigDecimal taxExpense = getTaxExpense(fromDate, toDate);
 
         for (TProfitLostModel model : mainList) {
             model.setSubOf(0);
@@ -47,10 +57,10 @@ public class ProfitLostService {
                 model.setCredit(salesIncome);
             }
             if (model.getIndexNo() == 2) {
-                getOpenStock();
-                getPurchaseOfYear();
-                getCloseStock();
-                cost=getCostOfSales();
+                getOpenStock(fromDate);
+                getPurchaseOfYear(fromDate,toDate);
+                getCloseStock(toDate);
+                cost = getCostOfSales();
                 model.setCredit(cost);
             }
             if (model.getIndexNo() == 3) {
@@ -83,44 +93,49 @@ public class ProfitLostService {
 
     }
 
-    private BigDecimal getRevenueTotal(Integer financialYear) {
-        return profitLostRepository.getRevenueTotal(financialYear);
+    private BigDecimal getRevenueTotal(String fromDate, String toDate) {
+        return profitLostRepository.getRevenueTotal(fromDate, toDate);
     }
 
-    private BigDecimal getOtherIncome() {
-        return profitLostRepository.getOtherIncome();
+    private BigDecimal getOtherIncome(String fDate, String tDate) {
+        return profitLostRepository.getOtherIncome(fDate, tDate);
     }
 
-    private BigDecimal getOtherExpense() {
-        return profitLostRepository.getOtherExpense();
+    private BigDecimal getOtherExpense(String fDate, String tDate) {
+        return profitLostRepository.getOtherExpense(fDate, tDate);
     }
 
-    private BigDecimal getTaxExpense() {
-        return profitLostRepository.getTaxExpense();
+    private BigDecimal getTaxExpense(String fDate, String tDate) {
+        return profitLostRepository.getTaxExpense(fDate, tDate);
     }
 
-    private void getOpenStock() {
-        openStock = profitLostRepository.getOpenStock();
+    private void getOpenStock(String fDate) {
+        openStock = profitLostRepository.getOpenStock(fDate);
     }
 
-    private void getPurchaseOfYear() {
-        purchase = profitLostRepository.getPurchaseOfYear();
+    private void getPurchaseOfYear(String fDate,String tDate) {
+        purchase = profitLostRepository.getPurchaseOfYear(fDate,tDate);
     }
 
-    private void getCloseStock() {
-        closeStock = profitLostRepository.getCloseStock();
+    private void getCloseStock(String toDate) {
+        closeStock = profitLostRepository.getCloseStock(toDate);
     }
 
     private BigDecimal getCostOfSales() {
         return openStock.add(purchase).subtract(closeStock);
     }
 
-    public List<TProfitLostModel> getSubList(Integer indexNo) {
+    public List<TProfitLostModel> getSubList(Integer indexNo,String financialYear,String fDate,String tDate) {
         List<TProfitLostModel> returnList = new ArrayList<>();
+        if (!"null".equals(financialYear) ) {
+            MFinancialYear fYear = financialYearRepository.findOne(Integer.valueOf(financialYear));
+            fDate = fYear.getStartDate();
+            tDate = fYear.getEndDate();
+        }
         TProfitLostModel model = profitLostRepository.findOne(indexNo);
         if (indexNo == 1) {
             //Revenue
-            List<Object[]> list = profitLostRepository.getRevenueDetails();
+            List<Object[]> list = profitLostRepository.getRevenueDetails(fDate,tDate);
             for (Object[] object : list) {
                 TProfitLostModel plModel = new TProfitLostModel();
 
@@ -135,7 +150,7 @@ public class ProfitLostService {
             }
         }
         if (indexNo == 2) {
-            //cosst of sales
+            //cost of sales
 
             TProfitLostModel openStockModel = new TProfitLostModel();
             openStockModel.setChecked(false);
@@ -178,9 +193,9 @@ public class ProfitLostService {
             closeStock.setSubOf(model.getIndexNo());
             returnList.add(closeStock);
         }
-        if (indexNo==5) {
-             //other expense
-            List<Object[]> list = profitLostRepository.getOtherExpenseDetails();
+        if (indexNo == 5) {
+            //other expense
+            List<Object[]> list = profitLostRepository.getOtherExpenseDetails(fDate,tDate);
             for (Object[] object : list) {
                 TProfitLostModel plModel = new TProfitLostModel();
 
@@ -193,7 +208,7 @@ public class ProfitLostService {
                 plModel.setSubOf(model.getIndexNo());
                 returnList.add(plModel);
             }
-            
+
         }
         return returnList;
     }

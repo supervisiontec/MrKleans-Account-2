@@ -25,12 +25,12 @@ public class ProfitLostController {
     @Autowired 
     private ProfitLostService profitLostService;
     
-    @RequestMapping(value = "/load-profit-lost-main/{financialYear}", method = RequestMethod.GET)
-    public List<TProfitLostModel> loadProfitLostMain(@PathVariable Integer financialYear) {
-        return profitLostService.loadProfitLostMain(financialYear);
+    @RequestMapping(value = "/load-profit-lost-main/{financialYear}/{fromDate}/{toDate}", method = RequestMethod.GET)
+    public List<TProfitLostModel> loadProfitLostMain(@PathVariable String financialYear,@PathVariable String fromDate ,@PathVariable String toDate ) {
+        return profitLostService.loadProfitLostMain(financialYear,fromDate,toDate);
     }
-    @RequestMapping(value = "/get-sub-list/{index}", method = RequestMethod.GET)
-    public List<TProfitLostModel> getSubList(@PathVariable Integer index) {
-        return profitLostService.getSubList(index);
+    @RequestMapping(value = "/get-sub-list/{index}/{financialYear}/{fromDate}/{toDate}", method = RequestMethod.GET)
+    public List<TProfitLostModel> getSubList(@PathVariable Integer index,@PathVariable String financialYear ,@PathVariable String fromDate ,@PathVariable String toDate) {
+        return profitLostService.getSubList(index,financialYear,fromDate,toDate);
     }
 }

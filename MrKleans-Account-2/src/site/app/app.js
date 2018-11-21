@@ -35,7 +35,7 @@
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? 'http://localhost:8071'
+                        ? 'http://localhost:8080'
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 

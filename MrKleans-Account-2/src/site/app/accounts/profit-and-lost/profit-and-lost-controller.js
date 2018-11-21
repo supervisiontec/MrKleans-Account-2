@@ -5,9 +5,11 @@ angular.module("profitAndLostModule")
         .factory("profitAndLostFactory", function ($http, systemConfig) {
             var factory = {};
 
-            factory.loadMainData = function (financialYear,callback) {
+            factory.loadMainData = function (financialYear, fromDate, toDate, callback) {
                 console.log(financialYear);
-                var url = systemConfig.apiUrl + "/api/care-point/transaction/profit-lost/load-profit-lost-main/"+financialYear;
+                console.log(fromDate);
+                console.log(toDate);
+                var url = systemConfig.apiUrl + "/api/care-point/transaction/profit-lost/load-profit-lost-main/" + financialYear + "/" + fromDate + "/" + toDate;
 
                 $http.get(url)
                         .success(function (data, status, headers) {
@@ -17,8 +19,8 @@ angular.module("profitAndLostModule")
                             callback(data);
                         });
             };
-            factory.getSubList = function (index, callback) {
-                var url = systemConfig.apiUrl + "/api/care-point/transaction/profit-lost/get-sub-list/" + index;
+            factory.getSubList = function (index, financialYear, fromDate, toDate, callback) {
+                var url = systemConfig.apiUrl + "/api/care-point/transaction/profit-lost/get-sub-list/" + index + "/" + financialYear + "/" + fromDate + "/" + toDate;
 
                 $http.get(url)
                         .success(function (data, status, headers) {
@@ -43,7 +45,7 @@ angular.module("profitAndLostModule")
         });
 
 angular.module("profitAndLostModule")
-        .controller('profitAndLostController', function ($scope, PrintPane, printService, profitAndLostFactory) {
+        .controller('profitAndLostController', function ($scope, $route, PrintPane, printService, $filter, profitAndLostFactory) {
             $scope.printService = new printService();
             $scope.selectedNode = "";
             $scope.clickList = [];
@@ -52,6 +54,9 @@ angular.module("profitAndLostModule")
 
             $scope.ui = {};
             $scope.model = {};
+            $scope.model.fromDate = null;
+            $scope.model.toDate = null;
+            $scope.model.financialYear = null;
 
 
             $scope.ui.print = function () {
@@ -63,12 +68,17 @@ angular.module("profitAndLostModule")
                             $scope.printService.printExcel('printDiv', 'profit and lost');
                         });
             };
-
-            $scope.ui.init = function () {
-                profitAndLostFactory.loadFinancialYearList(function (data) {
-                    $scope.financialYearList = data;
-                });
+            $scope.ui.frmoveFinancialYear = function () {
+                $scope.model.financialYear = null;
             };
+            $scope.ui.removeFromToDates = function () {
+                $scope.model.fromDate = null;
+                $scope.model.toDate = null;
+            };
+            $scope.ui.refresh = function () {
+                $route.reload();
+            };
+
             $scope.ui.unitClick = function (data) {
                 var indexNo = data.indexNo;
 
@@ -88,7 +98,10 @@ angular.module("profitAndLostModule")
                     });
                 } else {
                     $scope.clickList.push(data.indexNo);
-                    profitAndLostFactory.getSubList(parseInt(indexNo), function (dataList) {
+                    var financialYear = $scope.model.financialYear;
+                    var fromDate = $filter('date')($scope.model.fromDate, 'yyyy-MM-dd');
+                    var toDate = $filter('date')($scope.model.toDate, 'yyyy-MM-dd');
+                    profitAndLostFactory.getSubList(parseInt(indexNo), financialYear, fromDate, toDate, function (dataList) {
                         angular.forEach(dataList, function (data1) {
                             $scope.mainList.push(data1);
                         });
@@ -137,10 +150,17 @@ angular.module("profitAndLostModule")
                 });
                 return label;
             };
-            $scope.ui.setFinancialYear=function () {
-                var financialYear=$scope.model.financialYear;
-                 profitAndLostFactory.loadMainData(financialYear,function (data) {
+            $scope.ui.setFinancialYear = function () {
+                var financialYear = $scope.model.financialYear;
+                var fromDate = $filter('date')($scope.model.fromDate, 'yyyy-MM-dd');
+                var toDate = $filter('date')($scope.model.toDate, 'yyyy-MM-dd');
+                profitAndLostFactory.loadMainData(financialYear, fromDate, toDate, function (data) {
                     $scope.mainList = data;
+                });
+            };
+            $scope.ui.init = function () {
+                profitAndLostFactory.loadFinancialYearList(function (data) {
+                    $scope.financialYearList = data;
                 });
             };
 

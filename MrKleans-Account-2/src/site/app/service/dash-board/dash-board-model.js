@@ -51,8 +51,11 @@
 
             getDashboard2: function (fDate, tDate) {
                 var that = this;
+                console.log(fDate);
+                console.log(tDate);
                 dashBoardService.getDashBoard2(fDate, tDate)
                         .success(function (data) {
+                            console.log(data);
                             that.setDashboardData2(data);
                         });
 

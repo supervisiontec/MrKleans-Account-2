@@ -7,6 +7,7 @@ package com.mac.care_point.master.account;
 
 import com.mac.care_point.master.account.model.MAccAccount;
 import com.mac.care_point.master.account.model.MAccSettingMix;
+import com.mac.care_point.transaction.account_ledger.JournalRepository;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class AccAccountService {
 
     @Autowired
     private AccAccountRepository accAccountRepository;
+    
+    @Autowired
+    private JournalRepository journalRepository;
 
     @Autowired
     public List<MAccAccount> findAll() {
@@ -36,7 +40,10 @@ public class AccAccountService {
 
     @Transactional
     public MAccAccount saveNewAccount(MAccAccount accAccount) {
-
+        Integer count=journalRepository.getTransactionCount(accAccount.getSubAccountOf());
+        if (count>0) {
+            throw new RuntimeException("Can't create sub account.because there are another transaction with relation !");
+        }
         if (accAccount.getIndexNo() != null) {
             return accAccountRepository.save(accAccount);
         } else {

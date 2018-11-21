@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("accruedBillController", function ($scope, accruedBillModel, $timeout, $filter, calculator, Notification, ConfirmPane) {
+            .controller("accruedBillController", function ($scope,$uibModalStack, $uibModal,accruedBillModel, $timeout, $filter, calculator, Notification, ConfirmPane) {
                 $scope.model = new accruedBillModel();
                 $scope.ui = {};
                 $scope.model.currentBranch = {};
@@ -11,6 +11,9 @@
                     $timeout(function () {
                         document.querySelectorAll(id)[0].focus();
                     }, 10);
+                };
+                $scope.ui.modelCancel=function () {
+                    $uibModalStack.dismissAll();
                 };
                 //new
                 $scope.ui.new = function () {
@@ -53,6 +56,54 @@
                         $scope.ui.new();
                         $scope.ui.focus('#subAccount');
                     }
+                };
+                $scope.ui.popupSave=function () {
+                   var checkSave = true;
+                    if (!$scope.model.tempData.accAccount) {
+                        checkSave = false;
+                        Notification.error('select a account to add !');
+                    }
+                    if (!$scope.model.tempData.branch) {
+                        checkSave = false;
+                        Notification.error('select a branch to add !');
+                    }
+                    if (!$scope.model.tempData.description) {
+                        checkSave = false;
+                        Notification.error('insert description to add !');
+                    }
+                    if (!$scope.model.data.transactionDate) {
+                        checkSave = false;
+                        Notification.error('insert a Date to add !');
+                    }
+                    if (!$scope.model.tempData.debit) {
+                        checkSave = false;
+                        Notification.error('insert amount to add !');
+                    }
+                    if (!$scope.model.data.accAccount) {
+                        checkSave = false;
+                        Notification.error('select a main account to add !');
+                    }
+                    if (!$scope.model.data.typeIndexNo) {
+                        checkSave = false;
+                        Notification.error('select an accrued account to save !');
+                    }
+                    if (checkSave) {
+                        $scope.model.addDataWithCostCenter();
+                        
+                        $scope.ui.new();
+                        $scope.ui.focus('#subAccount');
+                        $scope.ui.modelCancel();
+                    } 
+                };
+                $scope.ui.viewModel=function () {
+                    $uibModal.open({
+                            animation: true,
+                            ariaLabelledBy: 'modal-title',
+                            ariaDescribedBy: 'modal-body',
+                            templateUrl: 'costCenter.html',
+                            scope: $scope,
+                            size: 'sm'
+                        });
                 };
                 $scope.ui.save = function () {
                     var checkSave = true;

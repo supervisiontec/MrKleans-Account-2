@@ -1,6 +1,6 @@
 (
         function () {
-            var factory = function ($filter, trialBalanceService) {
+            var factory = function ($filter, $q, trialBalanceService) {
                 function trialBalanceModel() {
                     this.constructor();
                 }
@@ -30,17 +30,15 @@
                         var debit = 0.00;
                         var credit = 0.00;
                         var that = this;
-                        
+
                         angular.forEach(that.accMainList, function (data) {
-                            if (data.isAccAccount === 1) {
-                                debit += data.debit;
-                                credit += data.credit;
-                            }
-                            data.view = false;
+
+                            debit += data.debit;
+                            credit += data.credit;
+
+                            data.view = true;
                             data.amountShow = true;
-                            if (data.level === 1) {
-                                data.view = true;
-                            }
+
                         });
                         that.totalCredit = credit;
                         that.totalDebit = debit;
@@ -49,26 +47,34 @@
                     }
                     , viewLevel: function (data) {
                         var that = this;
-                        that.level = parseInt(data.level) + 1;
-                        if (data.count > 0) {
-                            data.amountShow = data.amountShow === true ? false : true;
-
-                        }
-                        that.filter1(data);
-                    },
-                    filter1: function (data) {
-                        var that = this;
-                        angular.forEach(that.accMainList, function (acc) {
-                            var code = data.accCode;
-
-                            if (acc.accCode.substring(0, code.length) === code && that.level >= acc.level) {
-                                if (acc.subAccountOf === data.accNo) {
-                                    acc.view = acc.view === true ? false : true;
+                        var defer = $q.defer();
+                        if (data.amountShow) {
+                            var date = $filter('date')(that.date, 'yyyy-MM-dd');
+                            trialBalanceService.getSubData(date, data.accNo)
+                                    .success(function (subDataList) {
+                                        data.amountShow = data.amountShow === true ? false : true;
+                                        if (subDataList) {
+                                            angular.forEach(subDataList, function (sub) {
+                                                sub.view = true;
+                                                sub.amountShow = true;
+                                                that.accMainList.unshift(sub);
+                                            });
+                                        } else {
+                                            defer.reject(data);
+                                        }
+                                    });
+                            return defer.promise;
+                        } else {
+                            angular.forEach(that.accMainList, function (sub) {
+                                if (sub.subAccountOf === data.accNo) {
+                                    sub.amountShow = false;
+                                    sub.view = false;
                                 }
-                            }
-                        });
+                            });
+                            data.amountShow = true;
+                        }
                     }
-
+//                    
                 };
                 return trialBalanceModel;
             };

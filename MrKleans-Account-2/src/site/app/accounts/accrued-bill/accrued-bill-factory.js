@@ -25,7 +25,9 @@
                         "reconcileGroup":0,
                         "financialYear": null,
                         "costDepartment": "",
-                        "costCenter": ""
+                        "costCenter": "",
+                        "isEdit": 0
+                        
 
                     };
                     return data;
@@ -53,7 +55,8 @@
                         "reconcileGroup":0,
                         "financialYear": null,
                         "costDepartment": "",
-                        "costCenter": ""
+                        "costCenter": "",
+                        "isEdit": 0
                     };
                     return data;
                 };

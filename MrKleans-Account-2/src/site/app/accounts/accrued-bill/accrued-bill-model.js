@@ -158,10 +158,56 @@
                     that.totalCalculation();
                 }, 30);
             },
+            addDataWithCostCenter: function () {
+                var that = this;
+
+                angular.forEach(this.activeCostCenterList, function (data) {
+                    var subData = {};
+                    if (data.value) {
+                        subData.accAccount= that.tempData.accAccount;
+                        subData.bankReconciliation= false;
+                        subData.branch=that.tempData.branch;
+                        subData.chequeDate= null;
+                        subData.costCenter= data.indexNo;
+                        subData.costDepartment= "";
+                        subData.credit= 0;
+                        subData.currentBranch = null;
+                        subData.currentDate= null;
+                        subData.debit= that.tempData.debit/100*data.value;
+                        subData.description= that.tempData.description;
+                        subData.financialYear= null;
+                        subData.formName= "accrued_bill";
+                        subData.indexNo= null;
+                        subData.isEdit= 0;
+                        subData.reconcileAccount= null;
+                        subData.reconcileGroup= 0;
+                        subData.refNumber= null;
+                        subData.time= null;
+                        subData.transactionDate=$filter('date')(that.data.transactionDate, 'yyyy-MM-dd');
+                        subData.type= "accrued";
+                        subData.typeIndexNo= null;
+                        subData.user= null;
+
+
+                        that.saveDataList.push(subData);
+                    }
+                });
+                console.log(that.saveDataList);
+                that.tempData = accruedBillFactory.tempData();
+                $timeout(function () {
+                    that.totalCalculation();
+                }, 30);
+            },
+            clearTemp: function () {
+                var that = this;
+                that.tempData = accruedBillFactory.tempData();
+                $timeout(function () {
+                    that.totalCalculation();
+                }, 30);
+            },
             totalCalculation: function () {
                 var value = 0.00;
                 angular.forEach(this.saveDataList, function (data) {
-                    console.log(data);
                     value += parseFloat(data.debit);
                     return;
                 });

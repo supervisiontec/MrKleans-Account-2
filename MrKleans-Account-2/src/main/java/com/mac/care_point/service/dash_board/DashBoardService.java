@@ -34,16 +34,23 @@ public class DashBoardService {
         return dashBoardMain;
     }
 
-
     public List<Object> getDashBoard2(String fDate, String tDate) {
-        List<Object> ledgerTypes = journalRepository.getLedgerTypes(fDate,tDate);
+        System.out.println(fDate+" *&^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        System.out.println(tDate+" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        List<Object[]> ledgerTypes = journalRepository.getLedgerTypes(fDate,tDate);
         List<Integer> countList = new ArrayList<>();
+        List<String> lblList = new ArrayList<>();
         List<Object> retuenList = new ArrayList<>();
-        for (Object ledgerType : ledgerTypes) {
-            countList.add(journalRepository.getLedgerTypeCount(ledgerType.toString(),fDate,tDate).size());
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        for (Object[] ledgerType : ledgerTypes) {
+            System.out.println(ledgerType[0].toString());
+            System.out.println(ledgerType[1].toString());
+            countList.add(journalRepository.getLedgerTypeCount(ledgerType[1].toString(),fDate,tDate).size());
+            lblList.add(ledgerType[0].toString());
         }
-        retuenList.add(ledgerTypes);
+        retuenList.add(lblList);
         retuenList.add(countList);
+        System.out.println(retuenList.toString());
         return retuenList;
     }
 

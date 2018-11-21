@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("trialBalanceController", function ($scope, trialBalanceModel,printService, $timeout, PrintPane, Notification) {
+            .controller("trialBalanceController", function ($scope, trialBalanceModel, printService, $timeout, PrintPane, Notification) {
                 $scope.model = new trialBalanceModel();
                 $scope.printService = new printService();
                 $scope.ui = {};
@@ -29,6 +29,14 @@
                             })
                             .discard(function () {
                                 $scope.printService.printExcel('printDiv', 'Trial_Balance');
+                            });
+                };
+                $scope.ui.viewLevel = function (data) {
+                    $scope.model.viewLevel(data)
+                            .then(function (data) {
+                                Notification.success('Finded');
+                            }, function () {
+                                Notification.error('Empty');
                             });
                 };
 

@@ -30,4 +30,9 @@ public class TrialBalanceController {
         return trialBalanceService.loadMainAcc(date);
     }
     
+    @RequestMapping(value = "/get-sub-acc-balance/{date}/{accNo}", method = RequestMethod.GET)
+    public List<AccMainListModel> loadMainAcc(@PathVariable String date, @PathVariable Integer accNo) {
+        return trialBalanceService.loadSubAccBalance(date,accNo);
+    }
+    
 }

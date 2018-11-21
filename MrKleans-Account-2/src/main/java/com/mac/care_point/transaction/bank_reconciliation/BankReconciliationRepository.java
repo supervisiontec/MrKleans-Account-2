@@ -57,7 +57,8 @@ public interface BankReconciliationRepository extends JpaRepository<TAccLedger, 
             + "      from t_acc_ledger\n"
             + "      where t_acc_ledger.acc_account=:accAccount\n"
             + "      and t_acc_ledger.transaction_date >=:fDate and t_acc_ledger.transaction_date<=:lDate \n"
-            + "      and (t_acc_ledger.bank_reconciliation is null or t_acc_ledger.bank_reconciliation=false)", nativeQuery = true)
+            + "      and (t_acc_ledger.bank_reconciliation is null or t_acc_ledger.bank_reconciliation=false) \n"
+            + "and (t_acc_ledger.is_edit !=2 or t_acc_ledger.is_edit is null)", nativeQuery = true)
     public double getStartBalance(@Param("fDate") String fDate, @Param("lDate") String lDate, @Param("accAccount") Integer accAccount);
 
     @Query(value = "select t_acc_ledger.index_no,\n"
@@ -90,6 +91,7 @@ public interface BankReconciliationRepository extends JpaRepository<TAccLedger, 
             + "   t_acc_ledger.is_edit\n"
             + "from t_acc_ledger\n"
             + "where t_acc_ledger.acc_account=:accAccount\n"
+            +" and (is_edit !=2 or is_edit is null)\n"
             + "and year(t_acc_ledger.transaction_date) =:year and month(t_acc_ledger.transaction_date)=:month \n"
             + "and (t_acc_ledger.bank_reconciliation is null or t_acc_ledger.bank_reconciliation=false)\n"
             + "order by t_acc_ledger.transaction_date", nativeQuery = true)

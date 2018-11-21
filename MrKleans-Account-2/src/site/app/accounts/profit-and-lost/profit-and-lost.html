@@ -3,25 +3,44 @@
 <div class="index-content-body ">
     <div class="span5 article-tree">
         <div class="col-lg-3">
+            <table class="table-rounded control-table">
+                <th class="text-center select-primary-row-table-header">Selection</th>
+            </table>
             <table class="table-rounded control-table square-table">
-                <col style="width: 35%"/>
+                <col style="width: 40%"/>
                 <col style="width: 60%"/>
-                <col style="width: 10%"/>
                 <tbody>
 
+                    <tr>
+                        <td><label> From Date :</label></td>
+                        <td>
+                            <input class="form-control" type="date" ng-model="model.fromDate" 
+                                      ng-change="ui.frmoveFinancialYear()"  />
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                       <td><label> To Date :</label></td>
+                        <td>
+                            <input class="form-control" type="date" ng-model="model.toDate" 
+                                   ng-change="ui.frmoveFinancialYear()"  />
+                        </td>
+                        
+                    </tr>
+                    
                     <tr>
                         <td><label> Financial Year :</label></td>
                         <td>
                             <input class="form-control" type="text" ng-model="model.financialYear" 
                                        uib-typeahead="data.indexNo as (data.name) for data in financialYearList |filter:$viewValue|limitTo:10" 
                                        typeahead-input-formatter="model.financialYearLable($model)" 
+                                       ng-change="ui.removeFromToDates()"
                                        typeahead-editable="false" />
                         </td>
-                        <td>
-                            <a class="btn btn-lg btn-primary" ng-click="ui.setFinancialYear();">
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </a>
-
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="select-primary-row-table-header text-center" ng-click="ui.setFinancialYear();">
+                            <span>Process</span>
                         </td>
                     </tr>
                 </tbody>
@@ -34,7 +53,7 @@
                     <h6>Statement of comprehensive income and retained earnings
                         for the year ended
                     </h6>
-                    <h6>31 mar 2018</h6>
+                    <h6>31 mar 2019</h6>
                 </div>
                 <div class="col-lg-12 nopadding smart-scroll-y" style="height: calc(100vh - 150px)">
 
@@ -80,6 +99,7 @@
 </div>
 
 <div class="fab-container">
-    <a class="fab fab-warning" ng-show="true" ng-click="ui.print();"><i class="glyphicon glyphicon-import"></i></a>
-    <a class="fab fab-lg fab-success" ng-show="true" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+    <a class="fab fab-danger" ng-click="ui.refresh();"><i class="glyphicon glyphicon-refresh"></i></a>
+    <a class="fab fab-warning" ng-click="ui.print();"><i class="glyphicon glyphicon-import"></i></a>
+    <a class="fab fab-lg fab-success" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
 </div>

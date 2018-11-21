@@ -31,7 +31,6 @@ public class AccruedBillController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Integer saveAccruedBill(@RequestBody AccruedBillMix accruedBillMix) {
-        System.out.println(accruedBillMix.toString());
         return accruedBillService.saveAccruedBill(accruedBillMix);
     }
     @RequestMapping(value = "/find-accrued-bills-by-number-and-branch/{number}", method = RequestMethod.GET)

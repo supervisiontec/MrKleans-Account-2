@@ -36,14 +36,28 @@ public class mAccLedgerType implements Serializable{
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "label")
+    private String label;
+    
     public mAccLedgerType() {
     }
 
-    public mAccLedgerType(Integer indexNo, String name, Boolean isActive) {
+    public mAccLedgerType(Integer indexNo, String name, Boolean isActive, String label) {
         this.indexNo = indexNo;
         this.name = name;
         this.isActive = isActive;
+        this.label = label;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    
 
     public Integer getIndexNo() {
         return indexNo;

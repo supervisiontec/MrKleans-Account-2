@@ -120,12 +120,13 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
             + "   GROUP by DATE_FORMAT(ledger.transaction_date,'%Y-%b') order by ledger.transaction_date desc limit 6", nativeQuery = true)
     public List<Object[]> getDashBoard3(@Param("fDate") String fDate, @Param("tDate") String tDate);
 
-    @Query(value = "select t_acc_ledger.`type`\n"
-            + "from t_acc_ledger\n"
-            + "where t_acc_ledger.financial_year=(select m_financial_year.index_no from m_financial_year where m_financial_year.is_current=1)\n"
-            + "and t_acc_ledger.transaction_date>=:fDate and t_acc_ledger.transaction_date<=:tDate \n"
-            + "group by t_acc_ledger.`type` ", nativeQuery = true)
-    public List<Object> getLedgerTypes(@Param("fDate") String fDate, @Param("tDate") String tDate);
+    @Query(value = "select m_acc_ledger_type.label,\n"
+            + "     t_acc_ledger.type \n"
+            + "     from t_acc_ledger\n"
+            + "     LEFT JOIN m_acc_ledger_type on m_acc_ledger_type.name=t_acc_ledger.`type`\n"
+            + "     where t_acc_ledger.transaction_date>=:fDate and t_acc_ledger.transaction_date<=:tDate\n"
+            + "     group by t_acc_ledger.`type` ", nativeQuery = true)
+    public List<Object[]> getLedgerTypes(@Param("fDate") String fDate, @Param("tDate") String tDate);
 
     @Query(value = "select t_acc_ledger.index_no,\n"
             + "   t_acc_ledger.number,\n"
@@ -178,6 +179,9 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "UPDATE t_acc_ledger SET `is_edit`='2' WHERE delete_ref_no=:number", nativeQuery = true)
-    public void setDelete(@Param ("number")Integer number);
+    public void setDelete(@Param("number") Integer number);
+
+    @Query(value = "select count(index_no) from t_acc_ledger where acc_account = :subAccountOf", nativeQuery = true)
+    public Integer getTransactionCount(@Param ("subAccountOf")Integer subAccountOf);
 
 }

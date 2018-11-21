@@ -235,9 +235,13 @@
                             <input class="form-control text-right border-cal" ng-model="model.tempData.debit" ng-disabled="ui.mode !== 'NEW'" ng-keypress="ui.focusAdd($event,model.tempData.debit)">
                         </td>
                         <td>
-                            <a class="btn btn-primary" style="margin-top: 28px" id="btnAddData" ng-click="ui.addData()">
+                            <abbr title="Bill Amount Division from Cost Center... !" style="margin-left: 15px;font-size: larger;" ng-click="ui.viewModel()" >
+                                <a class="text-success" >
+                                    <b>        +         </b>
+                                </a></abbr>
+                            <a class="btn btn-primary" id="btnAddData" ng-click="ui.addData()">
                                 <span class="glyphicon glyphicon-plus"></span>
-                            </a>
+                            </a> 
                         </td>
                     </tr>
                 </tbody>
@@ -277,7 +281,7 @@
                 <col style="width: 10%"/>
                 <col style="width: 10%"/>
                 <tbody>
-                    <tr class="background-dark" ng-repeat="data in model.saveDataList">
+                    <tr class="background-dark" ng-repeat="data in model.saveDataList track by $index">
                         <td>{{model.accountLable(data.accAccount)}}</td>
                         <td>{{model.branchLable(data.branch)}}</td>
                         <td>{{data.description}}</td>
@@ -327,6 +331,56 @@
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
     <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
 </div>
-
+<script type="text/ng-template" id="costCenter.html">
+    <div class="col-lg-12 background-light no-padding">
+        <div class="row">
+            <div class="modal-header bg-primary">
+                <div class="col-lg-12">
+                    <center>
+                        <label> Cost Center </label>
+                    </center>
+                </div>
+            </div>
+            <div class="modal-body" style="height:450px;padding-left:0px;padding-right:0px">
+               <div class="col-xs-12">
+                    <table class="table-rounded control-table">
+                        <col style="width: 70%"/>
+                        <col style="width: 30%"/>
+                        <theader>
+                            <tr>
+                                <td>Cost Conter</td>
+                                <td>%</td>
+                            </tr>
+                        </theader>
+                    </table>
+                </div>
+                <div class="col-xs-12 smart-scroll-y" style="height: calc(100vh - 344px);">
+                    <table class="table-rounded control-table">
+                        <col style="width: 10%"/>
+                        <col style="width: 60%"/>
+                        <col style="width: 30%"/>
+                        <theader>
+                          <tr ng-repeat='data in model.activeCostCenterList'>
+                                <td>{{data.indexNo}}</td>
+                                <td>{{data.name}}</td>
+                                <td>
+                                    <input class="form-control text-right" placeholder="%" ng-model="data.value">
+                                </td>
+                            </tr>
+                        </theader>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer bg-primary">
+                <div class="col-lg-12">
+                    <center>
+                        <input type="button" style="width:75px" class='btn btn-defsult' value="Cancel" ng-click="ui.modelCancel()" />
+                        <input type="button" style="width:75px" class='btn btn-success' value="Add" ng-click="ui.popupSave();"/>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
 
 

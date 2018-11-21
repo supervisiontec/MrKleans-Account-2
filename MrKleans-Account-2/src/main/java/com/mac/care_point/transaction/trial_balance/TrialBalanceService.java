@@ -26,8 +26,27 @@ public class TrialBalanceService {
     private TrialBalanceRepository trialBalanceRepository;
 
     public List<AccMainListModel> loadMainAcc(String date) {
-        ArrayList<AccMainListModel> list = new ArrayList<AccMainListModel>();
+        ArrayList<AccMainListModel> list = new ArrayList<>();
         List<Object[]> loadMainAcc = trialBalanceRepository.loadMainAcc(date);
+        for (Object object[] : loadMainAcc) {
+            AccMainListModel model = new AccMainListModel();
+            model.setAccNo(Integer.parseInt(object[0].toString()));
+            model.setAccCode(object[1].toString());
+            model.setAccName(object[2].toString());
+            model.setDebit(new BigDecimal(object[3].toString()));
+            model.setCredit(new BigDecimal(object[4].toString()));
+            model.setLevel(Integer.parseInt(object[5].toString()));
+            model.setIsAccAccount(Integer.parseInt((object[6].toString())));
+            model.setCount(Integer.parseInt((object[7].toString())));
+            model.setSubAccountOf(Integer.parseInt((object[8].toString())));
+            list.add(model);
+        }
+        return list;
+    }
+
+    public List<AccMainListModel> loadSubAccBalance(String date, Integer accNo) {
+        ArrayList<AccMainListModel> list = new ArrayList<>();
+        List<Object[]> loadMainAcc = trialBalanceRepository.loadSubAccBalance(date,accNo);
         for (Object object[] : loadMainAcc) {
             AccMainListModel model = new AccMainListModel();
             model.setAccNo(Integer.parseInt(object[0].toString()));
