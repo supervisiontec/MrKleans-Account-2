@@ -174,7 +174,7 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
             + "order by m_acc_account.name", nativeQuery = true)
     public Object[] getSupplierBalanceList();
 
-    public List<TAccLedger> findByAccAccountOrderByTransactionDate(Integer account);
+//    public List<TAccLedger> findByAccAccountOrderByTransactionDate(Integer account);
 
     @Modifying(clearAutomatically = true)
     @Transactional
@@ -183,5 +183,7 @@ public interface JournalRepository extends JpaRepository<TAccLedger, Integer> {
 
     @Query(value = "select count(index_no) from t_acc_ledger where acc_account = :subAccountOf", nativeQuery = true)
     public Integer getTransactionCount(@Param ("subAccountOf")Integer subAccountOf);
+
+    public List<TAccLedger> findByAccAccountAndIsEditNotOrderByTransactionDate(Integer account, int isEditNot);
 
 }

@@ -60,9 +60,11 @@ public class FundTransferService {
         fundTransferMix.getData().setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
         fundTransferMix.getData().setUser(SecurityUtil.getCurrentUser().getBranch());
         fundTransferMix.getData().setIsMain(true);
+        fundTransferMix.getData().setIsEdit(0);
         fundTransferMix.getData().setSearchCode(searchCode);
         fundTransferMix.getData().setType(Constant.FUND_TRANSFER);
         TAccLedger save = journalRepository.save(fundTransferMix.getData());
+        save.setIsEdit(0);
 
         MAccAccount account = accountRepository.findOne(fundTransferMix.getData().getAccAccount());
         if ("BANK".equals(account.getAccType())) {
@@ -87,6 +89,7 @@ public class FundTransferService {
             tAccLedger.setTime(new SimpleDateFormat("kk:mm:ss").format(new Date()));
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getBranch());
             tAccLedger.setIsMain(false);
+            tAccLedger.setIsEdit(0);
             tAccLedger.setSearchCode(searchCode);
             tAccLedger.setIsCheque(false);
             tAccLedger.setType(Constant.FUND_TRANSFER);
@@ -95,7 +98,8 @@ public class FundTransferService {
             }
             tAccLedger.setTransactionDate(fundTransferMix.getData().getTransactionDate());
             TAccLedger save1 = journalRepository.save(tAccLedger);
-
+            save1.setIsEdit(0);
+            
             if ("BANK".equals(account.getAccType())) {
                 save1.setReconcileAccount(tAccLedger.getAccAccount());
                 save1.setAccAccount(unrealizedReceived.getAccAccount());

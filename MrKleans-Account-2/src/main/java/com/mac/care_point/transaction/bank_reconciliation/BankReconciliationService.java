@@ -88,6 +88,7 @@ public class BankReconciliationService {
             tAccLedger1.setReconcileGroup(findOne.getReconcileGroup());
             tAccLedger1.setIsMain(tAccLedger.getIsCheque());
             tAccLedger1.setIsCheque(true);
+            tAccLedger1.setIsEdit(0);
 
             bankReconciliationRepository.save(tAccLedger1);
 
@@ -113,6 +114,7 @@ public class BankReconciliationService {
             bankLedger.setType(Constant.RECONCILIATION);
             bankLedger.setTypeIndexNo(null);
             bankLedger.setIsMain(false);
+            bankLedger.setIsEdit(0);
             bankLedger.setIsCheque(false);
             bankLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 
@@ -159,6 +161,7 @@ public class BankReconciliationService {
             tAccLedger.setType(Constant.RECONCILIATION);
             tAccLedger.setTypeIndexNo(null);
             tAccLedger.setIsMain(false);
+            tAccLedger.setIsEdit(0);
             tAccLedger.setIsCheque(false);
             tAccLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
             bankReconciliationRepository.save(tAccLedger);
@@ -187,6 +190,7 @@ public class BankReconciliationService {
             bankLedger.setType(Constant.RECONCILIATION);
             bankLedger.setTypeIndexNo(null);
             bankLedger.setIsMain(true);
+            bankLedger.setIsEdit(0);
             bankLedger.setIsCheque(false);
             bankLedger.setUser(SecurityUtil.getCurrentUser().getIndexNo());
 

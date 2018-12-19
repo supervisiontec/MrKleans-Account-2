@@ -87,6 +87,7 @@ public class ReturnChequeService {
             tAccLedger.setDebit(credit);
             tAccLedger.setCredit(debit);
             tAccLedger.setIsMain(false);
+            tAccLedger.setIsEdit(0);
 
             TAccLedger save = returnChequeRepository.save(tAccLedger);
             save.setReconcileGroup(save.getIndexNo());

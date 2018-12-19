@@ -120,7 +120,7 @@ public class TAccLedger implements Serializable {
     private Integer costCenter;
 
     @Column(name = "`is_edit`")
-    private Integer isEdit;
+    private Integer isEdit=0;
 
     public TAccLedger() {
     }

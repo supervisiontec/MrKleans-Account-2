@@ -93,6 +93,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setDescription(mix.getData().getDescription());
             tAccLedger.setFormName(mix.getData().getFormName());
             tAccLedger.setIsMain(true);
+            tAccLedger.setIsEdit(0);
             tAccLedger.setIsCheque(true);
             tAccLedger.setSearchCode(code);
             tAccLedger.setNumber(number);
@@ -124,6 +125,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
+                    tAccLedger1.setIsEdit(0);
                     tAccLedger1.setSearchCode(code);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(null);//
@@ -155,6 +157,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setDescription(mix.getData().getDescription());
             tAccLedger.setFormName(mix.getData().getFormName());
             tAccLedger.setIsMain(true);
+            tAccLedger.setIsEdit(0);
             tAccLedger.setSearchCode(code);
             tAccLedger.setNumber(number);
             tAccLedger.setReconcileAccount(null);//
@@ -184,6 +187,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
+                    tAccLedger1.setIsEdit(0);
                     tAccLedger1.setSearchCode(code);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(null);//
@@ -215,6 +219,7 @@ public class SupplierPaymentSevrice {
             tAccLedger.setDescription(mix.getData().getDescription());
             tAccLedger.setFormName(mix.getData().getFormName());
             tAccLedger.setIsMain(true);
+            tAccLedger.setIsEdit(0);
             tAccLedger.setNumber(number);
             tAccLedger.setSearchCode(code);
             tAccLedger.setReconcileAccount(0);//
@@ -245,6 +250,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
+                    tAccLedger1.setIsEdit(0);
                     tAccLedger1.setSearchCode(code);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(null);//
@@ -286,6 +292,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
+                    tAccLedger1.setIsEdit(0);
                     tAccLedger1.setSearchCode(searchCode);
                     tAccLedger1.setIsCheque(tAccLedger.getIsCheque());
                     tAccLedger1.setNumber(number);
@@ -316,6 +323,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
+                    tAccLedger1.setIsEdit(0);
                     tAccLedger1.setSearchCode(searchCode);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(0);//
@@ -349,6 +357,7 @@ public class SupplierPaymentSevrice {
                     tAccLedger1.setDescription(mix.getData().getDescription());
                     tAccLedger1.setFormName(mix.getData().getFormName());
                     tAccLedger1.setIsMain(false);
+                    tAccLedger1.setIsEdit(0);
                     tAccLedger1.setSearchCode(searchCode);
                     tAccLedger1.setNumber(number);
                     tAccLedger1.setReconcileAccount(null);//
@@ -381,6 +390,7 @@ public class SupplierPaymentSevrice {
                         tAccLedger.setDescription(mix.getData().getDescription());
                         tAccLedger.setFormName(mix.getData().getFormName());
                         tAccLedger.setIsMain(false);
+                        tAccLedger.setIsEdit(0);
                         tAccLedger.setSearchCode(searchCode);
                         tAccLedger.setNumber(number);
                         tAccLedger.setReconcileAccount(null);//
@@ -410,6 +420,7 @@ public class SupplierPaymentSevrice {
                 tAccLedger1.setDescription(mix.getData().getDescription());
                 tAccLedger1.setFormName(mix.getData().getFormName());
                 tAccLedger1.setIsMain(false);
+                tAccLedger1.setIsEdit(0);
                 tAccLedger1.setSearchCode(searchCode);
                 tAccLedger1.setNumber(number);
                 tAccLedger1.setReconcileAccount(null);
@@ -443,6 +454,7 @@ public class SupplierPaymentSevrice {
                         tAccLedger.setDescription(mix.getData().getDescription());
                         tAccLedger.setFormName(mix.getData().getFormName());
                         tAccLedger.setIsMain(false);
+                        tAccLedger.setIsEdit(0);
                         tAccLedger.setSearchCode(searchCode);
                         tAccLedger.setNumber(number);
                         tAccLedger.setReconcileAccount(null);
@@ -474,6 +486,7 @@ public class SupplierPaymentSevrice {
             tAccLedger1.setDescription(mix.getData().getDescription());
             tAccLedger1.setFormName(mix.getData().getFormName());
             tAccLedger1.setIsMain(false);
+            tAccLedger1.setIsEdit(0);
             tAccLedger1.setNumber(number);
             tAccLedger1.setSearchCode(searchCode);
             tAccLedger1.setReconcileAccount(null);

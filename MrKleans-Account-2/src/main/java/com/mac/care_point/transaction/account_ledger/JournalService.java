@@ -55,6 +55,7 @@ public class JournalService {
             tAccLedger.setReconcileAccount(null);
             tAccLedger.setBankReconciliation(false);
             tAccLedger.setIsMain(Boolean.FALSE);
+            tAccLedger.setIsEdit(0);
             tAccLedger.setIsCheque(Boolean.FALSE);
             save = journalRepository.save(tAccLedger);
             if (save.getIndexNo() != null) {
@@ -117,7 +118,7 @@ public class JournalService {
     }
 
     public List<TAccLedger> getAccountLedgerByAccount(Integer account) {
-        return journalRepository.findByAccAccountOrderByTransactionDate(account);
+        return journalRepository.findByAccAccountAndIsEditNotOrderByTransactionDate(account,2);
     }
 
     Integer delete(Integer number) {

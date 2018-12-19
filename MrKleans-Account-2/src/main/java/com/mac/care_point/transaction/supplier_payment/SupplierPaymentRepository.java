@@ -47,6 +47,7 @@ public interface SupplierPaymentRepository extends JpaRepository<TAccLedger, Int
             + "   t_acc_ledger.is_edit\n"
             + "from t_acc_ledger\n"
             + "where t_acc_ledger.acc_account=:account\n"
+            + "and t_acc_ledger.is_edit!=2 \n"
             + "group by t_acc_ledger.reconcile_group\n"
             + "having debit!=credit", nativeQuery = true)
     public List<TAccLedger> getPayableBills(@Param("account") Integer account);
