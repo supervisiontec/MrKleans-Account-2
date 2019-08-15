@@ -1,10 +1,12 @@
 (function () {
     angular.module("appModule")
-            .controller("accruedBillController", function ($scope,$uibModalStack, $uibModal,accruedBillModel, $timeout, $filter, calculator, Notification, ConfirmPane) {
+            .controller("accruedBillController", function ($scope, $uibModalStack, $cookies, $uibModal, accruedBillModel, $timeout, $filter, calculator, Notification, ConfirmPane) {
                 $scope.model = new accruedBillModel();
                 $scope.ui = {};
                 $scope.model.currentBranch = {};
                 $scope.model.type = null;
+                $scope.ui.costCenterRequired = false;
+                $scope.ui.costDepartmentRequired = false;
 
                 //focus
                 $scope.ui.focus = function (id) {
@@ -12,7 +14,7 @@
                         document.querySelectorAll(id)[0].focus();
                     }, 10);
                 };
-                $scope.ui.modelCancel=function () {
+                $scope.ui.modelCancel = function () {
                     $uibModalStack.dismissAll();
                 };
                 //new
@@ -47,6 +49,18 @@
                         checkSave = false;
                         Notification.error('select a main account to add !');
                     }
+                    if ($scope.ui.costCenterRequired) {
+                        if (!$scope.model.tempData.costCenter) {
+                            checkSave = false;
+                            Notification.error('select a cost center to add !');
+                        }
+                    }
+                    if ($scope.ui.costDepartmentRequired) {
+                        if (!$scope.model.tempData.costDepartment) {
+                            checkSave = false;
+                            Notification.error('select a cost Department to add !');
+                        }
+                    }
                     if (!$scope.model.data.typeIndexNo) {
                         checkSave = false;
                         Notification.error('select an accrued account to save !');
@@ -57,8 +71,8 @@
                         $scope.ui.focus('#subAccount');
                     }
                 };
-                $scope.ui.popupSave=function () {
-                   var checkSave = true;
+                $scope.ui.popupSave = function () {
+                    var checkSave = true;
                     if (!$scope.model.tempData.accAccount) {
                         checkSave = false;
                         Notification.error('select a account to add !');
@@ -87,23 +101,30 @@
                         checkSave = false;
                         Notification.error('select an accrued account to save !');
                     }
+
+                    if ($scope.ui.costDepartmentRequired) {
+                        if (!$scope.model.tempData.costDepartment) {
+                            checkSave = false;
+                            Notification.error('select a cost Department to add !');
+                        }
+                    }
                     if (checkSave) {
                         $scope.model.addDataWithCostCenter();
-                        
+
                         $scope.ui.new();
                         $scope.ui.focus('#subAccount');
                         $scope.ui.modelCancel();
-                    } 
+                    }
                 };
-                $scope.ui.viewModel=function () {
+                $scope.ui.viewModel = function () {
                     $uibModal.open({
-                            animation: true,
-                            ariaLabelledBy: 'modal-title',
-                            ariaDescribedBy: 'modal-body',
-                            templateUrl: 'costCenter.html',
-                            scope: $scope,
-                            size: 'sm'
-                        });
+                        animation: true,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: 'costCenter.html',
+                        scope: $scope,
+                        size: 'sm'
+                    });
                 };
                 $scope.ui.save = function () {
                     var checkSave = true;
@@ -184,6 +205,8 @@
                 };
                 $scope.ui.init = function () {
                     $scope.ui.mode = "IDEAL";
+                    $scope.ui.costCenterRequired = $cookies.get("cost_center");
+                    $scope.ui.costDepartmentRequired = $cookies.get("cost_department");
 
                 };
                 $scope.ui.init();

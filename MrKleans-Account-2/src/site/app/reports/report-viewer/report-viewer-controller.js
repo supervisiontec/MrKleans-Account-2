@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("ReportViewerController", function ($scope, $filter, $sce, reportViewerModel, ReportViewerService) {
+            .controller("ReportViewerController", function ($scope, $filter, $sce, reportViewerModel, ReportViewerService, FileSaver) {
                 $scope.model = {};
                 $scope.newModel = new reportViewerModel();
                 $scope.model.currentReportGroup = {};
@@ -18,6 +18,7 @@
 
                 $scope.ui.selectReportGroup = function (reportGroup) {
                     $scope.model.currentReportGroup = reportGroup;
+
                 };
 
                 $scope.ui.selectReport = function (report) {
@@ -35,7 +36,7 @@
                 $scope.ui.viewCurrentReport = function () {
                     if ($scope.model.currentReport.report) {
                         $scope.ui.status = "LOADING";
-                        
+
                         ReportViewerService.viewReport(
                                 $scope.model.currentReport.report,
                                 $scope.model.currentReport.parameters,
@@ -44,8 +45,10 @@
                                 .success(function (response) {
                                     $scope.ui.status = "LOADED";
                                     var file = new Blob([response], {type: 'application/pdf'});
-                                    var fileURL = URL.createObjectURL(file);;
+                                    var fileURL = URL.createObjectURL(file);
+
                                     $scope.content = $sce.trustAsResourceUrl(fileURL);
+
                                 });
                     }
                 };
@@ -57,7 +60,7 @@
                     return $scope.model.currentReport.parameters.indexOf(param) >= 0;
                 };
 
-
+                
                 $scope.init = function () {
                     ReportViewerService.listReports()
                             .success(function (data) {

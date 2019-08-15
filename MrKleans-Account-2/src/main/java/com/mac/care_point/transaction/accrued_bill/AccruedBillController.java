@@ -28,7 +28,7 @@ public class AccruedBillController {
 
     @Autowired
     private AccruedBillService accruedBillService;
-
+    
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Integer saveAccruedBill(@RequestBody AccruedBillMix accruedBillMix) {
         return accruedBillService.saveAccruedBill(accruedBillMix);

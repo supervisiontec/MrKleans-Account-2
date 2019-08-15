@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import static org.apache.el.lang.ELArithmetic.subtract;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -542,5 +543,13 @@ public class SupplierPaymentSevrice {
         MBranch branchModel = branchRepository.findOne(branch);
         String branchCode = branchModel.getBranchCode();
         return code + "/" + branchCode + "/" + number;
+    }
+
+    public HashMap getGrnNo(String refNo) {
+        
+        String grnNo = paymentRepository.getGrnNo(refNo);
+        HashMap hashMap = new HashMap<String, String>();
+        hashMap.put("grnNo", grnNo);
+        return hashMap;
     }
 }

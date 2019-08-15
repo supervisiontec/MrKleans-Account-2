@@ -20,6 +20,10 @@
         this.getViewTrue = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/account/account-setting/user-permission/by-view-true");
         };
+        //permission list
+        this.getRequiredField = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/user/get-required-field");
+        };
 
         //ping
         this.ping = function () {

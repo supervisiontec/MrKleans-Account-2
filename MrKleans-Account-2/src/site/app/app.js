@@ -24,18 +24,20 @@
         "directGrnModule",
         "grnModule",
         "supplierReturnModule",
+        "grnSyncModule",
         //setting
         "accountSettingModule",
         "userPermissionModule",
         "ngFileSaver",
-        "accCodeSettingModule"
+        "accCodeSettingModule",
+        "excelModule"
     ]);
     //constants
     angular.module("appModule")
             .constant("systemConfig", {
                 apiUrl:
                         location.hostname === 'localhost'
-                        ? 'http://localhost:8072'
+                        ? 'http://localhost:8086'
                         : location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "")
             });
 
@@ -89,6 +91,10 @@
                             templateUrl: "app/master/cost-department/cost-department.html",
                             controller: "costDepartmentController"
                         })
+                        .when("/master/excel", {
+                            templateUrl: "app/master/excel/excel.html",
+                            controller: "excelController"
+                        })
 
                         //transaction
                         .when("/transaction/bank-reconciliation", {
@@ -98,6 +104,10 @@
                         .when("/transaction/fund-transfer", {
                             templateUrl: "app/accounts/fund-transfer/fund-transfer.html",
                             controller: "fundTransferController"
+                        })
+                        .when("/transaction/deposit", {
+                            templateUrl: "app/accounts/deposit/deposit.html",
+                            controller: "depositController"
                         })
                         .when("/transaction/general-voucher", {
                             templateUrl: "app/accounts/voucher/voucher.html",
@@ -134,6 +144,10 @@
                         .when("/transaction/profit-and-lost", {
                             templateUrl: "app/accounts/profit-and-lost/profit-and-lost.html",
                             controller: "profitAndLostController"
+                        })
+                        .when("/transaction/grn-sync", {
+                            templateUrl: "app/accounts/grn-sync/grn-sync.html",
+                            controller: "grnSyncController"
                         })
 
                         // services

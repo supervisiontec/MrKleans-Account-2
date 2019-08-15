@@ -1,0 +1,144 @@
+<div class="index-content-header"></div>
+<div class="index-content-body ">
+    <div class="col-xs-3 background-dark">
+        <div class="row smart-scroll-y" style="display: flex; flex-flow: column; height: calc(100vh - 53px);padding: 5px">
+            <table class="table-rounded control-table">
+                <colgroup>
+                    <col style="width: 100%">
+                </colgroup>
+                <tbody>
+                    <tr class="select-primary-row-table-header">
+                        <td><label class="control-label text-center">GRN Sync</label></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table">
+                    <col style="width: 40%"/>
+                    <col style="width: 60%"/>
+                    <tbody>
+                        <tr>
+                            <td>Branch :</td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="param.branch"
+                                       uib-typeahead="branch.regNumber as (branch.name + ' - ' + branch.regNumber) for branch in branchList |filter:$viewValue | limitTo:10" 
+                                       typeahead-input-formatter="branchLable($model)" 
+                                       typeahead-editable="false"/>    
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Supplier :</td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="param.supplier"
+                                       uib-typeahead="suppplier[1] as (suppplier[0] + ' - ' + suppplier[1]) for suppplier in supplierList |filter:$viewValue | limitTo:10" 
+                                       typeahead-input-formatter="supplierLable($model)" 
+                                       typeahead-editable="false"/>    
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>From Date :</td>
+                            <td>
+                                <input type="date" class="form-control" ng-model="param.fromDate"/>    
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>To Date :</td>
+                            <td>
+                                <input type="date" class="form-control" ng-model="param.toDate"/>    
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>GRN No :</td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="param.grnNo"/>    
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Reference No :</td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="param.referenceNo"/>    
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-9 smart-scroll-y" ng-show="true" style="height: calc(100vh - 75px);">
+        <div style="height: 85px ;padding-top: 10px;margin-bottom: 10px;display: flex;align-items: center;" class="background-dark"
+             ng-repeat="data in dataList">
+            <div class="col-lg-10">
+                <table style="width: 100%">
+                    <col style="width: 5%"/>
+                    <col style="width: 15%"/>
+                    <col style="width: 35%"/>
+                    <col style="width: 20%"/>
+                    <col style="width: 10%"/>
+                    <col style="width: 20%"/>
+                    <tbody>
+                        <tr class="background-dark">
+                            <td>{{$index + 1}}</td>
+                            <td><label class="label label-primary">Loc Id : {{data[1]}}</label></td>
+                            <td>{{data[2]}}</td>
+                            <td>Remarks : {{data[6]}}</td>
+                            <td><label class="label label-success"> GRN No : {{data[4]}}</label></td>
+                            <td class="text-right">Ref No : {{data[5]}}</td>
+                        </tr>
+                        <tr class="background-dark">
+                            <td>&nbsp;</td>
+                            <td>{{data[3]| date : "yyyy-MM-dd"}}</td>
+                            <td>Total : {{data[7]| number:2}}</td>
+                            <td>Disc : {{data[8]| number:2}}</td>
+                            <td>Tax : {{data[9]| number:2}}</td>
+                            <td class="text-right">
+                                <input type="text" class="form-control text-right" ng-model="data[13]">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary" style="width: 65px" ng-click="viewImage(data)"><i class="glyphicon glyphicon-picture"></i></button>
+                <button class="btn btn-warning" style="width: 65px" ng-click="sync(data)">sync</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="placeholder col-md-9" ng-hide="true" style="height: calc(100vh - 75px); padding: 0px 10px 10px 10px;">
+        <h1>VOUCHER DETAILS EMPTY :(</h1>
+    </div>
+
+</div>
+
+<div class="fab-container">
+    <a class="fab fab-lg fab-primary" ng-show="true" ng-click="loadData();"><i class="glyphicon glyphicon-search"></i></a>
+</div>
+
+
+
+<script type="text/ng-template" id="imagePopup.html">
+
+<div class="col-lg-12 background-light no-padding">
+    <div class="row">
+        <div class="modal-header bg-primary">
+            <div class="col-lg-12">
+                <center>
+                    <label> Image Viewer </label>
+                </center>
+            </div>
+        </div>
+        <div class="modal-body" style="height:450px;padding-left:0px;padding-right:0px">
+            <div class="col-xs-12 ">
+                <img src="{{imagemodelX[0]}}" width="100%"/><br>
+                <img src="{{imagemodelX[1]}}" width="100%"/><br>
+                <img src="{{imagemodelX[2]}}" width="100%"/>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+</div>
+</script>
+<!--<script type="text/ng-template" id="imagePopup.html">-->

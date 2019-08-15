@@ -60,12 +60,14 @@
                                 <li ng-show="ui.include('General Voucher')"><a href="#/transaction/general-voucher" ng-click="toggleHamburger('General Voucher');">General Voucher</a></li>    
                                 <li ng-show="ui.include('Bank Reconciliation')"><a href="#/transaction/bank-reconciliation" ng-click="toggleHamburger('Bank Reconciliation');">Bank Reconciliation</a></li>    
                                 <li ng-show="ui.include('Fund Transfer')"><a href="#/transaction/fund-transfer" ng-click="toggleHamburger('Fund & Cheque Transfer');">Fund & Cheque Transfer</a></li>    
+                                <li ng-show="true"><a href="#/transaction/deposit" ng-click="toggleHamburger('Deposit');">Deposit</a></li>    
                                 <li ng-show="ui.include('Accrued Bill')"><a href="#/transaction/accrued-bill" ng-click="toggleHamburger('Accrued Bill');">Accrued Bill</a></li>    
                                 <li ng-show="ui.include('Supplier Payment')"><a href="#/transaction/supplier-payment" ng-click="toggleHamburger('Supplier Payment');">Supplier Payment</a></li>    
                                 <li ng-show="ui.include('Return Cheque')"><a href="#/transaction/return-cheque" ng-click="toggleHamburger('Return Cheque');">Return Cheque</a></li>    
                                 <li ng-show="ui.include('Trial Balance')"><a href="#/transaction/trial-balance" ng-click="toggleHamburger('Trial Balance');">Trial Balance</a></li>    
                                 <li ng-show="ui.include('Edit Transaction')"><a href="#/transaction/edit-transaction" ng-click="toggleHamburger('Edit Transaction');">Edit Transaction</a></li>    
                                 <li ng-show="ui.include('Profit and lost')"><a href="#/transaction/profit-and-lost" ng-click="toggleHamburger('Profit and lost');">Profit And Lost</a></li>    
+                                <li ><a href="#/transaction/grn-sync" ng-click="toggleHamburger('GRN Sync');">GRN Sync</a></li>    
                             </ul>
                         </li>
                         <li ng-show="ui.include('Reports')">
@@ -85,6 +87,7 @@
                                 <li ng-show="ui.include('Cost Center')"><a href="#/master/cost-center" ng-click="toggleHamburger('Cost Center');">Cost Center</a></li>
                                 <li ng-show="ui.include('Cost Department')"><a href="#/master/cost-department" ng-click="toggleHamburger('Cost Department');">Cost Department</a></li>
                                 <li ng-show="ui.include('Budget')"><a href="#/master/budget" ng-click="toggleHamburger('Budget');">Budget</a></li> 
+                                <li ng-show="true"><a href="#/master/excel" ng-click="">Excel</a></li> 
                             </ul>
                         </li>
                         <li ng-show="ui.includeList(['Account Setting', 'User Permission', 'Code Setting'])"> 

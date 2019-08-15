@@ -8,8 +8,8 @@
                 var date = new Date();
                 $scope.model.filter.fromDate = new Date(date.getFullYear(), date.getMonth(), 1);
                 $scope.model.filter.toDate = new Date();
-
-
+                
+                
 
                 $scope.label = ["Jan", "February", "March", "April", "May", "June", "July"];
                 $scope.series = ['Income', 'Expense'];
@@ -19,7 +19,7 @@
                 ];
 
                 $scope.onClick = function (points, event) {
-                   
+
 
                     $uibModal.open({
                         animation: true,
@@ -49,7 +49,7 @@
                     $scope.cols = Object.keys($scope.rows[0]);
 
                 };
-                
+
                 $scope.datasetOverride = [{yAxisID: 'y-axis-1'}, {yAxisID: 'y-axis-2'}];
                 $scope.options = {
                     scales: {

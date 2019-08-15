@@ -1,0 +1,25 @@
+<div>
+    <form enctype="multipart/form-data">
+        <input type="file" id="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+        <button type="submit" value="submit" ng-click="uploadExcel()">
+            Upload File
+        </button>
+    </form>
+</div>
+<div>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID : {{excelJsonObj.length}}</th>
+                <th>NAME</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="data in excelJsonObj">
+                <td>{{data.index}}</td>
+                <td>{{data.name}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

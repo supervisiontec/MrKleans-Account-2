@@ -440,7 +440,7 @@
                             <tbody>
                                 <tr ng-repeat="bill in model.billList| orderBy:'transactionDate'">
                                     <td><label class="label label-default">{{bill.searchCode}}</label></td>
-                                    <td><label>{{bill.refNumber===null?'- - -':bill.refNumber}}</label></td>
+                                    <td><label>{{bill.grnNo}}</label></td>
                                     <td><label>{{bill.transactionDate}}</label></td>
                                     <td><label class="pull-right">{{bill.credit| number:2}}</label></td>
                                     <td><label class="pull-right">{{bill.debit| number:2}}</label></td>

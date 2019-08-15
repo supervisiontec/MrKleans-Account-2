@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/care-point/transaction/fund-transfer")
 public class FundTransferController {
+    
     @Autowired
     private FundTransferService fundTransferService;
 

@@ -8,6 +8,7 @@ package com.mac.care_point.transaction.supplier_payment;
 import com.mac.care_point.transaction.account_ledger.model.TAccLedger;
 import com.mac.care_point.transaction.supplier_payment.model.SupplierPaymentMix;
 import com.mac.care_point.zutil.SecurityUtil;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,7 +39,10 @@ public class SupplierPaymentController {
     @RequestMapping(value = "/get-payable-bills/{account}", method = RequestMethod.GET)
     public List<TAccLedger> getPayableBills(@PathVariable Integer account) {
         return paymentSevrice.getPayableBills(account);
-
+    }
+    @RequestMapping(value = "/get-grn-no/{refNo}", method = RequestMethod.GET)
+    public HashMap<String ,String> getGrnNo(@PathVariable String refNo) {
+        return paymentSevrice.getGrnNo(refNo);
     }
 
     @RequestMapping(value = "/get-over-payment-amount/{supplier}", method = RequestMethod.GET)

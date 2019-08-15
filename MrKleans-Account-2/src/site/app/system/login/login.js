@@ -1,6 +1,6 @@
 (function () {
     angular.module("appModule")
-            .controller("LoginController", function ($scope, $cookies, $location, $timeout, SecurityService) {
+            .controller("LoginController", function ($scope, $cookies, $location, $window, $timeout, SecurityService) {
                 $scope.ui = {};
                 $scope.model = {};
 
@@ -31,9 +31,15 @@
                                         $cookies.put("nick-name", data.principal.nickName);
                                         $cookies.put("branch-index-no", data.principal.branch);
                                         $cookies.put("branch-name", data.principal.branchName);
+                                        
+                                        $scope.getRequiredField();
+                                        
+                                        $timeout(function () {
+                                            $window.location.reload();
+                                        }, 1000);
                                     })
                                     .error(function (data, status) {
-                                        var element = angular.element(document.querySelectorAll(".login-form")[0])
+                                        var element = angular.element(document.querySelectorAll(".login-form")[0]);
                                         element.addClass("login-failed");
                                         $timeout(function () {
                                             element.removeClass("login-failed");
@@ -42,6 +48,18 @@
                                     });
                         }
                     }
+                };
+                $scope.getRequiredField = function () {
+                    console.log('$scope.getRequiredField');
+                    SecurityService.getRequiredField($scope.model.data)
+                            .success(function (data, status, headers) {
+                                $cookies.put("cost_center",data.cost_center);
+                                $cookies.put("cost_department",data.cost_department);
+                            })
+                            .error(function (data, status) {
+                                console.log(data,status);
+                            });
+
                 };
             });
 }());

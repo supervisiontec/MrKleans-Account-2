@@ -22,6 +22,9 @@
         this.getPayableBills = function (account) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/supplier-payment/get-payable-bills/" + account);
         };
+        this.getGrnNo = function (refNo) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/supplier-payment/get-grn-no/" + refNo);
+        };
         this.getOverPaymentAmount = function (supplier) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/supplier-payment/get-over-payment-amount/" + supplier);
         };

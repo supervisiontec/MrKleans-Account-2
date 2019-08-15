@@ -1,6 +1,6 @@
 
 (function () {
-    var factory = function (supplierPaymentFactory, supplierPaymentService, $q,  $filter, Notification) {
+    var factory = function (supplierPaymentFactory, supplierPaymentService, $timeout, $q, $filter, Notification) {
         function supplierPaymentModel() {
             this.constructor();
         }
@@ -76,6 +76,14 @@
                         });
 
             },
+            getGrnNo: function (bill) {
+                supplierPaymentService.getGrnNo(bill.refNumber)
+                        .success(function (data) {
+                            console.log(data['grnNo']);
+                            bill.grnNo=data['grnNo'];
+                        });
+
+            },
             selectBalanceSupplier: function (account, typeIndexNo) {
                 var that = this;
                 console.log(account);
@@ -104,6 +112,7 @@
                                 that.billList = [];
                                 angular.forEach(data, function (bill) {
                                     bill.pay = 0.00;
+                                        that.getGrnNo(bill);
                                     that.billList.push(bill);
                                 });
                             });
@@ -138,7 +147,7 @@
                 this.setPayTotalAndOverPayment();
             },
             changePayAmount: function () {
-               
+
                 this.setPayTotalAndOverPayment();
             },
             setPayTotalAndOverPayment: function () {

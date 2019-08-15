@@ -37,6 +37,7 @@ public interface Constant {
     public static final String CUSTOMER_PAYMENT = "customer_payment";
     public static final String CHEQUE_RETURN = "cheque_return";
     public static final String FUND_TRANSFER = "transfer";
+    public static final String DEPOSIT = "deposit";
     public static final String ADVANCE = "advance";
     public static final String GRN = "grn";
     public static final String DIRECT_GRN = "direct_grn";
@@ -67,6 +68,7 @@ public interface Constant {
     public static final String CODE_SUPPLIER_PAYMENT = "SUPPAY";
     public static final String CODE_ACCRUED_BILL = "ACRDBIL";
     public static final String CODE_FUND_TRANSFER = "TRA";
+    public static final String CODE_DEPOSIT = "DPO";
     public static final String CODE_CHEQUE_RETURN = "CHQRTN";
     public static final String CODE_PAYMENT_VOUCHER = "PAYVUC";
     public static final String CODE_PAY = "PAY";

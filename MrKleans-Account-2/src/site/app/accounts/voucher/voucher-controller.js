@@ -1,11 +1,13 @@
 (function () {
     angular.module("appModule")
-            .controller("voucherController", function ($scope, $sce, voucherModel,calculator, printService, voucherService, $timeout, $uibModal, Notification, ConfirmPane) {
+            .controller("voucherController", function ($scope, $sce, $cookies, voucherModel, calculator, printService, voucherService, $timeout, $uibModal, Notification, ConfirmPane) {
                 $scope.model = new voucherModel();
                 $scope.printService = new printService();
                 $scope.ui = {};
                 $scope.model.currentBranch = {};
                 $scope.model.type = null;
+                $scope.ui.costCenterRequired = false;
+                $scope.ui.costDepartmentRequired = false;
 
                 $scope.reportName = "General Voucher";
 
@@ -48,6 +50,18 @@
                     if (!$scope.model.data.accAccount) {
                         checkSave = false;
                         Notification.error('select a main account to add !');
+                    }
+                    if ($scope.ui.costCenterRequired) {
+                        if (!$scope.model.tempData.costCenter) {
+                            checkSave = false;
+                            Notification.error('select a cost center to add !');
+                        }
+                    }
+                    if ($scope.ui.costDepartmentRequired) {
+                        if (!$scope.model.tempData.costDepartment) {
+                            checkSave = false;
+                            Notification.error('select a cost Department to add !');
+                        }
                     }
                     if (checkSave) {
                         $scope.model.addData();
@@ -169,9 +183,9 @@
                     $scope.model.type = type.value;
                     $scope.ui.focus('#account');
                     $scope.model.setClear();
-
                 };
-                $scope.ui.focusAdd = function (model,amount) {
+
+                $scope.ui.focusAdd = function (model, amount) {
                     if (model.which === 13) {
                         var value = calculator.cal(amount);
                         console.log(value);
@@ -181,7 +195,7 @@
                 $scope.ui.searchVoucherByNumber = function (number) {
                     var key = event ? event.keyCode || event.which : 13;
                     if (key === 13) {
-                        
+
                         $scope.model.searchVoucherByNumber(number)
                                 .then(function () {
 
@@ -192,6 +206,8 @@
                 };
                 $scope.ui.init = function () {
                     $scope.ui.mode = "IDEAL";
+                    $scope.ui.costCenterRequired = $cookies.get("cost_center");
+                    $scope.ui.costDepartmentRequired = $cookies.get("cost_department");
 
                 };
                 $scope.ui.init();

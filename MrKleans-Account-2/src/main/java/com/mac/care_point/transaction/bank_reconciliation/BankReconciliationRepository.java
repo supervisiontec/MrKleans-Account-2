@@ -48,6 +48,7 @@ public interface BankReconciliationRepository extends JpaRepository<TAccLedger, 
             + "     t_acc_ledger.is_edit\n"
             + "    from t_acc_ledger\n"
             + "    where t_acc_ledger.bank_reconciliation=1\n"
+            + "     and (t_acc_ledger.is_edit!=2 or t_acc_ledger.is_edit!=null)  \n"
             + "    and (t_acc_ledger.cheque_date <= :date or t_acc_ledger.cheque_date is null) and t_acc_ledger.reconcile_account=:accAccount\n"
             + "    group by t_acc_ledger.reconcile_group\n"
             + "    having debit!=credit", nativeQuery = true)

@@ -25,8 +25,9 @@
                         "isMain": false,
                         "isCheque": false,
                         "financialYear": null,
-                        "costDepartment": "",
-                        "costCenter": ""
+                        "costDepartment": null,
+                        "costCenter": null,
+                        "payTo": null,
 
                     };
                     return data;

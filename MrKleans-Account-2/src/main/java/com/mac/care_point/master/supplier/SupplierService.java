@@ -75,4 +75,8 @@ public class SupplierService {
         return supplierRepository.findByType(Constant.ACCRUED);
     }
 
+    public List<Object[]> getSuppliersGRN() {
+        return supplierRepository.getSuppliersGRN();
+    }
+
 }

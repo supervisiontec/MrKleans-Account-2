@@ -182,6 +182,7 @@
                                 </tbody>                 
                             </table>
                             <a class="btn btn-block btn-primary" ng-click="ui.viewCurrentReport();">VIEW</a>
+                            <!--<a class="btn btn-block btn-warning" ng-click="ui.printExcel();">PRINT EXCEL</a>-->
                         </div>
                     </div>
                 </uib-tab>
@@ -209,7 +210,7 @@
             </div>
 
             <div id="viewerContainer" class="col-xs-12" style="height: calc(100vh - 60px);"  ng-show="ui.status === 'LOADED'">
-                <div class="row" style="height: 100%;">
+                <div class="row" style="height: 100%;" id="printDiv">
                     <object data="{{content}}" class="smart-scroll-y smart-scroll-x"  type="application/pdf" style="width:100%;height:100%;">
                     </object>
                 </div>

@@ -1,9 +1,11 @@
 (function () {
     angular.module("appModule")
-            .controller("journalController", function ($scope, $uibModal, printService, calculator, $sce, journalService, journalModel, $timeout, Notification, ConfirmPane) {
+            .controller("journalController", function ($scope, $uibModal,$cookies, printService, calculator, $sce, journalService, journalModel, $timeout, Notification, ConfirmPane) {
                 $scope.model = new journalModel();
                 $scope.printService = new printService();
                 $scope.ui = {};
+                $scope.ui.costCenterRequired = false;
+                $scope.ui.costDepartmentRequired = false;
 
                 $scope.reportName = "Journal Voucher";
 
@@ -95,6 +97,18 @@
                     if (!$scope.model.tempData.branch) {
                         check = false;
                         Notification.error('select a branch name to add !');
+                    }
+                    if ($scope.ui.costCenterRequired) {
+                        if (!$scope.model.tempData.costCenter) {
+                            check = false;
+                            Notification.error('select a cost center to add !');
+                        }
+                    }
+                    if ($scope.ui.costDepartmentRequired) {
+                        if (!$scope.model.tempData.costDepartment) {
+                            check = false;
+                            Notification.error('select a cost Department to add !');
+                        }
                     }
                     if (check) {
                         $scope.model.add();
@@ -199,6 +213,8 @@
 
                 $scope.ui.init = function () {
                     $scope.ui.mode = "IDEAL";
+                    $scope.ui.costCenterRequired = $cookies.get("cost_center");
+                    $scope.ui.costDepartmentRequired = $cookies.get("cost_department");
 
                 };
                 $scope.ui.init();

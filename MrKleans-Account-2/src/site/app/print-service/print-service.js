@@ -31,7 +31,7 @@
                     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
                 });
                 var date = $filter('date')(new Date(), 'yyyy-MM-dd HH-mm-ss');
-                FileSaver.saveAs(blob, name+"(" + date + ").xls");
+                FileSaver.saveAs(blob, name+" (" + date + ").xls");
             }
 
         };

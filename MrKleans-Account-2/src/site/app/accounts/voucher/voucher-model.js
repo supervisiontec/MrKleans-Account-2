@@ -52,9 +52,13 @@
             },
             loadAccAccount: function () {
                 var that = this;
+                that.accAccountList = [];
                 voucherService.loadAccAccounts()
-                        .success(function (data) {
-                            that.accAccountList = data;
+                        .success(function (dataList) {
+                            angular.forEach(dataList, function (data) {
+                                data.accountMain = data.accMain.indexNo;
+                                that.accAccountList.push(data);
+                            });
                         });
             },
             getValue: function (accIndex) {
@@ -128,11 +132,18 @@
                 data.voucherList = this.saveDataList;
                 this.data.transactionDate = $filter('date')(this.data.transactionDate, 'yyyy-MM-dd');
                 this.data.chequeDate = $filter('date')(this.data.chequeDate, 'yyyy-MM-dd');
+                if (this.data.payTo) {
+                    this.data.costCenter = this.data.payTo;
+                }else{
+                    this.data.costCenter = 0;
+                    
+                }
                 data.voucher = this.data;
                 if (this.selectAccType.name === 'BANK') {
                     data.voucher.bankReconciliation = true;
                 }
                 var defer = $q.defer();
+                console.log(data);
                 voucherService.saveVoucher(JSON.stringify(data))
                         .success(function (data) {
                             defer.resolve(data);

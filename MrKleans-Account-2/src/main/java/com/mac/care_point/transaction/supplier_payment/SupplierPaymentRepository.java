@@ -96,4 +96,8 @@ public interface SupplierPaymentRepository extends JpaRepository<TAccLedger, Int
 
     public List<TAccLedger> findByNumberAndBranchAndType(Integer number, Integer branch, String SUPPLIER_PAYMENT);
 
+    @Query(value = "SELECT t_grn.number FROM t_grn WHERE index_no=:refNo", nativeQuery = true)
+    public String getGrnNo(
+           @Param("refNo") String refNo);
+
 }

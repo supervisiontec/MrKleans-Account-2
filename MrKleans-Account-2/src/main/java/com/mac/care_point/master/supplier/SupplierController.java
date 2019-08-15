@@ -39,4 +39,8 @@ public class SupplierController {
     public List<MSupplier> getAccruedSuppliers() {
         return supplierService.getAccruedSuppliers();
     }
+    @RequestMapping(value = "/get-suppliers-grn", method = RequestMethod.GET)
+    public List<Object[]> getSuppliersGRN() {
+        return supplierService.getSuppliersGRN();
+    }
 }

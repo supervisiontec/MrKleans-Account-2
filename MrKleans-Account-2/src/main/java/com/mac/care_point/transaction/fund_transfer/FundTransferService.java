@@ -8,7 +8,6 @@ package com.mac.care_point.transaction.fund_transfer;
 import com.mac.care_point.account_setting.account_setting.AccountSettingRepository;
 import com.mac.care_point.account_setting.account_setting.model.MAccSetting;
 import com.mac.care_point.common.Constant;
-import com.mac.care_point.common.SearchCodeGenarator;
 import com.mac.care_point.master.account.AccAccountRepository;
 import com.mac.care_point.master.account.model.MAccAccount;
 import com.mac.care_point.master.branch.BranchRepository;
